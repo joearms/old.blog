@@ -1,12 +1,13 @@
 ---
 layout: post
 title: Testing testing 123
+tags: jekyll bootstrap github disqus
+year: 2013
+month: 3
+day: 26
+published: true
+summary: testing my blog
 ---
-
-{{ page.title }}
-================
-
-<p class="meta">26 March 2010</p>
 
 This is a test of Jekyll. If it works I'll move all my blocks to github.
 
@@ -39,7 +40,7 @@ Stuff that is broken
 
 Colored quoting of text.
 
-References
+URL Autolinking does not work
 ==========
 
 URL autolinking seems to be broken. The next line is not turned into 
@@ -56,7 +57,9 @@ github flavored markdown</a>
 Comments
 ========
 
-Disqus seems ok for this. This needs to be setup
+I have used Disqus for this. We'll see if it works
+
+<p><a href="https://twitter.com/share" class="twitter-share-button" data-via="joeerl">Tweet</a></p>
 
 
 

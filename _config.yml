@@ -2,3 +2,8 @@ markdown: rdiscount
 pygments: true
 rdiscount:
   extensions: [smart]
+
+comments :
+   provider: disqus
+   disqus:
+     short_name:  joearmstrongsblog

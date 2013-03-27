@@ -3,11 +3,6 @@ layout: post
 title: Promoting Erlang
 ---
 
-{{ page.title }}
-================
-
-<p class="meta">26 March 2010</p>
-
 I've just got back from the <a
 href="http://www.erlang-factory.com/conference/SFBay2013">2013 Bay
 Area Erlang Factory</a>. This was my third time in SF and I had
