@@ -9,7 +9,7 @@ published: true
 summary: testing my blog
 ---
 
-This is a test of Jekyll. If it works I'll move all my blocks to github.
+This is a test of Jekyll. If it works I'll move all my blogs to github.
 
 The is a <a href="http://cobyism.com/jekyll/docs/home/">guide</a> and
 <a href="http://paulstamatiou.com/how-to-wordpress-to-jekyll">How to
