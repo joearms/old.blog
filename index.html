@@ -1,0 +1,29 @@
+---
+layout: default
+title: Joe Armstrong
+---
+
+<div id="home">
+  <h1>Blog Posts</h1>
+  <ul class="posts">
+    {% for post in site.posts %}
+      <li><span>{{ post.date | date_to_string }}</span> &raquo; <a href="{{ post.url }}">{{ post.title }}</a></li>
+    {% endfor %}
+  </ul>
+
+  <h1>Movies</h1>
+  
+  <ul>
+    <li>
+      <a href="https://www.youtube.com/watch?v=qyVvGjNjBOA">Erlang - the movie</a>
+    </li>
+    <li>
+      <a href="https://www.youtube.com/watch?v=u41GEwIq2mE&list=UUDLl_-lfEBsXw0EbVkhKviQ">
+	Erlang Interview at Rackspace</a> Good overview of the history of Erlang
+	and what problems Erlang solves.
+    </li>
+    
+  </ul>
+
+
+  </div>
