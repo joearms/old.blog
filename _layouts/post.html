@@ -1,20 +1,11 @@
 ---
 layout: default
-headers: <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="ANM's Blog." />
 ---
 
 <div id="title">
   <h1>{{ page.title }}</h1>
   <span class="meta">{{ page.date | date_to_string}}</span>
-
-<div class="social">
- <div class="share">
-    <div class="g-plusone" data-size="medium"></div>
-  </div>
-  <div class="share">
-  <iframe allowtransparency="true" frameborder="0" scrolling="no" src="http://platform.twitter.com/widgets/tweet_button.html?url={{ site.url }}{{ page.url }}&count=horizontal" style="width:115px; height:21px;"></iframe>
- </div>
-</div>
+ 
 
 <div id="content">
 {{ content }}
@@ -22,13 +13,16 @@ headers: <link href="/atom.xml" type="application/atom+xml" rel="alternate" titl
 
 <div id="tags">
 Tagged:
-<ul class="inline-tag-list">
   {% for tag in page.tags %}
-  <li><a href="/blog/tag/{{tag}}">{{tag}}</a></li>
+  <a href="/blog/tag/{{tag}}">{{tag}}</a> &nbsp;
   {% endfor %}
-</ul>
 </div>
+<p></p>
 <hr />
+
+<p><a href="https://twitter.com/share" class="twitter-share-button" data-via="joeerl">Tweet</a></p>
+<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+
 
 <p>Comments:</p>
 

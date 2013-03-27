@@ -38,7 +38,9 @@ Quotes seem to work properly. I can make &ldquo;curly quotes&rdquo; and
 Stuff that is broken
 ====================
 
-Colored quoting of text.
+* Colored quoting of text
+* My tweet button is wrong
+
 
 URL Autolinking does not work
 ==========
@@ -51,15 +53,11 @@ http://help.github.com/articles/github-flavored-markdown.html
 But the following *is* a link:
 
 
-<a href="http://help.github.com/articles/github-flavored-markdown.html">
-github flavored markdown</a>
-
 Comments
 ========
 
 I have used Disqus for this. We'll see if it works
 
-<p><a href="https://twitter.com/share" class="twitter-share-button" data-via="joeerl">Tweet</a></p>
 
 
 
