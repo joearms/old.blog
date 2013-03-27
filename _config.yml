@@ -1,7 +1,7 @@
 markdown: rdiscount
 pygments: true
 rdiscount:
-  extensions: [smart]
+  extensions: [smart, autolink]
 
 comments :
    provider: disqus

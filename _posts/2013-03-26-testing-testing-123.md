@@ -11,9 +11,14 @@ summary: testing my blog
 
 This is a test of Jekyll. If it works I'll move all my blogs to github.
 
-The is a <a href="http://cobyism.com/jekyll/docs/home/">guide</a> to Jekyll. Also
-reading <a href="http://paulstamatiou.com/how-to-wordpress-to-jekyll">How to convert
-wordpress to Jekyll</a> clarified a few issues.
+Rreference Material
+==================
+
+* http://cobyism.com/jekyll/docs/home/
+* http://paulstamatiou.com/how-to-wordpress-to-jekyll
+* http://spparker.com/posts/2011-04-26-keeping-jekyll-classy
+* http://help.github.com/articles/github-flavored-markdown.html
+
 
 Code highlighting test
 ======================
@@ -43,17 +48,15 @@ Stuff that is broken
 * Colored quoting of text
 * My tweet button is wrong
 
-URL Autolinking does not work
+Making Autolinking work
 ==========
 
-URL autolinking seems to be broken. The next line is not turned into 
-a link:
+To get autolinking to work needs some changes to <b>_config.yml</b>
 
-http://help.github.com/articles/github-flavored-markdown.html
+    rdiscount:
+        extensions: [smart, autolink]
 
-But the following *is* a link:
 
-<a href="http://help.github.com/articles/github-flavored-markdown.html">a link</a>
 
 
 Comments
