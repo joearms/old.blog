@@ -70,6 +70,8 @@ Page.title = {{page.title}}
 
 Page.url = {{page.url}}
 
+The link below is missing the twitter icon. Anybody know what's wrong?
+
 <a href="https://twitter.com/share" class="twitter-share-button" data-size="medium"
 data-url="http://joearms.github.com/2013/03/27/promoting-erlang.html">
 tweet</a>
