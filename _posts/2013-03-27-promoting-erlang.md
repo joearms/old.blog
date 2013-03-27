@@ -21,9 +21,8 @@ Mr. twitter what the superlative of ``awesome'' was, the responses included
 It was great to meet old friends and make new friends, that's what I
 like about the factories, it's the gossip and the talks and the side-events.
 
-In my keynote I mentioned <a
-href="http://www.sics.se/~joe/ubf">UBF</a> (Universal Binary Format) which 
-is near to my heart. Unfortunately UBF is not widely used (which is a shame)
+In my keynote I mentioned UBF (Universal Binary Format) which is near
+to my heart. Unfortunately UBF is not widely used (which is a shame)
 and a possible reason is the lack of publicity.
 
 The subject of ``self-promotion'' has bubbled up occasionally on the
@@ -31,13 +30,14 @@ Erlang mailing list. Various users have described  Erlang folk as being
 <i>appallingly bad</i> at prompting Erlang.  I have in various posts tried to
 explain why this is so.
 
-It's a cultural thing. In the far off snowy land from whence Erlang originated
-self promotion is regarded with extreme suspicion. We (the Erlang people)
-are actually quite proud of our work, but for us to say that what we have done is good
-is a cardinal sin in Sweden and is considered very bad manners. 
+It's a cultural thing. In the far off snowy land from whence Erlang
+originated self promotion is regarded with extreme suspicion. We (the
+Erlang people) are actually quite proud of our work, but for us to say
+that what we have done is good is a cardinal sin in Sweden and is
+considered very bad manners.
 
 It's OK for other people to say that what we have done is not-bad
-(which we, of course, must vigorously denied) but for us to venture
+(which we, of course, must vigorously deny) but for us to venture
 the opinion that we what we have done is good is considered at the
 least a breach of etiquette and at most bragging (which is frowned
 upon).
@@ -57,8 +57,8 @@ So I think I'll change strategy. The old method was:
 * Publish on some website (say github)
 * Send a single post to the Erlang mailing list
 
-If nobody shows any interest, then I conclude that the project what a failure and
-turn to some other problem.
+If nobody showed any interest, then I concluded that the project was a
+failure and turned to some other problem.
 
 Since I actually rather like UBF (I think it's better than Json and
 XML) for example I remind people every ten years or so, so see if I
@@ -68,16 +68,16 @@ Now the worm has turned.
 
 I'm starting a new blog. I'm going to tell you why Erlang is wicked
 badd-ass awesome (translation: not-bad) and what's happening in the
-Erkang world. I'll also talk about some other comeletiung tenchologies
-whuch I consider to be decidedly <i>Unawesome</i> and I'll tell you
+Erlang world. I'll also talk about some other competing tenchologies
+which I consider to be decidedly <i>Unawesome</i> and I'll tell you
 why.
 
-Stuff is happening. In two years time Erlang populatry will explode.
+Stuff is happening. In two years time Erlang popularity will explode.
 In a series of blog posts I'll tell you why.
 
 In the next few posts I'll retroactively blog about what happened
-at the Erlang factory. This is behind the secenes stuff. What really
-happend in San Francisco?
+at the Erlang factory. This is behind the scenes stuff. What really
+happened in San Francisco?
 
 
 

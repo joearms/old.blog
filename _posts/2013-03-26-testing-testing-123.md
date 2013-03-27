@@ -25,11 +25,13 @@ start([Config]) ->
     start_link(Conf).
 {% endhighlight %}
 
-Quotes
-======
+Quotes test
+===========
 
-Quotes don't work properly. I want to see &ldquo;curly quotes&rdquo; and
-not ``regualr quotes''. How can markdown (or whatever this is) get this wrong?
+Quotes seem to work properly. I can make &ldquo;curly quotes&rdquo; and
+``regualar quotes''.
+
+
 
 
 Stuff that is broken
@@ -40,7 +42,16 @@ Colored quoting of text.
 References
 ==========
 
-https://help.github.com/articles/github-flavored-markdown
+URL autolinking seems to be broken. The next line is not turned into 
+a link:
+
+http://help.github.com/articles/github-flavored-markdown.html
+
+But the following *is* a link:
+
+
+<a href="http://help.github.com/articles/github-flavored-markdown.html">
+github flavored markdown</a>
 
 Comments
 ========
