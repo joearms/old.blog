@@ -11,6 +11,12 @@ summary: testing my blog
 
 This is a test of Jekyll. If it works I'll move all my blogs to github.
 
+ToDo
+====
+
+* Fix RSS feeds
+
+
 Rreference Material
 ==================
 
@@ -18,7 +24,6 @@ Rreference Material
 * http://paulstamatiou.com/how-to-wordpress-to-jekyll
 * http://spparker.com/posts/2011-04-26-keeping-jekyll-classy
 * http://help.github.com/articles/github-flavored-markdown.html
-
 
 Code highlighting test
 ======================
