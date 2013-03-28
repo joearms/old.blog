@@ -113,7 +113,7 @@ And then an amazing thing happened...
 I got pull requests.   
 
 
-Sylvain Benner has sent my two pull request to fix my spelling
-errors. Thank you Sylvian. I'm not the world's best speller. So I'm
+Sylvain Benner has sent me two pull requests to fix my spelling
+errors. Thank you Sylvain. I'm not the world's best speller. So I'm
 pathetically gratefully for all the help I can get. So thank you once
 again.
