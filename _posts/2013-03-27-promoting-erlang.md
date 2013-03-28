@@ -33,7 +33,7 @@ considered very bad manners.
 
 It's OK for other people to say that what we have done is not-bad
 (which we, of course, must vigorously deny) but for us to venture
-the opinion that we what we have done is good is considered at the
+the opinion that what we have done is good is considered at the
 least a breach of etiquette and at most bragging (which is frowned
 upon).
 
@@ -43,7 +43,7 @@ appreciation than Awesome is a mystery to me.
 
 I asked my American friends if saying that I thought that what we had
 done was not bad would be perceived as bragging, or would attract
-negative criticism. They ensured my that this was not the case and
+negative criticism. They ensured me that this was not the case and
 that it was OK to shout it from the roofs.
 
 So I think I'll change strategy. The old method was:
@@ -57,13 +57,13 @@ failure and turned to some other problem.
 
 Since I actually rather like UBF (I think it's better than Json and
 XML) for example I remind people every ten years or so, so see if I
-can raise a modicum of interst.
+can raise a modicum of interest.
 
 Now the worm has turned.
 
 I'm starting a new blog. I'm going to tell you why Erlang is wicked
 badd-ass awesome (translation: not-bad) and what's happening in the
-Erlang world. I'll also talk about some other competing tenchologies
+Erlang world. I'll also talk about some other competing technologies
 which I consider to be decidedly <i>Unawesome</i> and I'll tell you
 why.
 
