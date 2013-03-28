@@ -90,7 +90,8 @@ I was amazed - this is jaw dropping good stuff.
 When the videos from the Erlang factory come out watch Alexander's
 talk and prepare to be amazed. The future is here it arrived last week
 in San Francisco.
- 
+
+Discuss this on https://news.ycombinator.com/item?id=5451202 
   
 
 
