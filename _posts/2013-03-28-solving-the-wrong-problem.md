@@ -8,7 +8,7 @@ day: 27
 published: true
 ---
 
-We're right and the rest of the word is wrong. We (that is Erlang
+We're right and the rest of the world is wrong. We (that is Erlang
 folks) are solving the right problem, the rest of the world (non
 Erlang people) are solving the wrong problem.
 
