@@ -22,7 +22,7 @@ RSS
 I have set up an RSS atom feed. Hope it works
 
 
-Rreference Material
+Reference Material
 ==================
 
 * http://cobyism.com/jekyll/docs/home/
@@ -50,7 +50,7 @@ Quotes test
 ===========
 
 Quotes seem to work properly. I can make &ldquo;curly quotes&rdquo; and
-``regualar quotes''.
+``regular quotes''.
 
 Stuff that is broken
 ====================
