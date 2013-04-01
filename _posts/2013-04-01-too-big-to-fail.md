@@ -22,7 +22,7 @@ Here a usage example:
 {% highlight erlang %}
 test() ->
     spawn(fun() ->
-		  process_flag(to_big_to_fail, true)
+		  process_flag(too_big_to_fail, true)
 	  end).
 {% endhighlight %}
 <p></p>
@@ -30,7 +30,7 @@ test() ->
 Semantics
 =========
 
-To big to fail processes behave like regular processes until they get
+Too big to fail processes behave like regular processes until they get
 too big and memory congestion occurs.  If a memory allocation error is
 triggered when a <b>too_big_to_fail</b> process needs more memory, then a
 random smaller process is killed, and the system reattempts memory
@@ -50,14 +50,14 @@ other nodes and, these can allocate additional memory.
 
 This is what happens:
 
-* A too <b>big_to_fail_process</b> runs out of memory on node one
+* A <b>too_big_to_fail_process</b> runs out of memory on node one
 * A ``helper'' process is allocated on node two
 * The helper node allocates as much memory as it can
 * node one reduces it's memory footprint, using the additional memory made by stealing memory from node two.
 * This if recursively repeated. So If node two runs out of memory, it tries to steal
 memory from node three, and so.
 
-If all <b>to_big_to_fail_nodes</b> run out of memory, then they request
+If all <b>too_big_to_fail_nodes</b> run out of memory, then they request
 additional memory from the memory allocator of last resort.
 
 The Memory Allocator of Last Resort
@@ -74,7 +74,7 @@ a reboot is required.
 Release Schedule
 ================
 
-<b>to_big_to_fail_processes</b> will be released in OTP-R18B. The
+<b>too_big_to_fail_processes</b> will be released in OTP-R18B. The
 semantics of the memory allocator of last resort are still being
 studied and will be the subject of a forthcoming EEP.
 
