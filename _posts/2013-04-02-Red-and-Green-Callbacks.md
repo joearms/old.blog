@@ -182,7 +182,7 @@ this, we know _exactly_ when the callback is triggered.  It is
 triggered immediately after receiving the message **Msg**.
 
 This wee code fragment is doubly beautiful, if you send the process a message
-**{new_callback, F1}** then it will change it's behavior using the
+**{new_callback, F1}** then it will change its behavior using the
 new callback on the next evocation.
 
 I don't know how you would write this in Javascript. I've written
@@ -214,7 +214,7 @@ wander over to the mailbox to see if any new mail has arrived when
 they were doing other things.
 
 That's how Erlang messaging works. Each house (process) has a life of
-it's own.  The mail guy delivers the mail, and the house owners go
+its own.  The mail guy delivers the mail, and the house owners go
 check the mailboxes now and then when they feel like it.
 
 
