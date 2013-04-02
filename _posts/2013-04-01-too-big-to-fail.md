@@ -64,7 +64,7 @@ The Memory Allocator of Last Resort
 ===================================
 
 If all the <b>too_big_to_fail</b> processes have failed, and run out of memory
-then they can make a request to the ``Memory Allacator of Last Resort.''. The
+then they can make a request to the ``Memory Allocator of Last Resort.''. The
 memory allocator of last resort has the ability to print new memory. Exactly how it
 does this and what the consequences are is little understood. Fortunately if new memory
 is consumed slower than it is printed everything returns to normal. But if
