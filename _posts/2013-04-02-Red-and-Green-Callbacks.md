@@ -95,7 +95,7 @@ move on.
 Enter Concurrency
 =================
 
-Erlang I/O is magic with a purpose. When we have two parallel processes
+Erlang I/O is magic with a purpose. When we have two parallel processes,
 a **read()** request in process **A** will apparently block in **A**,
 but this will not effect the code in any other parallel process (say **B**).
 
@@ -147,11 +147,11 @@ model, and they haven't a clue how the code will interleave when it
 executes.
 
 (I actually have a love-hate relationship with Javascript, most parts
-I love but I hate  the concurrency model- that might sound funny since
-Javascript has no concurrency module - so there's nothing to hate :-)
+I love but I hate the concurrency model- that might sound funny since
+Javascript has no concurrency model - so there's nothing to hate :-)
 
 What's even more difficult to understand is errors. Errors in
-multi-threaded callback code with shared memory is something what would
+multi-threaded callback code with shared memory is something that would
 give me an extremely large headache.
 
 Green Callbacks
@@ -178,7 +178,7 @@ Here's a example of a green callback in Erlang:
 
 When the processes running this code receives a message **Msg** it
 evaluates the function **F(Msg)**.  There is no uncertainty about
-this, we know _exactly_ when the callback is triggered.  Is is
+this, we know _exactly_ when the callback is triggered.  It is
 triggered immediately after receiving the message **Msg**.
 
 This wee code fragment is doubly beautiful, if you send the process a message
@@ -200,8 +200,8 @@ a process it is put in the mailbox (if the postal guy can find the
 processes).
 
 Imagine Erlang processes are houses with mailboxes. Sending a
-message means you hand your message to the mail guy, whose job it is
-to do two things.  Deliver the mail in the destination mailbox and bang
+message means you hand your message to the mail guy, whose job is
+to do two things: deliver the mail in the destination mailbox and bang
 on the door to say ``new mail.''
 
 A process can be doing something or asleep. Just like a house owner,
