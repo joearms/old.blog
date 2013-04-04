@@ -65,7 +65,7 @@ read() ->
            ...
         Pattern2 -> 
            ...
-    end
+    end.
 {% endhighlight %}
 
 The details of exactly how selective receive works are not important
@@ -173,7 +173,7 @@ Here's a example of a green callback in Erlang:
             Msg ->
                 F(Msg),
                 loop(F)
-        end
+        end.
 {% endhighlight %}
 
 When the processes running this code receives a message **Msg** it
@@ -183,12 +183,12 @@ triggered immediately after receiving the message **Msg**.
 
 This wee code fragment is doubly beautiful, if you send the process a message
 **{new_callback, F1}** then it will change its behavior using the
-new callback on the next evocation.
+new callback on the next invocation.
 
 I don't know how you would write this in Javascript. I've written
 quite a lot of jQuery and know how to setup and remove callbacks. But
 what happens if an event is triggered in the time interval between
-removing an even handler and adding a new one. I have no idea, and
+removing an event handler and adding a new one. I have no idea, and
 life is too short to find out.
  
 How Erlang I/O really works
