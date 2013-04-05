@@ -10,7 +10,7 @@ published: true
 
 What's the difference between concurrency and parallelism?
 
-Explain it two a five year old.
+Explain it to a five year old.
 
 <img src='/images/con_and_par.jpg'/>
 
