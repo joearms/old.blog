@@ -20,9 +20,9 @@ Thanks Tom
 =========
 
 The blog is powered by
-[Jekyl](https://github.com/mojombo/jekyll),
+[Jekyll](https://github.com/mojombo/jekyll),
 and the more I use it the more I like
-it.  It only took a few hours of mucking around to make a responsive
+it. It only took a few hours of mucking around to make a responsive
 design that worked on my laptop and on my phone.
 
 I'd bumped into Tom Preston Warner at several Erlang conferences and
@@ -61,7 +61,7 @@ And he replied:
 
     Tom
 
-A win-win situation. Github uses Erlang, and I get to use github,
+A win-win situation. [Github uses Erlang](http://www.infoq.com/interviews/erlang-and-github), and I get to use github,
 great.	  
 
 The new blog
@@ -86,7 +86,7 @@ Now I've added adverts to my book on the front page and a link to my
 thesis which is a free download.
 
 As time goes on I'll be adding information to the
-[Resources](http://joearms.gitbub.com/resources.html). At the moment
+[Resources](http://joearms.github.io/resources.html). At the moment
 it's just a placehoder.
 
 Thanks for the edits
