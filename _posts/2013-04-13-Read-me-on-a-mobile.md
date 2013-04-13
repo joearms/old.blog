@@ -92,7 +92,7 @@ it's just a placehoder.
 Thanks for the edits
 ===================
 
-When I was in school I was a total looser at English. I couldn't spell
+When I was in school I was a total loser at English. I couldn't spell
 for toffee, hadn't a clue about punctuation. I can spell and punctuate
 way better now, but I'm still a long way from perfect. I tend to see
 what I thought I had written not what I actually wrote, so all your
