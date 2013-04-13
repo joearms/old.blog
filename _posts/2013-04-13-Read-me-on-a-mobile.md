@@ -13,7 +13,7 @@ The banner needs some work on it (when viewed on a mobile) but
 otherwise I'm happy with the results.
 
 All I have to do (at home) is point the browser on my Android phone at
-<b>http\:\\\\localhost:192.168.0.21:4000</b> and Jekyll, running on my
+<b>http://192.168.0.21:4000</b> and Jekyll, running on my
 laptop (which has IP 192.168.0.21) serves up the page.
 
 Thanks Tom
@@ -114,8 +114,8 @@ github. So far I've had help from:
 * Catlion (Unknown). 
 
 10 people from as many different countries. While politicians and
-power-mongers f\*\*k up the world the world up we programmers and engineers
-get on with the job, collaborsating and helping each other, which gives
+power-mongers f\*\*k world up, we, programmers and engineers
+get on with the job, collaborating and helping each other, which gives
 me some hope for the future.
 
 Thanks, guys, I really appreciate this.
