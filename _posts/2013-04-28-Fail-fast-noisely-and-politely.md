@@ -67,7 +67,7 @@ and worse I couldn't understand the explanation of the error codes
 that were in the list. The third error code didn't exist.
 
 The same program, had a link to some help desk with some fatuous text
-saying they welcomed comments about their program
+saying they welcomed comments about their program.
 When I mailed this address describing in detail what they should do
 with their software, I got a polite reply, saying my comments had been
 noted and passed on to their development group on one of the moons
