@@ -87,7 +87,7 @@ thesis which is a free download.
 
 As time goes on I'll be adding information to the
 [Resources](http://joearms.github.io/resources.html). At the moment
-it's just a placehoder.
+it's just a placeholder.
 
 Thanks for the edits
 ===================
