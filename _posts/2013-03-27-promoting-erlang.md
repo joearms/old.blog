@@ -22,7 +22,7 @@ and a possible reason is the lack of publicity.
 
 The subject of ``self-promotion'' has bubbled up occasionally on the
 Erlang mailing list. Various users have described  Erlang folk as being
-<i>appallingly bad</i> at prompting Erlang.  I have in various posts tried to
+<i>appallingly bad</i> at promoting Erlang.  I have in various posts tried to
 explain why this is so.
 
 It's a cultural thing. In the far off snowy land from whence Erlang
