@@ -93,7 +93,7 @@ influenced by Erlang and Ruby.  From Erlang it bring pattern matching,
 higher order functions and the entire process and error handling ``let
 it crash'' philosophy. From Ruby it brings sigils, shortcu syntaxes, It
 also adds a few goodies of its own, the |> pipe operator, reminiscent
-of Prologs DCGs and Haskall monads (though less complicated, more like
+of Prologs DCGs and Haskell monads (though less complicated, more like
 the good old unix pipe operator) and the macro quote and unquote
 operators, which come from the lisp quasiquote and comma operators.
 
