@@ -104,7 +104,7 @@ meta-programming far easier.
 
 The implementation is surprisingly solid, though some things don't work as I
 expected. String interpolation (which is a great idea) works in a
-hit-and-miss manner
+hit-and-miss manner.
 
 I'd thought that:
 
@@ -113,7 +113,7 @@ I'd thought that:
 evaluated x and injected a pretty-printed representation of x into the
 string.  But it only works for some simpler forms of x and not all x.
 
-Since you can call any Erlang function from Elixir this was easy to fix
+Since you can call any Erlang function from Elixir this was easy to fix.
 
 IO.puts "...#{pp(x)}..." always works. I just defined pp(x) as
 
@@ -146,7 +146,7 @@ nicely down into LLVM assembler - but that's another story too long to tell here
 
 # The Three Laws of Programming Language Design
 
-* What you get right nobody mentions.
+* What you get right, nobody mentions.
 * What you get wrong, people bitch about.
 * What is difficult to understand you have to explain to people over and over again.
 
@@ -157,15 +157,15 @@ understand.
 The wrong stuff is a bitch. You boobed, but you are forgiven if the
 good stuff outweighs the bad. This is the stuff you want to remove
 later, but you can't because of backwards compatibility and some nitwit has
-written a zillion lines of code using the all the bad stuff.
+written a zillion lines of code using all the bad stuff.
 
 The difficult to understand stuff is a real bummer. You have to
 explain it over and over again until you're sick, and some people never
 get it, you have to write hundred of mails and thousands of words
-explaining over and over again why this stuff means and why it so.
+explaining over and over again why this stuff means and why it is so.
 For a language designer, or author, this is a pain in the bottom.
 
-I'm going mention a few things that I think fall into these three
+I'm going to mention a few things that I think fall into these three
 categories.
 
 Before I start I'll just say that Elixir has got a heck of lot of
@@ -188,8 +188,8 @@ XML files always start
 This is great. Reading the first line of an XML file is like
 listening to the opening bars of Rachmaninoff's third piano
 concerto. A sublime experience. All praise to the XML designers,
-hallowed be their names, give these guy's some Turing prizes.
-  
+hallowed be their names, give these guys some Turing prizes.
+
 Putting the language version in all source files is essential. Why is
 this?
 
@@ -222,17 +222,17 @@ Then it should say
        I have a headache. I'm going to have a rest...
     **
 
-It's the first law of data design 
+It's the first law of data design:
 
      All data that might change in the future should be 
-     tagged with a version number 
+     tagged with a version number.
 
 and a module *is* data.
 
 Funs and defs are not the same
 ==============================
 
-I started writing ``Programming Erlang'' Dave Thomas wondered why
+When I started writing ``Programming Erlang'' Dave Thomas wondered why
 you couldn't type function in the shell.
 
 If a module contains this:
@@ -247,7 +247,7 @@ In Lisp and so on you can. Dave said something like ``this is going to
 confuse people'' - he was right and it does confuse people. There must
 be hundreds to thousands of messages on forums asking about this.
 
-I have explained why is so many times that my hair has gone grey, it's
+I have explained why so many times that my hair has gone grey, it's
 true my hair is now grey because of this.
 
 It's because there is a bug in Erlang.
@@ -261,7 +261,7 @@ In Erlang **FORMS** are not **EXPRESSIONS**.
 
     double(X) -> 2*X.            in an Erlang module is a FORM
 
-    Double = fun(X) -> 2*X end,  in the shell is an EXPRESSION
+    Double = fun(X) -> 2*X end.  in the shell is an EXPRESSION
 
 The two are **not** the same. This bit of silliness has been Erlang forever
 but we didn't notice it and we learned to live with it.
@@ -281,16 +281,16 @@ into the shell and it will say
 If you don't fix this you'll spend the next 20 years explain why - just like we did in Erlang.
 
 BTW the fix is really really easy. I made erl2 as an experiment to fix
-this It can't be fixed in Erlang (backwards compatibility) so I did it
+this. It can't be fixed in Erlang (backwards compatibility) so I did it
 in [erl2](https://github.com/joearms/erl2). This needs a very small
 change to erl_eval and a few tweaks in the parser.
 
 Basically FORMS are not expressions, so I added a keyword **def**
 
-     Var = def fac(0) -> ; fac(N) -> N*fac(N-1) end
+     Var = def fac(0) -> ; fac(N) -> N*fac(N-1) end.
 
 This is __defined__ to be an expression with a side effect. Since it's
-an expression I can evaluated in the shell, remember the shell can
+an expression I can evaluate in the shell, remember the shell can
 only evaluate expressions.
 
 The side effect is to create a function called shell:fac/1 (just as if
@@ -351,7 +351,7 @@ This is going to make it really difficult for programmers in Occam-pi
 to convert to Elixir, by the simple act of changing **<-** to **!** will cause
 hoards of occam-pi programmers would weep for joy rush into the
 streets crying ``horray, horray, what a good day'' and immediately
-convert to Elixir.  old men will tell of this in times to come, and
+convert to Elixir. Old men will tell of this in times to come, and
 there will be much rejoicing and celebration in the land.
 
 The Pipe operator
@@ -456,10 +456,10 @@ of a string we can interpret the contents in different ways. We might
 like to write
 
      A = "Joe",
-     B = s"Hello #{A}",
+     B = s"Hello #{A}".
 
 So that B would be **"Hello Joe"** - here the s sigil would change the
-interpretation of the strung literal to mean **"substitute variables in"**.
+interpretation of the string literal to mean **"substitute variables in"**.
 
 Elixir does this in a very nice way, defining many different sigils.
 
@@ -599,7 +599,7 @@ Proper closures should only contain pointers into immutable
 data (which is the case in Erlang) - no pointers into mutable data. If
 a closure contains a pointer into mutable data and you change the data
 later you break the closure. This means you can't parallelize your
-program and even sequential code can can contain weird errors.
+program and even sequential code can contain weird errors.
 
 In a conventional language creating proper closures would be very
 expensive since it would require deep copying of all the variables
