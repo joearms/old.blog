@@ -375,7 +375,7 @@ So
 Means
 
      newvar = x(1,2);
-     y(newvar,1,2);
+     y(newvar,a,b,c);
 
 This is **very** useful. Suppose we want to capitalize an atom that is
 turn the atom **'abc'** into **'Abc'**. There is no function to capitalize an
