@@ -146,7 +146,7 @@ nicely down into LLVM assembler - but that's another story too long to tell here
 
 # The Three Laws of Programming Language Design
 
-* What you get right, nobody mentions.
+* What you get right, nobody mentions it.
 * What you get wrong, people bitch about.
 * What is difficult to understand you have to explain to people over and over again.
 
