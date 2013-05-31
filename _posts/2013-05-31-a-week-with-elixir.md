@@ -80,7 +80,7 @@ the non-shared concurrency model, the underlying error handling and
 code loading mechanism are identical. They must be identical they run
 on the same VM. This is also why things like Scala and Akka will never
 be like Erlang. Scala and Akka run on the JVM so under the covers,
-things like garabage collection and code loading are fundamentally
+things like garbage collection and code loading are fundamentally
 different. 
 
 What Elixir brings to the table is a complete different surface
@@ -91,7 +91,7 @@ Erlang's syntax derived from Prolog and was heavily influenced by
 smalltalk, CSP and the functional programming. Elixir is heavily
 influenced by Erlang and Ruby.  From Erlang it bring pattern matching,
 higher order functions and the entire process and error handling ``let
-it crash'' philosophy. From Ruby it brings sigils, shortcu syntaxes, It
+it crash'' philosophy. From Ruby it brings sigils, shortcut syntaxes, It
 also adds a few goodies of its own, the |> pipe operator, reminiscent
 of Prologs DCGs and Haskell monads (though less complicated, more like
 the good old unix pipe operator) and the macro quote and unquote
@@ -103,7 +103,7 @@ Elixir AST has a far more uniform representation, which makes
 meta-programming far easier.
 
 The implementation is surprisingly solid, though some things don't work as I
-expected. String iterpolation (which is a great idea) works in a
+expected. String interpolation (which is a great idea) works in a
 hit-and-miss manner
 
 I'd thought that:
@@ -142,7 +142,7 @@ recursion. Actually it could not have loops with mutable variables
 since this would be impossible to compile into anything remotely
 sensible in the EVM. SSA variables in sequences are fine, the EVM knows
 how to optimize these. Loops no, so Elixir doesn't go there. It would even boil
-nicely down into LLVM assember - but that's another story too long to tell here.
+nicely down into LLVM assembler - but that's another story too long to tell here.
 
 # The Three Laws of Programming Language Design
 
@@ -173,7 +173,7 @@ things right, and the good things far outweigh the bad things.
 
 The nice thing about Elixir is that it's not too late to fix the bad
 things. This can only be done before zillions of line of code get
-written and before trillians of programmers start using it - so
+written and before trillions of programmers start using it - so
 there's only a few days to fix this.
 
 No versions in the source files
@@ -224,7 +224,7 @@ Then it should say
 
 It's the first law of data design 
 
-     All data tht might change in the future should be 
+     All data that might change in the future should be 
      tagged with a version number 
 
 and a module *is* data.
@@ -419,7 +419,7 @@ hidden argument that threads its way in and out of a sequence of
 function calls. It's kind-of what a monad does in Haskell, but keep this
 a secret.
 
-Prolog had DCGs, Erlang didn't, Elixir has the pipe operator
+Prolog had DCGs, Erlang didn't, Elixir has the pipe operator.
 
 Elixir has sigils
 ==================
@@ -467,12 +467,12 @@ In Elixir the sigil syntax is different, it's:
 
     %C{.....}
 
-Ther C is a single character followed by a pair of matching brackets
+Their C is a single character followed by a pair of matching brackets
 **{}** or **[]**.
 
 
 Sigils are great. Erlang could have had these 15 years ago, and they can 
-be added now without breaking backwards compatability.
+be added now without breaking backwards compatibility.
 
 Docstrings
 ==========
