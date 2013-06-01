@@ -7,7 +7,7 @@ published: true
 
 About a week ago I started looking at [Elixir](http://elixir-lang.org). 
 Elixir had been one of
-those things that was vaguely aware of but had not yet time to look at
+those things that I was vaguely aware of but had not yet time to look at
 in any detail.
 
 This all changed when I discovered the announcement that Dave Thomas
@@ -56,7 +56,7 @@ know why.
 Surprise number two, Simon St. Laurent was also writing a book on
 Elixir. Simon did a good job with [Introducing
 Erlang](http://www.amazon.com/Introducing-Erlang-Simon-St-Laurent/dp/1449331769)
-... and we'd exchanged several mail, so something was in the air. With
+... and we'd exchanged several mails, so something was in the air. With
 both Pragmatic Press and O'Reilly racing to get into  Elixir I knew
 something was happening on the Erlang VM, and I didn't know about
 this. Boy am I out of touch.
@@ -74,31 +74,31 @@ EVM (Erlang Virtual Machine) - actually nobody call this the EVM They
 just say the "Beam" VM but I thing we should start calling this the
 EVM to distinguish it for the JVM.
 
-Why do Erlang and Elixir have the same ``semantics''. The reason has
+Why do Erlang and Elixir have the same ``semantics''? The reason has
 to do with the underlying machine. The garbage collection behavior,
 the non-shared concurrency model, the underlying error handling and
-code loading mechanism are identical. They must be identical they run
+code loading mechanism are identical. They must be identical: they run
 on the same VM. This is also why things like Scala and Akka will never
 be like Erlang. Scala and Akka run on the JVM so under the covers,
 things like garbage collection and code loading are fundamentally
 different. 
 
 What Elixir brings to the table is a complete different surface
-syntax, inspired by Ruby. What you might call a ``non scary'' syntax,
+syntax, inspired by Ruby. What you might call a ``non-scary'' syntax,
 and a load of extra goodies.
 
 Erlang's syntax derived from Prolog and was heavily influenced by
 smalltalk, CSP and the functional programming. Elixir is heavily
-influenced by Erlang and Ruby.  From Erlang it bring pattern matching,
+influenced by Erlang and Ruby.  From Erlang it brings pattern matching,
 higher order functions and the entire process and error handling ``let
-it crash'' philosophy. From Ruby it brings sigils, shortcut syntaxes, It
+it crash'' philosophy. From Ruby it brings sigils, and shortcut syntaxes. It
 also adds a few goodies of its own, the |> pipe operator, reminiscent
 of Prologs DCGs and Haskell monads (though less complicated, more like
 the good old unix pipe operator) and the macro quote and unquote
 operators, which come from the lisp quasiquote and comma operators.
 
 Elixir also brings a new underlying AST to the table, instead of the
-Erlang AST where everything form has it's own representation, the
+Erlang AST where everything form has its own representation, the
 Elixir AST has a far more uniform representation, which makes
 meta-programming far easier.
 
@@ -131,7 +131,7 @@ In Erlang this would be:
 which is ``obviously'' equivalent to the Elixir version. Actually the
 Elixir version is easier to read. The |> operator in the above means
 pipe the output of io_lib:format into lists:flatten and then
-list_to_binary. Just like the good 'ol Unix pipe operator.
+list_to_binary. Just like the good ol' Unix pipe operator.
 
 Elixir breaks a few Erlang holy cows - variables can be re-bound in
 sequences.  This is actually ok, the resulting forms can still be
@@ -150,7 +150,7 @@ nicely down into LLVM assembler - but that's another story too long to tell here
 * What you get wrong, people bitch about.
 * What is difficult to understand you have to explain to people over and over again.
 
-Some language get some things so right that nobody ever bothers to
+Some languages get some things so right that nobody ever bothers to
 mention them, they are right, they are beautiful, they are easy to
 understand.
 
@@ -275,7 +275,7 @@ In an Elixir Module you can write
 My bet is that thousands of programmers will cut and paste this from their text editor
 into the shell and it will say
 
-    ex> def double(x) do 2*x; end
+    ex> def triple(x) do 3*x; end
     ** (SyntaxError) iex:66: cannot invoke def outside module
 
 If you don't fix this you'll spend the next 20 years explain why - just like we did in Erlang.
@@ -300,7 +300,7 @@ So really
 
     iex> double = fn(x) -> 2 * x end;
 
-    iex> def douuble(x) do 2*x end;
+    iex> def double(x) do 2*x end;
 
 Should be identical, and **both** should define a function with name **Shell.double**
 
@@ -309,7 +309,7 @@ Make this change and avoid grey hair.
 Funs have an extra dot in the name
 ==================================
 
-    iex> f = fn(x) -> 2 * xend
+    iex> f = fn(x) -> 2 * x end
     #Function<erl_eval.6.17052888>
     iex> f.(10)
     20
@@ -336,20 +336,20 @@ should be **!**, like this:
 
     Process ! Message
 
-Next week my brain will have gone soggy and my neutral network be
+Next week my brain will have gone soggy and my neural network be
 reprogrammed so that I ``see'' <- as **!** - this is not about thinking
 it's about reprogramming the base of my spine. The send operator is
-not in my brain, it's in the the base of my spine. My brains thinks
+not in my brain, it's in the the base of my spine. My brain thinks
 ``send a message to a process'' and sends a message to my fingertips,
 my spine adds the **!** then by brain does **backspace erase <-**.
 
 It's a syntax thing. We all love to hate syntax. But on a scale of
-badness where 10 is ``really really bad'' and 1 is well ``ok I might
+badness where 10 is ``really really bad'' and 1 is ``well ok I might
 get used to this'' its about a 3.
 
 This is going to make it really difficult for programmers in Occam-pi
 to convert to Elixir, by the simple act of changing **<-** to **!** will cause
-hoards of occam-pi programmers would weep for joy rush into the
+hoards of occam-pi programmers to weep for joy rush into the
 streets crying ``horray, horray, what a good day'' and immediately
 convert to Elixir. Old men will tell of this in times to come, and
 there will be much rejoicing and celebration in the land.
@@ -362,7 +362,7 @@ really easy to understand so nobody will give you credit for
 it. That's life.
 
 This is the recessive monadic gene of Prolog. The gene was dominant in
-Prolog recessive in Erlang (son-of-prolog) but re-emerged in
+Prolog, recessive in Erlang (son-of-prolog) but re-emerged in
 Elixir (son-of-son-of-prolog).
 
 **x |> y** means call **x** then take the output of **x** and add it as an extra
@@ -402,7 +402,7 @@ With the **|>** operator this becomes:
         X |> atom_to_list |> list_to_binary |> capitalize_binary 
           |> binary_to_list |> binary_to_atom
 
-Why did I call this the recessive gene.
+Why did I call this the recessive gene?
 
 Erlang was derived from Prolog, and Elixir is derived from Erlang.
 
@@ -427,7 +427,7 @@ Elixir has sigils
 Sigils are great - love 'em. We should add these to Erlang.
 
 A string is a programming language abstraction. Programming languages
-have string literals, usually sequence of characters surrounded by
+have string literals, usually a sequence of characters surrounded by
 double quotes.  So when you see a line of code like:
 
     x = "a string"
@@ -440,7 +440,7 @@ In Erlang
 
      X = "abc" 
 
-means ``X is a list of integer representing the ASCII codes for a, b
+means ``X is a list of integers representing the ASCII codes for a, b
 and c''
 
 But we can choose any meaning we want. In Elixir **x = "abc"** means
@@ -479,7 +479,7 @@ Docstrings
 
 Docstrings are great love 'em.
 
-But I have a minor quibble. Please put the docstring **inside** the function definition
+But I have a minor quibble. Please put the docstring **inside** the function definition.
 
 You say
  
@@ -499,7 +499,7 @@ Put it *inside* the function like this:
        """
      end
 
-Otherwise you'll get``detached comment'' things will get mucked up
+Otherwise you'll get``detached comment'': things will get mucked up
 when you edit programs. Comments will get separated from the functions
 to which they apply.
 
@@ -548,14 +548,13 @@ Oops it should be ``do:'' and not ``do :''
 
 To me white-space is white-space. Inside string literals I cannot mess
 with white-space. Outside a string literal I like to add white space
-wherever I feel like for formatting reason, so I can make the code
+wherever I feel like for formatting reasons, so I can make the code
 look pretty.
 
 But I can't do this in Elixir - I don't like this.
 
 Closures done right - Hip hip hooray
 ====================================
-
 
 Closures in Elixir (fn's) are really just closures in Erlang (fun's)
 
@@ -626,7 +625,7 @@ why can't I say
        a + x
     end
 
-in a module. This is completely fixable I did this in an experiment
+in a module? This is completely fixable I did this in an experiment
 in erlang2.
 
 Finally
@@ -636,7 +635,7 @@ This has been my first week with Elixir, and I'm pretty excited.
 
 Elixir has a non-scary syntax and combines the good features of Ruby
 and Erlang.  It's not Erlang and it's not Ruby and it has ideas of
-it's own.
+its own.
 
 It's a new language, but books are being written as the language is
 being developed. The first Erlang book came 7 years after Erlang was
@@ -646,8 +645,8 @@ long to wait for a decent book.
 Dave loves Elixir, I think it's pretty cool, I think we're going to have fun
 together.
 
-Erlang powers things like Whats-App and crucial parts of half the
-worlds mobile phone networks. It's going to be great fun to see what
+Erlang powers things like WhatsApp and crucial parts of half the
+world's mobile phone networks. It's going to be great fun to see what
 will happen when the technology becomes less scary and the next wave
 of enthusiasts joins the party.
 
