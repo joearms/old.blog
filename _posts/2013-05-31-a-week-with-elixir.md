@@ -579,7 +579,7 @@ see the difference:
 Oh dear we broke the function f. We define a function f, start using
 it. Redefine a and this has the side effect of breaking f. One of the
 good things about functional programming is that it makes it easy to
-reason abut programs. If f(10) evaluates to 15 then it should evaluate
+reason about programs. If f(10) evaluates to 15 then it should evaluate
 to 15 forever, you should not be able to remotely break it.
 
 What about Elixir? This gets closures right:
