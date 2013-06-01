@@ -50,7 +50,7 @@ later. Malcolm Gladwell in his book
 talks about this.  Experts in a particular field can often instantly
 know that something is right, but they can't explain why.
 
-When I saw that Dave was had got his eye ``on the ball'' I wanted to
+When I saw that Dave had his eye ``on the ball'' I wanted to
 know why.
 
 Surprise number two, Simon St. Laurent was also writing a book on
