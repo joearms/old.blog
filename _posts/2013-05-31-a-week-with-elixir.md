@@ -329,7 +329,7 @@ The send operator
     Process <- Message
 
 What's on earth is? Do you realize how difficult it will be to convert
-form occam-pi to Elixir.
+from occam-pi to Elixir.
 
 You're going to lose the occam-pi community here. The send operator
 should be **!**, like this:
@@ -339,7 +339,7 @@ should be **!**, like this:
 Next week my brain will have gone soggy and my neural network be
 reprogrammed so that I ``see'' <- as **!** - this is not about thinking
 it's about reprogramming the base of my spine. The send operator is
-not in my brain, it's in the the base of my spine. My brain thinks
+not in my brain, it's in the base of my spine. My brain thinks
 ``send a message to a process'' and sends a message to my fingertips,
 my spine adds the **!** then by brain does **backspace erase <-**.
 
@@ -450,7 +450,7 @@ in Erlang:
 
      X = r"...."
 
-could be defined to mean ``a compiled regular expression'' (ie is
+could be defined to mean ``a compiled regular expression'', i.e. is
 equivalent to **X = re:compile("....")** - given that we know the meaning
 of a string we can interpret the contents in different ways. We might
 like to write
@@ -556,7 +556,7 @@ But I can't do this in Elixir - I don't like this.
 Closures done right - Hip hip hooray
 ====================================
 
-Closures in Elixir (fn's) are really just closures in Erlang (fun's)
+Closures in Elixir (fn's) are really just closures in Erlang (fun's).
 
 fn's have the nice property of capturing the present value of any
 variables that are in their scope (ie we can create immutable
