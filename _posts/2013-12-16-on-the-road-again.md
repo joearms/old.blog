@@ -72,7 +72,7 @@ and about two weeks before the conference think about the talk. This
 often involves describing some program or technique that you've been
 thinking about for a while, but haven't got around to implementing.
 
-A lot of thanks get implemented this way.
+A lot of things get implemented this way.
 [Erlang 2](https://github.com/joearms/erl2) was developed for a talk at the
 Stockholm Erlang Users' conference.
 
