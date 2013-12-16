@@ -70,7 +70,7 @@ it an integer, wait for the response and print the response:
 {% highlight erlang %}
 test() ->
     Pid = spawn(fun universal_server/0),
-    Pid ! {become, fun fac_server/0},
+    Pid ! {become, fun factorial_server/0},
     Pid ! {self(), 50},
     receive
         X -> X
