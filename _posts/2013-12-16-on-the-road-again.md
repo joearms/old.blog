@@ -6,7 +6,7 @@ year: 2013
 month: 12
 day: 16
 published: true
-summary: testing my blog
+summary: Review of two conferences
 ---
 
 I've been on the road again. At the start of the year I said ``I'll
