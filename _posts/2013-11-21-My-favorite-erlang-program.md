@@ -48,7 +48,7 @@ factorial of an integer. This is mind-boggling simple:
 {% highlight erlang %}
 factorial_server() ->
     receive
-       {From ! N} ->
+       {From, N} ->
            From ! factorial(N),
            factorial_server()
     end.
@@ -77,15 +77,15 @@ test() ->
     end.
 {% endhighlight %}
  
-All these functions belong to the module **demo**.
+All these functions belong to the module [fav1](/code/fav1.erl).
 
 Now all we have to do is fire up an Erlang shell and run the test program
 
 {% highlight erlang %}
 $ erl
-1 > c(demo1).
-{ok, demo1}
-2 > demo1:test().
+1 > c(fav1).
+{ok, fav1}
+2 > fav1:test().
 30414093201713378043612608166064768844377641568960512000000000000
 {% endhighlight %}
 
