@@ -43,7 +43,7 @@ The Factorial Server
 ====================
 
 A factorial server is a server which waits for an integer and sends back the
-factorial of an integer. This is mind-boggling simple:
+factorial of an integer. This is mind-bogglingly simple:
 
 {% highlight erlang %}
 factorial_server() ->
