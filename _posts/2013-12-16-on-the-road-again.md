@@ -134,14 +134,15 @@ Joe Armstrong and David Turner
 
 
 David Turner is the man who ``rediscovered'' functional programming.
-Perhaps rediscovered is the wrong word, but it was Davids work
-that connected Churches Lambda calculus (1941) with work 
-on Combinatorial logic by Curry and Freys (1958) and made the first
-lazy functional programming language (SASL) in 1972.
+Perhaps rediscovered is the wrong word, but it was Davids work that
+connected Churches Lambda calculus (1941) with work on Combinatorial
+logic by Curry and Freys (1958) and which led to the purely functional
+programming language (SASL) in 1972.
 
-David's SASL was inspired by Peter Landin's ISWIM. SASL was first implemented
-in LISP over a weekend by Tony Davie, and reimplemeted by David in BCPL in 1973.
-Lazy functional programming languages were born.
+David's SASL was inspired by Peter Landin's ISWIM. SASL was first
+implemented in LISP over a weekend by Tony Davie, and reimplemeted by
+David in BCPL in 1973.  In 1976 David redesigned SASL and lazy
+functional programming languages were born.
 
 SASL was, like Erlang, dynamically typed. I asked David about this,
 he seemed unconcerned. Some of his language had dynamic types, others
