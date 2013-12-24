@@ -11,4 +11,8 @@ published: true
 Wrapping christmas presents takes a while. This one took me
 about an hour. Hope they won't guess what it is.
 
+Note: No animals were hurt in wrapping this present.
+
 <img src='/images/cat_and_joe_ed.jpg'/>
+
+
