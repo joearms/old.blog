@@ -143,7 +143,7 @@ in a sensible way that will not cause problems in the future.
 
 # Names in Funs
 
-You can use a name inside a fun before the name has been defined. This
+In Erlang you can't use a name inside a fun before the name has been defined. This
 makes it rather difficult to define things like factorial in a fun.
 
 Why is this?
