@@ -100,9 +100,9 @@ If the compiler sees a line of code like this:
     X1 = X#{key1 := Val1, key2 := Val2, ...}
 </pre>
 
-When all the update operators are ":=" then it know that the new
-object X1 has the same keys as X. This means we can store the a
-descriptor of X (ie what the keys the object has) and the values are
+When all the update operators are ":=" then it knows that the new
+object X1 has the same keys as X. This means we can store the
+descriptor of X (ie what keys the object has) and the values
 in different places, and that the new object X1 can share the keys
 used by X.
 
@@ -123,18 +123,18 @@ over this for years.
 Here's an example:
 
 <pre>
-> Z = #{ {age,fred} => 12, {age, bill} => 97, 
-         {color, red} => {rgb,255,0,0}}.
+> Z = #{ {age, fred} => 12, {age, bill} => 97, 
+         {color, red} => {rgb, 255, 0, 0}}.
 </pre>
 
 Then I can pattern match out any of the arguments like this:
 
 <pre>
->    #{ {color,red} := X1} = Z.
+>    #{ {color, red} := X1} = Z.
 </pre>
 
 
-which binds X1 to {rgb,255,0,0}
+which binds X1 to {rgb, 255, 0, 0}
 
 So now we have maps - the keys can be any ground term. We can handle
 large lists of maps that all have the same keys in a space efficient manner
@@ -170,7 +170,7 @@ so we write the inner part of the factorial function as
      end.
 </pre>
 
-and pass the function to be called as an additonal argument to the function.
+and pass the function to be called as an additional argument to the function.
 Now everything is defined. If we say:
 
 <pre>
@@ -179,7 +179,7 @@ Now everything is defined. If we say:
      end.
 </pre>
 
-Then G(G,X) will computer factorial X.
+Then G(G,X) will compute factorial X.
 
 But we want to hide this horrible function G, so we write:
 
@@ -219,7 +219,7 @@ out at the pub the evening before.
 But there is an easier way. Allow names in the function definition before
 they are fully defined.
 
-So now we have a better way .. and there should be a drum role here.
+So now we have a better way .. and there should be a drum roll here.
 
 Here's the new way (in the shell).
 
