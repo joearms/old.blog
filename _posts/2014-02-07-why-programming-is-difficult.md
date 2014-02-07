@@ -158,11 +158,10 @@ long term this is disastrous.
 Take document production. I vacillate between TeX/LaTeX and XSLT-FO
 and my own Erlguten.
 
-<blockquote>
 About once every three years I get a strong desire to write all my
 documents directly in postscript, and then the only thing to do is
 take a deep breath and wait until the feeling goes away.
-</blockquote>
+
 
 I guess Giambattista Bondoni when he produced his Manuale Tipografico
 in 1818 wasn't particular concerned if typesetting a single page took a
@@ -202,8 +201,8 @@ stuff and you need to know who to ask when you get stuck.
 # Amazing but true
 
 When I'd finished this article, I wanted to spell check the content.
-At this particular time emacs-ispell mode decided to that it could not find
-aspell, the program that I use for spelling checking.
+emacs-ispell mode decided to go on strike. It could not find aspell,
+the program that I use for spelling checking.
 
 My emacs spell checker has worked faithfully on this machine for
 several years.  And just when I complain that I spend half my life
