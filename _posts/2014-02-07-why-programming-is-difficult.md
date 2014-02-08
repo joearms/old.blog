@@ -75,7 +75,7 @@ managers moved him on to the next project.
 
 There was no time, and no understanding for the point of view that
 not-only should the web site look ok, but the code that produced it
-should be cleaned up documented become the next project was
+should be cleaned up and documented before the next project was
 started. And this was for projects that would have to be maintained in
 the future.
 
@@ -188,7 +188,7 @@ Fortunately we have place to go to where we cannot be
 distracted. Sleep. A lot of programming problems get solved while you
 sleep.
 
-There are two methods. First you load your load your brain with
+There are two methods. First you load your brain with
 problems, then you sleep then the next day you wake up and some of
 the problems are solved. Easy.
 
@@ -211,7 +211,7 @@ to break.
 
 I don't believe in malicious Gods, nor that the laws of physics are
 different in the left-hand corner of the sofa in my front room where
-I'm typing this, though there is circumstantion evidence to suggest the
+I'm typing this, though there is circumstantial evidence to suggest the
 contrary.
 
 I could see no reason why my spelling checker should break - Everything
