@@ -18,8 +18,6 @@ Books
 Websites
 =======
 
-Blogs 
-=====
 
 Companies Using Erlang
 ======================
