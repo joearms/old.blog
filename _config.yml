@@ -1,5 +1,5 @@
 markdown: rdiscount
-pygments: true
+highlighter: true
 rdiscount:
   extensions: [smart, autolink]
 
