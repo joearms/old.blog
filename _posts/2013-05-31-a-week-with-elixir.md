@@ -520,7 +520,7 @@ Yup, monads are really easy to understand that's why there are
 hundreds of articles explaining how easy they are.
 
 Elixir macros are really easy - quote is just quasiquote in lisp and
-unqote is the list comma operator - so that was easy :-)
+unquote is the list comma operator - so that was easy :-)
 
 Extra punctuation
 =================
