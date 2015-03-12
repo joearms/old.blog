@@ -39,7 +39,7 @@ How could we give a precise name to Thomas? - that's easy (in theory)
 (and we'd need some fancy error correction algorithm since I guess two
 scans of the genome would not produce bit identical results).
 
-# Naming thing by their content
+# Naming things by their content
 
 Inside computers things are stored in files, this raises two
 very tricky problems:
@@ -64,7 +64,7 @@ that have meaning, and we can search for these.
 Once we have the SHA1 name of a file we can safely request this file
 from any server and don't need to bother with security.
 
-Fpr example, if I request a file with SHA1
+For example, if I request a file with SHA1
 cf23df2207d99a74fbe169e3eaa035e623b65d94 from a server then I can
 check that the data I got back was correct by computing its SHA1
 checksum.
