@@ -127,7 +127,7 @@ will diverge and at that time we can think of changing the UUIDs
 I think this would be a rather good mechanism. Imagine the following:
 
 + We create file and make sure it contains a UUID.
-+ The file gets modified, or renamed. At this stage their is still only one file
++ The file gets modified, or renamed. At this stage there is still only one file
   with this UUID.
 + We copy the file to a new file. Now we have two files with the same UUID. Each can be
   independently edited renamed or copied. By keeping a database of UUID to filename
