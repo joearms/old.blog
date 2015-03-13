@@ -58,7 +58,7 @@ find the filename of a file that contains some data I'm interested
 in''.
 
 The latter problem (finding the file) is solved by indexing the
-contents of the file The file can contain hashtags of certain names
+contents of the file. The file can contain hashtags of certain names
 that have meaning, and we can search for these.
 
 Once we have the SHA1 name of a file we can safely request this file
