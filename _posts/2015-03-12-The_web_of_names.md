@@ -127,13 +127,13 @@ will diverge and at that time we can think of changing the UUIDs
 I think this would be a rather good mechanism. Imagine the following:
 
 + We create file and make sure it contains a UUID.
-+ The file gets modified, or renamed. At this stage their is still only one file
++ The file gets modified, or renamed. At this stage there is still only one file
   with this UUID.
 + We copy the file to a new file. Now we have two files with the same UUID. Each can be
   independently edited renamed or copied. By keeping a database of UUID to filename
   mappings we can easily track down all modifications of the file. At a certain stage
   we might look at all the files containing the same UUID and decide that some of the
-  modifications are so large as to warrent a name change, in this case we add a new UUID
+  modifications are so large as to warrant a name change, in this case we add a new UUID
   to the
   file - and we can also add a `parent:UUID` tag in the file saying that this file
   was derived from an earlier file with this UUID. Using the parent tag we'd be able
