@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTML as a programing language
+title: HTML as a programming language
 tags: HTML programming erlang
 year: 2015
 month: 3
