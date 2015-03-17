@@ -192,5 +192,28 @@ that make no sense and by keeping the best of all the modifications.
 This is part of my __reversing entropy__ plan - that hopefully will
 clear up the mess we're in.
  
+# Update 1
+
+Since I published this article my attention has been drawn
+(thank's to Twitter and some private communications)  to a number of
+projects with goals that are broadly similar or overlapping with what
+I'm suggesting:
+
+[CNNx](http://www.ccnx.org/what-is-ccn/) is a project that wants
+content to be addressed by name, not by machine address and using
+secured content.
+
+[Named Data Networking](http://named-data.net/project/) wants to 
+secure content.
+
+[IFPS](http://ipfs.io) wants to make the entire web into a secure
+distributed file system.
+
+It seems like many people have similar ideas - which is
+great. Hopefully this will lead to better and more secure systems.
+
+
+
+
 
  
