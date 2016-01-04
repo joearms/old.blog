@@ -21,6 +21,10 @@ line](https://forums.developer.apple.com/thread/5137).
 {% include_relative swift/browser.swift %}
 </pre>
 
+{% highlight swift %}
+{% include_relative swift/browser.swift %}
+{% endhighlight %}
+
 Which when I stuck in a file called `browser.swift` and gave the shell command
 `swift browser.swift'  up popped the following window:
 
@@ -344,7 +348,7 @@ A little research revealed that the correct way to call
 `add` was to use the totally unobvious syntax:
 
 <pre>
-{% include_relative swift/funcs3.swift %}
+{% include_relative swift/funcs2.swift %}
 </pre>
 
 Inconsistent *moi*? - the first parameter name is omitted. All the other parameters
@@ -361,7 +365,7 @@ Better though again unobvious is to prefix each argument in the function definit
 underscore `_` like this:
 
 <pre>
-{% include_relative swift/funcs2.swift %}
+{% include_relative swift/funcs3.swift %}
 </pre>
 
 Now at least we can call the function in the same way as we'd do in
