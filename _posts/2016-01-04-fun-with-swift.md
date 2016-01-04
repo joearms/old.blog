@@ -35,7 +35,7 @@ http://practicalswift.com/.
 
 My immediate reaction was ``Golly -- Swift might just be usable'' and
 I was hooked.  I'd also read that Swift was a functional language
-which again peaked my interest.
+which again piqued my interest.
 
 In the next week or so I found that Swift was certainly not a pure
 functional language but that it was whole lot better than
@@ -247,7 +247,7 @@ program to see what happens.
 
 <img src='/images/experiment4.png'/>
 
-This is actually a `TextView` where I've set the backgorund color to the window
+This is actually a `TextView` where I've set the background color to the window
 background color.
 
 *Exercise:* Make a better or alternative version.	
