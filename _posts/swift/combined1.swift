@@ -59,25 +59,24 @@ func make_text(window:NSWindow,
     return text
 }
 
-func set_window_args(window:NSWindow, _ w:Int, _ h:Int, _ title:String) ->
-    Void {
+func make_window(w: Int, _ h: Int, _ title: String) -> NSWindow {
+    let window = NSWindow()
     window.setContentSize(NSSize(width:w, height:h))
     window.styleMask = NSTitledWindowMask | NSClosableWindowMask |
-                       NSMiniaturizableWindowMask |
-                       NSResizableWindowMask
-        
+        NSMiniaturizableWindowMask | NSResizableWindowMask
+    
     window.opaque = false
     window.center();
     window.title = title
+    return window
 }
 
 class AppDelegate: NSObject, NSApplicationDelegate
 {
-    let window = NSWindow()
+    let window = make_window(400, 200, "My title")
 
     func applicationDidFinishLaunching(aNotification: NSNotification)
     {
-        set_window_args(window, 400, 200, "My title")
         let entry1  = make_entry(window, (200, 80, 180, 30), "1")
         let text1   = make_text(window, (20, 80, 180, 30), "Hello from me")
         let text2   = make_text(window, (20, 120, 180, 30), "Another field")
@@ -91,9 +90,9 @@ class AppDelegate: NSObject, NSApplicationDelegate
               return true} //
 
         button1.onclick = f1
-                
+        
         window.makeKeyAndOrderFront(window)
-        window.level = 1
+        window.makeMainWindow()
     }
 }
 
