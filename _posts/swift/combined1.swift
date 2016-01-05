@@ -93,6 +93,7 @@ class AppDelegate: NSObject, NSApplicationDelegate
         
         window.makeKeyAndOrderFront(window)
         window.makeMainWindow()
+        window.level = 1
     }
 }
 

@@ -166,7 +166,7 @@ This will generate an executable called `experiment<K>`
 
 # <a name="experiment0"></a> Experiment 0 - How not to make a window
 
-If we start Xcode, do `File->New->Project` and select `Coco Application`
+If we start Xcode, do `File->New->Project` and select `Cocoa Application`
 then set the language to `Swift` then Xcode will create a file called
 `ApplicationDelegate.swift` with the following content:
 
@@ -478,36 +478,11 @@ and Xcode was not used.
 
 I had hoped to write:
 
-      window = create_window(400, 200)
+      let window = make_window(400, 200, "My Title")
+      let entry1 = make_text(window, ...)
 
-to create a `400` by `200` window:
-
-To my mind this could be achieved with the following function:
-
-<pre>
-func make_window(w:Int, _ h:Int) ->
-    NSWindow {
-    let window = NSWindow()
-    window.setContentSize(NSSize(width:w, height:h))
-    window.styleMask = NSTitledWindowMask | NSClosableWindowMask |
-                       NSMiniaturizableWindowMask |
-                       NSResizableWindowMask
-        
-    window.opaque = false
-    window.center();
-    window.title = "Experiment 5"
-    return window
-}
-</pre>
-
-But this for some weird reason does not work. So I've split the code into
-two parts:
-
-    window = NSWindow()
-
-in the initialization section of the `AppDelegate` class, and a function
-`set_window_args` in the the `applicationDidFinishLaunching` method.
-
+But for some reason this does not work, so I have to move the call to `make_window`
+to the initialisation part of the class. I haven't a clue why.
 
 # <a name="swift_fpl"></a> Swift as a functional language
 
