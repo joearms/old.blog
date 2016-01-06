@@ -65,8 +65,8 @@ func set_voice(outSynth: AudioUnit, _ instrument:Int){
 
 func play_notes(outSynth: AudioUnit, _ time:Int){
     let midiChannelInUse: UInt32 = 0; //we're using midi channel 1...
-    for var i = 0; i < 10 ; i++ {
-        let noteNum = UInt32(i)+60
+    for i: UInt32 in 0..<10 {
+        let noteNum = i+60
         let onVelocity:UInt32 = 127
         let noteOnCommand:UInt32 = Midi.kMidiMessage_NoteOn.rawValue << 4 |
                                    midiChannelInUse
@@ -77,20 +77,15 @@ func play_notes(outSynth: AudioUnit, _ time:Int){
 }
 
 func main(){
-    var outGraph: AUGraph
-    var synthNode, limiterNode, outNode: AUNode
-    var outSynth: AudioUnit
-    var result: OSStatus
-    var cd: AudioComponentDescription
+    var outGraph = AUGraph()
+    var synthNode = AUNode()
+    var limiterNode = AUNode()
+    var outNode = AUNode()
+    var outSynth = AudioUnit()
+    var cd = AudioComponentDescription()
+    var result = NewAUGraph(&outGraph)
     
-    outGraph = AUGraph()
-    synthNode = AUNode()
-    limiterNode = AUNode()
-    outNode = AUNode()
-    outSynth = AudioUnit()
-    cd = AudioComponentDescription()
     
-    result = NewAUGraph(&outGraph);
     print("result1 =", result);
 
     cd.componentManufacturer = kAudioUnitManufacturer_Apple;
@@ -137,12 +132,10 @@ func main(){
     set_voice(outSynth, 2) // piano
     play_notes(outSynth, 250)
     
-    for var instrument = 1; instrument < 127; instrument++ {
+    for instrument in 1..<127 {
         set_voice(outSynth, instrument)
         play_notes(outSynth, 25)
     }
 }
 
 main()
-
-              
