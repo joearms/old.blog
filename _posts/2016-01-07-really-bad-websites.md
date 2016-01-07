@@ -8,13 +8,18 @@ day: 7
 published: true
 ---
 
+# <marquee> I'm hoping somebody can help me here.</marquee>
 
-I'm hoping somebody can help me here.
-
+<img src='/images/construction.gif'/>
 
 A year of so ago I stumbled upon a *really bad* website -- it was 
 stunningly bad. Unfortunately I lost the link. I also lost a link to
 what was a pretty good MS-DOS style interface.
+
+<marquee><font color="red">And I'd Forgotten about the
+&lt;marquee> tag</font></marquee>
+
+And tragically the `<blink>` tag doesn't work any more...
 
 Added note: Within a couple of hours of publishing this
 artice Roger Lipscombe added this link in the comments
@@ -44,7 +49,7 @@ to make it visually more attractive.
 
 Are then any CSS frameworks that help you make truly horrible websites?
 
-# Added notes
+# <marquee>Added notes</marquee>
 
 http://www.wonder-tonic.com/geocitiesizer/index.php
 will transform any site into
