@@ -8,11 +8,18 @@ day: 7
 published: true
 ---
 
+
 I'm hoping somebody can help me here.
+
 
 A year of so ago I stumbled upon a *really bad* website -- it was 
 stunningly bad. Unfortunately I lost the link. I also lost a link to
 what was a pretty good MS-DOS style interface.
+
+Added note: Within a couple of hours of publishing this
+artice Roger Lipscombe added this link in the comments
+http://code.divshot.com/geo-bootstrap/ -- this is the site I was thinking
+about. Thanks Roger.
 
 So what's on a really bad website?
 
@@ -37,6 +44,19 @@ to make it visually more attractive.
 
 Are then any CSS frameworks that help you make truly horrible websites?
 
+# Added notes
+
+http://www.wonder-tonic.com/geocitiesizer/index.php
+will transform any site into
+a slighly less readable version. 
+Here is [this article transformed](http://www.wonder-tonic.com/geocitiesizer/content.php?theme=3&music=8&url=joearms.github.io/2016/01/07/really-bad-websites.html).
+
 # Example Sites
 
++ http://code.divshot.com/geo-bootstrap/
++ https://kristopolous.github.io/BOOTSTRA.386/
 + http://web.archive.org/web/20100813142028/http://havenworks.com/
++ http://www.lingscars.com/
++ http://www.angelfire.com/super/badwebs/
++ http://webkingusa.com/computer-services/index.html
++ http://dhtmlconf.com/
