@@ -7,9 +7,8 @@ month: 1
 day: 29
 published: true
 ---
-
 In earlier articles I have talked about 
-[Controlling Live Music](http://joearms.github.io/2013/03/27/Controlling-Live-Music.html)
+[Controlling Live Music](http://joearms.github.io/2016/01/27/Controlling-Live-Music.html)
 and
 [A Badass Way to Connect Programs Together](http://joearms.github.io/2016/01/28/A-Badass-Way-To-Connect-Programs-Together.html)
 

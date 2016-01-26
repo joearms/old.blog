@@ -11,7 +11,7 @@ published: true
 This is the first of four related articles about how we
 organize software. The others are:
 
-+ [Controlling Live Music](http://joearms.github.io/2013/03/27/Controlling-Live-Music.html)
++ [Controlling Live Music](http://joearms.github.io/2016/01/27/Controlling-Live-Music.html)
 
 + [A Badass Way to Connect Programs Together](http://joearms.github.io/2016/01/28/A-Badass-Way-To-Connect-Programs-Together.html)
 
