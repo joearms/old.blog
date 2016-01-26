@@ -1,5 +1,7 @@
 markdown: rdiscount
-highlighter: pygments
+highlighter: rouge
+future: true
+
 rdiscount:
   extensions: [smart, autolink]
 
@@ -11,3 +13,4 @@ comments :
 name: Joe Armstrong's blog
 description: Joe Armstrong's Erlang and other stuff blog
 url: http://joearms.github.com
+
