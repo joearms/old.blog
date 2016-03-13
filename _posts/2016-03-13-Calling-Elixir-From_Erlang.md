@@ -119,6 +119,52 @@ it.
 
 Have a nice one.
 
+# Added notes
+
+Yes - the experiment worked. By the time I'd got back from lunch, two
+people had tweeted what to do. Both said ``start the Elixir application first.''
+
+So I tried this:
+
+    > application:start(elixir).
+    {error,{not_started,compiler}}
+
+
+Not quite but getting warm: So yet another try:
+
+    1> application:start(compiler).
+    ok
+    2> application:start(elixir).  
+    ok
+    3> test:test().                
+    {ok,{defmodule,[{line,2}],
+               [{'__aliases__',[{counter,0},{line,2}],['ModuleName']},
+
+       ...
+
+The `...` above is because the shell output and the markdown
+processor are not on speaking terms
+and life is too short to wonder what:
+
+    Liquid Exception: Liquid syntax error: Variable ...
+    was not properly terminated with regexp:
+
+and 3 more lines of gibberish means.
+
+Not only does the mardown processor not do what I thought it should do
+- but also the error message that it produces cannot be cut and paste into
+this blog since this triggers the same error.
+
+Which leave me wondering just exactly how difficult is it to bonk a bit of verbatim
+text into a web page. Parse the stuff - wrap it in a HTML `pre` tag and quote the
+less than and ampersand characters.
+
+Life is full of surprises - and programming more so.
+
+
+
+
+
 
 
 
