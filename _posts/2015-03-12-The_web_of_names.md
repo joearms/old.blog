@@ -211,9 +211,3 @@ distributed file system.
 
 It seems like many people have similar ideas - which is
 great. Hopefully this will lead to better and more secure systems.
-
-
-
-
-
- 

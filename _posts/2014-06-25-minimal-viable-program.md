@@ -3,8 +3,8 @@ layout: post
 title: Minimal Viable Programs
 tags: 
 year: 2014
-month: 2
-day: 14
+month: 6
+day: 25
 published: true
 ---
 
