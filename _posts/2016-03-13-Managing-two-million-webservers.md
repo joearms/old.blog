@@ -76,7 +76,7 @@ them over lots of processors and make the system fault-tolerant and scalable.
 Packing Erlang or Elixir processes onto cores is easy becuase they are
 small and are like packing physical objects. If we want to pack sand
 in barrels it's easy. The grains of sand are so small that it's easy
-to completely fill the barrels. Backing huge boulders is difficult,
+to completely fill the barrels. Packing huge boulders is difficult,
 they don't pack well and much space is wasted.
 
 # Adding fault-tolerance and scalability
