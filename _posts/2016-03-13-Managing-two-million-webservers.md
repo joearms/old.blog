@@ -42,21 +42,21 @@ If we can accept say 20K requests/second - this is equivalent to
 saying we can create 20K webservers/second.
 
 On the surface things look very similar. But there is a fundamental
-difference between having one webserevr handling two million
+difference between having one webserver handling two million
 connections, and two million web servers handling one connection each.
 
-If there is a software error and the server software crashes we loose
+If there is a software error and the server software crashes we lose
 either two million connections or one depending upon the model.
 
-In Erlang if the web server software itself is incorrect we'll loose a
+In Erlang if the web server software itself is incorrect we'll lose a
 single connection, which is OK. Since the software is incorrect and
 crashes we don't know what to do so crashing is a good
 alternative. What is important is that one session crashing does not
 effect all the other sessions.
 
 This requirement, goes way back to when we designed Erlang in the mid
-1980's.  In Telecoms systems, loosing one connection due to a software
-error was acceptable, loosing them all due to a bug was big time bad
+1980's.  In Telecoms systems, losing one connection due to a software
+error was acceptable, losing them all due to a bug was big time bad
 news.
 
 # Chat or Presence Servers
