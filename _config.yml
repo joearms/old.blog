@@ -1,4 +1,4 @@
-markdown: rdiscount
+markdown: kramdown
 highlighter: rouge
 future: true
 
