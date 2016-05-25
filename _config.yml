@@ -1,0 +1,16 @@
+markdown: kramdown
+highlighter: rouge
+future: true
+
+rdiscount:
+  extensions: [smart, autolink]
+
+comments :
+   provider: disqus
+   disqus:
+     short_name:  joearmstrongsblog
+
+name: Joe Armstrong's blog
+description: Joe Armstrong's Erlang and other stuff blog
+url: http://joearms.github.com
+

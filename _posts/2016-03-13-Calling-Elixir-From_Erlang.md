@@ -1,0 +1,176 @@
+---
+layout: post
+title: Calling Elixir from Erlang 
+tags: erlang elixir
+year: 2016
+month: 3
+day: 13
+published: true
+---
+ 
+I've been feeling inspired following Dave Thomas and Bruces Tate's inspirational talk
+[We are Blessed](https://www.youtube.com/watch?v=fklep3sUSWo])
+that they gave at the [Erlang factory](http://www.erlang-factory.com/sfbay2016)
+so I started playing ...
+
+Part of the lecture described how Dave had thrown out a challenge to Bruce -
+``Do something difficult in Elixir for a month'' then talk to be about it.
+
+Great I thought - I'll cross compile Erlang into Elixir and see what happens -
+I mentioned this to Dave and somebody in the coffee queue overheard the
+conversation and said it was impossible - to which I though ``even
+better, when can I start.'' Attacking impossible problems is so much
+more fun that attacking easy problems that you know you can solve.
+
+And as Alan Kay said - ``If you don't fail at least 90% of the time,
+you're not aiming high enough.''
+
+Cross compilation is just a matter of diddling with parse trees, so it should
+in be principle ``be easy''
+
+> If a computer scientist says that something is easy in principle, it
+  means it might be really really difficult in practice, but they
+  don't know 'cos they haven't failed yet.
+
+
+So wanted to mess with the parse trees representing Erlang programs
+and Elixir programs. I know what Erlang parse trees look like and what
+they mean, but what about Elixir?
+
+Specifically I wanted to parse an Elixir module, then turn the AST back to textual
+representation and whap it into a file. Hopefully I'd get back what I started with.
+
+We'll see ...
+
+ 
+# Getting the parse tree
+
+So now I wanted to call Elixir from Erlang so that I could explore the goodness of
+Elixir from Erlang, but ran into a tiny problem.
+
+Calling Erlang from Elixir is well documented but not the other way around.
+
+
+After  a little tinkering I found that I could parse an Elixir file like this:
+
+    {:ok, ast} = Code.string_to_quoted(File.read!("module.ex"))
+
+and turn the ast into a string with
+
+    Macro.to_string(ast)
+
+> With my Erlang hat on I thought the inverse of
+`Code.string_to_quoted` would be `Code.quoted_to_string` **but I was wrong**
+and the principle of least astonishment was violated again.
+
+# Moving on...
+
+I now wanted to call `Code.string_to_quoted` and `File.read!` from
+Erlang - so I ran into the - *where is this stuff* and *what is it
+called* problem.
+
+
+# Where is my Elixir stuff and how can Erlang find it?
+
+I messed around a bit and figured out that Erlang could find my Elixir code if I made
+a `.erlang` file with the following:
+
+    code:add_path("/usr/local/lib/elixir/lib/elixir/ebin/").
+    io:format("Elixir paths set~n").
+
+And whoopydo happy days are here again, Erlang knows where the Elixir code is.
+
+# What are the functions called?
+
+But what are the functions called? Well `File.read!` in Elixir is just
+`'Elixir.File':'read!'` in Erlang. That was easy. So now I wrote the Erlang code:
+
+    test() ->
+       X = 'Elixir.File':'read!'("module.ex"),
+       Ast = 'Elixir.Code':string_to_quoted(X).
+
+Keeping my figures crossed I ran this in the Erlang shell:
+
+    > test:test().
+    ** exception error: bad argument
+     in function  ets:lookup/2
+        called as ets:lookup(elixir_config,compiler_options)
+
+Ouch. Whaaaat the $#@!!$%$#@#$$$$
+
+Ooops I've gotta set some stuff up. **How do I do this?**
+
+So Now what? I could:
+
++ Google Google Google ... (boring)
++ Read the sources (deep sigh, do I really have to?) 
++ Write a blog article and hope some kind person adds a comment telling me how to do this
+
+In retrospect blogging and tweeting the blog is probably the fastest way to program.
+I'll time it and see.
+
+Somebody out there knows how to do this, but I don't know who.
+
+> This is the big problem with software - probably all software we want
+has already been written - but we can't find it so we do it ourselves.
+
+Now I'm off for lunch - hopefully when I get back somebody will have solved
+it.
+
+Have a nice one.
+
+# Added notes
+
+Yes - the experiment worked. By the time I'd got back from lunch, two
+people had tweeted what to do. Both said ``start the Elixir application first.''
+
+So I tried this:
+
+    > application:start(elixir).
+    {error,{not_started,compiler}}
+
+
+Not quite but getting warm: So yet another try:
+
+    1> application:start(compiler).
+    ok
+    2> application:start(elixir).  
+    ok
+    3> test:test().                
+    {ok,{defmodule,[{line,2}],
+               [{'__aliases__',[{counter,0},{line,2}],['ModuleName']},
+
+       ...
+
+The `...` above is because the shell output and the markdown
+processor are not on speaking terms
+and life is too short to wonder what:
+
+    Liquid Exception: Liquid syntax error: Variable ...
+    was not properly terminated with regexp:
+
+and 3 more lines of gibberish means.
+
+Not only does the mardown processor not do what I thought it should do
+- but also the error message that it produces cannot be cut and paste into
+this blog since this triggers the same error.
+
+Which leave me wondering just exactly how difficult is it to bonk a bit of verbatim
+text into a web page. Parse the stuff - wrap it in a HTML `pre` tag and quote the
+less than and ampersand characters.
+
+Life is full of surprises - and programming more so.
+
+
+
+
+
+
+
+
+
+
+
+
+  
+

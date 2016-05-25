@@ -1,0 +1,184 @@
+---
+layout: post
+title: Mutable Value Chains
+tags: SHA values mutable data
+year: 2015
+month: 6
+day: 19
+published: true
+---
+
+Mutable value chains are sequences of immutable values which can be stored
+in a Key-Value store (KVS) or Distributed hash table (DHT).
+
+Mutable value chains solve the ``variable update problem'' using
+sequences of values to represent changes to a variable. Each new value
+assigned to a variable is represented by adding a new value to the
+sequence.
+
+I'll assume you know a little about DHTs and Key-Value stores and
+show how a number of services can be deployed on top of Key-Value
+stores or DHTs
+
+I'll also assume that the values stored in the KVS or DHT are
+*immutable* - and look at the central problem of ``updating'' an
+immutable value.
+
+This might sound complicated, but really it's very easy and involves the idea
+of an iterated sequence of SHA keys.
+
+Iterated SHA keys offer a surprisingly simple way to store mutable
+sequences of data in a Distributed Hash Table (DHT) like
+[Kademlia](https://en.wikipedia.org/wiki/Kademlia)
+or massive Key-Value store (like [Riak](http://basho.com/products/riak-kv/)).
+
+# Mutable Value Chains
+
+How can we modify immutable data?
+
+The short answer is we can't. Suppose we have some data base variable
+`X` whose value changes with time. We might say that:
+
+    X0 = 10
+
+and some time later:
+
+    X1 = 16
+
+and so on. Instead of having a single variable `X` whose value changes
+in time we can think of having a sequence of values `X0`, `X1`, `X2`,
+... and so on where the values of `X0`, `X1` and so on are immutable (ie
+never change).
+
+The advantages of having immutable data are many. Firstly the values
+are **cacheable** forever. Since we know the values cannot change we
+can store them forever in an efficient manner. We can compress the
+values and build indexes over them knowing that that data won't
+change. We also don't have any problems with update consistency, since
+they cannot be updated.
+
+Cacheing works because of immutable data. GIT works because of
+immutable data, Functional programming works because of immutable
+data. Functional programs create new values from old values without
+changing the old values which make it easy to argue about the
+properties of the program. Things like debugging become easy because
+old values are not overwritten.
+
+So how can we make mutable sequences of values? If I say `x = 10`, how can I
+later on say x = `20`, I can't change the *value* of `10` so I can't say ``and now
+there's a new value.''
+
+I've been wondering how to do this for years, and suddenly it occurred
+to me how to do this. One way that doesn't work is to view the
+sequence of values as some kind of linked list, where each value has
+an invisible write-once-only pointer to the next value. The
+write-once-pointer gets updated when the value is updated,
+unfortunately this is difficult to implement and there are problems
+with consistency.
+
+> Keys are iterated SHA sequences
+
+The solution is blindingly simple (once you see it) - we represent the
+sequence as a set Key-Value pairs where the Keys are taken from an
+iterated sequence of SHA1 checksums. The first key is a random number,
+thereafter `Key[i] = sha(Key[i-1])`.
+
+# Application 1 - Secure Mail
+
+`Ann` wants to send a stream of messages to `Bob`.
+
+* `Ann` generates a 120 bit random number `K0`
+* `Ann` communicates the value of `K0` to `Bob` by some out-of-band method (writing it down on a sheet of paper)
+* `Ann's` first mail to `Bob` is stored in a DHT with key `K0`
+* `Ann's` second mail to `Bob` is stored in a DHT with key `sha(K0)`
+* `Ann's` third mail to `Bob` is stored in a DHT with key `sha(sha(K0))`
+* ...
+* `Bob` polls the DHT for `K0` to get the first mail
+* `Bob` polls the DHT for `sha(K0)` to get the second mail
+
+Assuming we use a DHT like Kademlia to store the data `Ann`
+should republish the data (say) every hour and store the data on the
+20 nearest nodes to the key.
+
+# What's in the value?
+
+I haven't said anything about the values that are stored at a particular key. There are
+several alternatives. Assuming these values are tuples that have been serialized in
+some way, we could choose:
+
+`{sha,Key1}` This is an indirection to a second document `Key1` is the SHA of a second
+document stored in the DHT. The document is ``self-signed'' ie has checksum `Key1`. The
+client can fetch this document and check that it has SHA1 checksum of `Key1`. This
+is immune to a thing-in-the-middle attack.
+
+`{s,Person,Key1,Data,Proof}` is a signed document. Person signed the document. `Key1` is
+the SHA of a key in the DHT containing Person's public key. `Data` is signed with
+authentication `Proof`
+
+`{e,...}` is an encrypted document ...
+
+As you can see there are many possibilities.
+
+# Application 2 - Decentralized map
+
+Given a sequence of values `X0`, `X1`, `X2`, `X3` compute a sequence of
+values `Y0`, `Y1`, `Y2`, ... where `Yi = f(Xi)`. This is easy:
+
+* Generate two random numbers `Kx0` and `Ky0`
+* Store `X0` in the DHT with key `Kx0`
+* Store `X1` in the DHT with key `sha(Kx0)`
+* ...
+* Compute `Y0 = f(X0)` and store the result in the DHT with key `Ky0`
+* Compute `Y1 = f(X1)` and store the result in the DHT with key `sha(Ky0)`
+
+If the sequence of `X`'s is huge then multiple workers can be started tell them
+to start computing values at different points in the value chain.
+
+# Application 3 - Software upgrade
+
+Suppose we have deployed some software on an extremely large number of machines.
+
+Assume that we are at version 23 of some software. The ``Key'' to this software
+is `K23` (an SHA checksum) to fetch the software we lookup `K23` in our DHT,
+and assume this is the SHA of the software. So:
+
+      OurSoftware = lookup(lookup(K23))
+
+Where `lookup(Key)` retrieves a value from a global DHT.
+
+To publish new software the provider injects two new keys into the software.
+Something like:
+
+     
+     SHA = sha(Blob),
+     inject(SHA, Blob)
+     inject(sha(K23), SHA)
+
+Where `inject(Key, Value)` inserts a new value into the DHT (or KVS) and `Blob`
+represents the software.
+
+Clients at version `K23` poll the system by doing `lookup(sha(K23))` if a new value
+is returned then the software needs to be upgraded.
+
+Values can be protected and signed with a layer of cryptography
+
+
+# Application 4 - Digital Money
+
+It should be possible to make small closed groups of agents participating
+in financial transactions. Once we have established secure message streams between
+agents, we can add a server and a transaction layer in a manner similar to bitcoin.
+
+By keeping the groups small the transaction chains will be short which simplifies the
+implementation.
+
+# Will the keys run out?
+
+SHA which I have chosen in this article has 160 bits, so after more than `2^160`
+entries have been put into the DHT collisions will occur.
+
+To put this number in perspective we note that the number of atoms on
+the planet is about 10^50 (2^166) and the volume of the universe/the
+Planck volume is about 10^188 (c. 2^624) so we might need a larger key space
+that that which is provided by SHA.
+
