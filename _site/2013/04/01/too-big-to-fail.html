@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="author" content="Joe Armstrong" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    
+    <title>Too big to fail</title>
+    
+    <!-- Bootstrap -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet" media="screen" />
+    <link href="/css/bootstrap-responsive.min.css" rel="stylesheet" />
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css" type="text/css" />
+    <!-- RSS -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml" />
+    <link rel="stylesheet" href="/css/screen.css" type="text/css" 
+	  media="screen, projection" />
+  </head>
+
+  <body>
+    <div class="navbar">
+      <div class="navbar-inner">
+	<a class="brand" href="/index.html">Joe Armstrong - Erlang and other stuff</a>
+	<ul class="nav">
+	  <li><a href="/index.html">Home</a></li>
+	  <li><a href="/archive.html">Archive</a></li>
+	  <li><a href="/resources.html">Resources</a></li>
+	  <li><a href="/installing.html">Installing</a></li>
+	  <li><a href="/links.html">Links</a></li>
+	  <li><a href="https://github.com/joearms/joearms.github.com/">Source</a></li>
+	</ul>
+      </div>
+    </div>
+    
+    <div class="customize">
+      <div class="row-fluid">
+	<div class="span7 offset1">
+	  <div>
+  <div id="title">
+  
+    <h1>Too big to fail</h1>
+    <span class="meta">01 Apr 2013</span>
+    <p></p>
+  </div>
+
+  <div id="content">
+    <p><img src="http://learnyousomeerlang.com/static/img/rube.png" /></p>
+
+<p>Image from <a href="http://nostarch.com/erlang">Learn You Some Erlang for Great Good!</a></p>
+
+<p>I’m proud to announce a new extension to Erlang.
+After twelve years of discussion, we’ve added the <b>too_big_to_fail</b>
+flag to processes.</p>
+
+<p>Here a usage example:</p>
+
+<figure class="highlight"><pre><code class="language-erlang" data-lang="erlang"><span class="nf">test</span><span class="p">()</span> <span class="o">-&gt;</span>
+    <span class="nb">spawn</span><span class="p">(</span><span class="k">fun</span><span class="p">()</span> <span class="o">-&gt;</span>
+		  <span class="nb">process_flag</span><span class="p">(</span><span class="n">too_big_to_fail</span><span class="p">,</span> <span class="n">true</span><span class="p">)</span>
+	  <span class="k">end</span><span class="p">).</span></code></pre></figure>
+
+<p></p>
+
+<h1 id="semantics">Semantics</h1>
+
+<p>Too big to fail processes behave like regular processes until they get
+too big and memory congestion occurs.  If a memory allocation error is
+triggered when a <b>too_big_to_fail</b> process needs more memory, then a
+random smaller process is killed, and the system reattempts memory
+allocation for the <b>too_big_to_fail</b> process.</p>
+
+<p>An interesting situation can occur if the too big to fail process
+has killed all other processes and still cannot get enough memory.</p>
+
+<p>In this case the node running the process tries to memory steal from other nodes.</p>
+
+<h1 id="memory-stealing">Memory Stealing</h1>
+
+<p>If a too big to fail process runs out of memory after killing all the
+smaller processes on the current node, it can spawn a clone of itself on
+other nodes and, these can allocate additional memory.</p>
+
+<p>This is what happens:</p>
+
+<ul>
+  <li>A <b>too_big_to_fail_process</b> runs out of memory on node one</li>
+  <li>A ``helper’’ process is allocated on node two</li>
+  <li>The helper node allocates as much memory as it can</li>
+  <li>node one reduces it’s memory footprint, using the additional memory made by stealing memory from node two.</li>
+  <li>This if recursively repeated. So If node two runs out of memory, it tries to steal
+memory from node three, and so.</li>
+</ul>
+
+<p>If all <b>too_big_to_fail_nodes</b> run out of memory, then they request
+additional memory from the memory allocator of last resort.</p>
+
+<h1 id="the-memory-allocator-of-last-resort">The Memory Allocator of Last Resort</h1>
+
+<p>If all the <b>too_big_to_fail</b> processes have failed, and run out of memory
+then they can make a request to the ``Memory Allocator of Last Resort.’’. The
+memory allocator of last resort has the ability to print new memory. Exactly how it
+does this and what the consequences are is little understood. Fortunately if new memory
+is consumed slower than it is printed everything returns to normal. But if
+new memory is consumed faster that it can be printed then the system will crash and
+a reboot is required.</p>
+
+<h1 id="release-schedule">Release Schedule</h1>
+
+<p><b>too_big_to_fail_processes</b> will be released in OTP-R18B. The
+semantics of the memory allocator of last resort are still being
+studied and will be the subject of a forthcoming EEP.</p>
+
+
+  </div>
+
+  <div id="tags">
+    Tagged:
+    
+    <a href="/blog/tag/banks">banks</a> &nbsp;
+    
+    <a href="/blog/tag/failure">failure</a> &nbsp;
+    
+  </div>
+  <p></p>
+
+  <hr />
+  
+  <!-- the tweet button -->
+  <p>
+    <a href="https://twitter.com/share"  class="twitter-share-button" 
+       data-url="http://joearms.github.com/2013/04/01/too-big-to-fail.html">Tweet</a>
+  </p>
+  
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+  <!-- end of tweet button -->
+
+  <p>Comments:</p>
+  
+  <div id="disqus">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      // var disqus_developer = 1;
+      var disqus_shortname = 'joearmstrongsblog';
+      var disqus_identifier = '/2013/04/01/too-big-to-fail';
+      var disqus_url = 'http://joearms.github.com/2013/04/01/too-big-to-fail.html';
+      (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+  </div>
+  
+  <noscript>
+    Please enable JavaScript to view the <a
+    href="http://disqus.com/?ref_noscript">comments powered by
+    Disqus.</a>
+  </noscript>
+</div>
+
+	</div>
+	<div class="span3">
+	  
+	</div>
+      </div>
+    </div>
+    
+    <!-- Footer  ==================================== -->
+    <footer class="footer">
+      <div class="container">
+	<p>&copy; 2013 Joe Armstrong</p>
+	  Theme and code from <a href="https://github.com/mojombo">Tom
+	  Preston-Werner</a>.<br /> Hosted by <a
+	  href="https://github.com/networc/networc.github.com/">GitHub</a>
+	  and powered by <a
+	  href="https://github.com/mojombo/jekyll">Jekyll</a>.
+	  Source code <a href="https://github.com/joearms/joearms.github.com">here</a>.
+	</p>
+	<p>
+	  joearms@gmail.com <a href="http://github.com/joearms/">github.com/joearms</a>
+	  <a href="http://twitter.com/joeerl/">twitter.com/joeerl</a>
+	</p>
+      </div>
+    </footer>
+
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+
+    <!-- Google Analytics -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      
+      ga('create', 'UA-39670657-1', 'github.com');
+      ga('send', 'pageview');
+    </script>
+    <!-- Google Analytics end -->
+    
+  </body>
+</html>

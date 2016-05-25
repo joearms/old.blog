@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="author" content="Joe Armstrong" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    
+    <title>Solving the wrong problem</title>
+    
+    <!-- Bootstrap -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet" media="screen" />
+    <link href="/css/bootstrap-responsive.min.css" rel="stylesheet" />
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css" type="text/css" />
+    <!-- RSS -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml" />
+    <link rel="stylesheet" href="/css/screen.css" type="text/css" 
+	  media="screen, projection" />
+  </head>
+
+  <body>
+    <div class="navbar">
+      <div class="navbar-inner">
+	<a class="brand" href="/index.html">Joe Armstrong - Erlang and other stuff</a>
+	<ul class="nav">
+	  <li><a href="/index.html">Home</a></li>
+	  <li><a href="/archive.html">Archive</a></li>
+	  <li><a href="/resources.html">Resources</a></li>
+	  <li><a href="/installing.html">Installing</a></li>
+	  <li><a href="/links.html">Links</a></li>
+	  <li><a href="https://github.com/joearms/joearms.github.com/">Source</a></li>
+	</ul>
+      </div>
+    </div>
+    
+    <div class="customize">
+      <div class="row-fluid">
+	<div class="span7 offset1">
+	  <div>
+  <div id="title">
+  
+    <h1>Solving the wrong problem</h1>
+    <span class="meta">28 Mar 2013</span>
+    <p></p>
+  </div>
+
+  <div id="content">
+    <p>We’re right and the rest of the world is wrong. We (that is Erlang
+folks) are solving the right problem, the rest of the world (non
+Erlang people) are solving the wrong problem.</p>
+
+<p>The problem that the rest of the world is solving is <i>how to
+parallelise legacy code</i>. Up to about 2004 Moore’s law
+applied. Each year your programs just got faster, you didn’t have to
+be a better programmer, you didn’t need a smarter algorithm your
+machine just got faster year on year.</p>
+
+<p>Chips got bigger and bigger, clock speeds got greater and greater,
+and programs went faster and faster which improved performance by about
+15% per year.</p>
+
+<p>In 2004 this ended. The chips were so big and the clock rates so fast
+that clock pulses could not reach all parts of the chip in one
+clock cycle. Circuit designs changed. The multi-core came.</p>
+
+<p>From 2004 chips still got bigger, but clock rates started sinking and
+the number of CPUs per chip started increasing. We moved from the era
+of one superfast processor per chip, to several slower and weaker
+processors per chip.</p>
+
+<p>At this point in time, sequential programs started getting slower, year on year,
+and parallel programs started getting faster.</p>
+
+<p>The problem was that there were no parallel programs, or at least very few.</p>
+
+<p>Now Erlang is (in case you missed it) a concurrent language, so Erlang
+programs should in principle go a lot faster when run on parallel
+computers, the only thing that stops this is if the Erlang programs
+have sequential bottlenecks.</p>
+
+<p>Amdahl’s law hits you in the face if your parallel program has any sequential parts.</p>
+
+<p>Suppose 10% of your program is sequential (the rest being parallel) -
+the time to execute the parallel bit can be shrunk to zero by having
+sufficiently many parallel processors. But the sequential part will
+remain.</p>
+
+<p>With 10% sequential code the maximum speedup of your program will be a
+factor 10. One tenth of the program can never speed up, the time for
+the other 9/10’s can shrink to zero.</p>
+
+<p>So for Erlang programmers the trick to speeding up their programs is
+to find the sequential parts in the code.</p>
+
+<p>For anybody who writes sequential code the trick to speeding up their
+programs is to find the parallel parts in their code.</p>
+
+<p>The road to automatic parallelisation of sequential programs is
+littered with corpses.  It can’t be done. (not quite true, in some
+specific circumstances it can, but this is by no means easy).</p>
+
+<p>So now data centers are being filled with shiny new computers
+and the top-end machines have as many as 24 cores. But what about performance?
+Are these shiny new machines going 24 times faster?</p>
+
+<p>For some problems yes - but for many problems no. For many problems
+only one of the 24 CPUs is being used. The underutilization of the CPUs is
+a serious problem.  This point was pointed out in Alexander Gounares
+Brilliant talk at the Erlang factory.</p>
+
+<p>Alexander’s talk gave us a glimpse of the future. His company <a href="http://concurix.com/">concurix</a> is showing us where the
+future leads.  They have tools to automate the detection of sequential
+bottlenecks in Erlang code.</p>
+
+<p>Concurix have been using these tools to find bottlenecks in the Erlang
+VM and in their test code and the results are amazing.  They found a
+bottleneck in an image processing application, there was a lock in zlib
+which was written in C. They rewrote it in Erlang, going from C to Erlang.</p>
+
+<p>This is crazy, C should go faster, well yes it does but it had a
+lock. Erlang was slower but lock-free and thus scaleable. So removing the C
+and doing image processing in Erlang was faster than doing it in C.</p>
+
+<p>I was amazed - this is jaw dropping good stuff.</p>
+
+<p>When the videos from the Erlang factory come out watch Alexander’s
+talk and prepare to be amazed. The future is here it arrived last week
+in San Francisco.</p>
+
+<p>Discuss this on https://news.ycombinator.com/item?id=5451202</p>
+
+
+  </div>
+
+  <div id="tags">
+    Tagged:
+    
+    <a href="/blog/tag/parallelism">parallelism</a> &nbsp;
+    
+    <a href="/blog/tag/concurrency">concurrency</a> &nbsp;
+    
+    <a href="/blog/tag/sequential">sequential</a> &nbsp;
+    
+  </div>
+  <p></p>
+
+  <hr />
+  
+  <!-- the tweet button -->
+  <p>
+    <a href="https://twitter.com/share"  class="twitter-share-button" 
+       data-url="http://joearms.github.com/2013/03/28/solving-the-wrong-problem.html">Tweet</a>
+  </p>
+  
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+  <!-- end of tweet button -->
+
+  <p>Comments:</p>
+  
+  <div id="disqus">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      // var disqus_developer = 1;
+      var disqus_shortname = 'joearmstrongsblog';
+      var disqus_identifier = '/2013/03/28/solving-the-wrong-problem';
+      var disqus_url = 'http://joearms.github.com/2013/03/28/solving-the-wrong-problem.html';
+      (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+  </div>
+  
+  <noscript>
+    Please enable JavaScript to view the <a
+    href="http://disqus.com/?ref_noscript">comments powered by
+    Disqus.</a>
+  </noscript>
+</div>
+
+	</div>
+	<div class="span3">
+	  
+	</div>
+      </div>
+    </div>
+    
+    <!-- Footer  ==================================== -->
+    <footer class="footer">
+      <div class="container">
+	<p>&copy; 2013 Joe Armstrong</p>
+	  Theme and code from <a href="https://github.com/mojombo">Tom
+	  Preston-Werner</a>.<br /> Hosted by <a
+	  href="https://github.com/networc/networc.github.com/">GitHub</a>
+	  and powered by <a
+	  href="https://github.com/mojombo/jekyll">Jekyll</a>.
+	  Source code <a href="https://github.com/joearms/joearms.github.com">here</a>.
+	</p>
+	<p>
+	  joearms@gmail.com <a href="http://github.com/joearms/">github.com/joearms</a>
+	  <a href="http://twitter.com/joeerl/">twitter.com/joeerl</a>
+	</p>
+      </div>
+    </footer>
+
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+
+    <!-- Google Analytics -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      
+      ga('create', 'UA-39670657-1', 'github.com');
+      ga('send', 'pageview');
+    </script>
+    <!-- Google Analytics end -->
+    
+  </body>
+</html>

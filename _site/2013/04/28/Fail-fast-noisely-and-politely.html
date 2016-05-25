@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="author" content="Joe Armstrong" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    
+    <title>Fail Fast and Noisily, Fail Politely</title>
+    
+    <!-- Bootstrap -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet" media="screen" />
+    <link href="/css/bootstrap-responsive.min.css" rel="stylesheet" />
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css" type="text/css" />
+    <!-- RSS -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml" />
+    <link rel="stylesheet" href="/css/screen.css" type="text/css" 
+	  media="screen, projection" />
+  </head>
+
+  <body>
+    <div class="navbar">
+      <div class="navbar-inner">
+	<a class="brand" href="/index.html">Joe Armstrong - Erlang and other stuff</a>
+	<ul class="nav">
+	  <li><a href="/index.html">Home</a></li>
+	  <li><a href="/archive.html">Archive</a></li>
+	  <li><a href="/resources.html">Resources</a></li>
+	  <li><a href="/installing.html">Installing</a></li>
+	  <li><a href="/links.html">Links</a></li>
+	  <li><a href="https://github.com/joearms/joearms.github.com/">Source</a></li>
+	</ul>
+      </div>
+    </div>
+    
+    <div class="customize">
+      <div class="row-fluid">
+	<div class="span7 offset1">
+	  <div>
+  <div id="title">
+  
+    <h1>Fail Fast and Noisily, Fail Politely</h1>
+    <span class="meta">28 Apr 2013</span>
+    <p></p>
+  </div>
+
+  <div id="content">
+    <p>In <a href="http://pragprog.com/book/jaerlang2/programming-erlang">Programming Erlang 2’nd edition</a>
+I described a new design principle.</p>
+
+<p>When applications fail, the programmer should provide <strong>two</strong> error
+messages.  Not one. The first error message, the ``noisy’’ message is
+intended for the programmer. It should provide a heck of a lot of
+information, which should be put into a permanent log file, and from
+which it should be possible to do a post-mortem debugging of the
+program to see what went wrong.</p>
+
+<p>The second error message should obey the ``fail politely’’ rule.  A
+polite error message should be shown to the poor unsuspecting user of
+the program, preferably with a grovelling apology for wasting their
+time.</p>
+
+<p>If a web site powered by PHP fails to work because it can’t connect
+to a SQL database I don’t want to know - really, I don’t want to
+know, I am totally uninterested in this. <strong>TOTALLY</strong>, sorry for shouting,
+I want you to imagine me typing this in on my keyboard or rather,
+banging in the text with rather vigorous keystrokes. <strong>I JUST DON’T
+WANT TO KNOW WHY YOUR PROGRAM FAILED.</strong></p>
+
+<p>What do you want me to do with these awful error messages, print them
+out and put them in a bottle and drop it into the nearest sewer? I
+haven’t a clue.</p>
+
+<h1 id="please-send-good-and-bad-examples-of-error-messages">Please send good and bad examples of error messages</h1>
+
+<p>I’d really like to see some <strong>really bad</strong> error messages, and some good ones
+so feel free to post comments to this blog.</p>
+
+<p>I’m sure that the programmer who wrote the code that crashed wants
+to know why their program crashed which is why all this precious
+information about why the program crashed should be stored in a file
+or a database or in the cloud FOREVER and not just scroll past the
+screen, and even worse be sent to the poor user.</p>
+
+<p>Some error messages are positively mind-bogglingly awful, hundreds of
+lines of meaningless crap. I’ve even seen error messages which refer to
+error codes that don’t exist.</p>
+
+<p>I won’t name names here, so I won’t tell you who but a certain company
+that makes software that unfortunately it has been my duty to use,
+crashed with 3 different numerical error codes. Numerical error codes,
+I ask you, NUMERICAL, (Sorry I’m shouting again) - the topic of whether
+to have numerical codes or human readable text was a hot topic in the
+late 1970’s so I was somewhat surprise to see numerical error codes
+still in existence.</p>
+
+<p>After a bit of Googling I found a web site claiming to have the big
+list of all error codes that this program was known to have
+produced. Unfortunately only two of the codes were in the bug list -
+and worse I couldn’t understand the explanation of the error codes
+that were in the list. The third error code didn’t exist.</p>
+
+<p>The same program, had a link to some help desk with some fatuous text
+saying they welcomed comments about their program.
+When I mailed this address describing in detail what they should do
+with their software, I got a polite reply, saying my comments had been
+noted and passed on to their development group on one of the moons
+of Titan.</p>
+
+<h1 id="sign-the-pledge">Sign the pledge</h1>
+
+<p>I ….. (name of programmer) promise to never let horrible error
+messages out of my program where they can offend the sensibilities of
+the poor sods who have to use my program.</p>
+
+<p>Print the pledge out and glue it to your computer.</p>
+
+
+  </div>
+
+  <div id="tags">
+    Tagged:
+    
+    <a href="/blog/tag/error">error</a> &nbsp;
+    
+    <a href="/blog/tag/messages">messages</a> &nbsp;
+    
+    <a href="/blog/tag/politeness">politeness</a> &nbsp;
+    
+  </div>
+  <p></p>
+
+  <hr />
+  
+  <!-- the tweet button -->
+  <p>
+    <a href="https://twitter.com/share"  class="twitter-share-button" 
+       data-url="http://joearms.github.com/2013/04/28/Fail-fast-noisely-and-politely.html">Tweet</a>
+  </p>
+  
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+  <!-- end of tweet button -->
+
+  <p>Comments:</p>
+  
+  <div id="disqus">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      // var disqus_developer = 1;
+      var disqus_shortname = 'joearmstrongsblog';
+      var disqus_identifier = '/2013/04/28/Fail-fast-noisely-and-politely';
+      var disqus_url = 'http://joearms.github.com/2013/04/28/Fail-fast-noisely-and-politely.html';
+      (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+  </div>
+  
+  <noscript>
+    Please enable JavaScript to view the <a
+    href="http://disqus.com/?ref_noscript">comments powered by
+    Disqus.</a>
+  </noscript>
+</div>
+
+	</div>
+	<div class="span3">
+	  
+	</div>
+      </div>
+    </div>
+    
+    <!-- Footer  ==================================== -->
+    <footer class="footer">
+      <div class="container">
+	<p>&copy; 2013 Joe Armstrong</p>
+	  Theme and code from <a href="https://github.com/mojombo">Tom
+	  Preston-Werner</a>.<br /> Hosted by <a
+	  href="https://github.com/networc/networc.github.com/">GitHub</a>
+	  and powered by <a
+	  href="https://github.com/mojombo/jekyll">Jekyll</a>.
+	  Source code <a href="https://github.com/joearms/joearms.github.com">here</a>.
+	</p>
+	<p>
+	  joearms@gmail.com <a href="http://github.com/joearms/">github.com/joearms</a>
+	  <a href="http://twitter.com/joeerl/">twitter.com/joeerl</a>
+	</p>
+      </div>
+    </footer>
+
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+
+    <!-- Google Analytics -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      
+      ga('create', 'UA-39670657-1', 'github.com');
+      ga('send', 'pageview');
+    </script>
+    <!-- Google Analytics end -->
+    
+  </body>
+</html>

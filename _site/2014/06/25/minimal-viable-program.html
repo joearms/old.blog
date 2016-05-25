@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="author" content="Joe Armstrong" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    
+    <title>Minimal Viable Programs</title>
+    
+    <!-- Bootstrap -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet" media="screen" />
+    <link href="/css/bootstrap-responsive.min.css" rel="stylesheet" />
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css" type="text/css" />
+    <!-- RSS -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml" />
+    <link rel="stylesheet" href="/css/screen.css" type="text/css" 
+	  media="screen, projection" />
+  </head>
+
+  <body>
+    <div class="navbar">
+      <div class="navbar-inner">
+	<a class="brand" href="/index.html">Joe Armstrong - Erlang and other stuff</a>
+	<ul class="nav">
+	  <li><a href="/index.html">Home</a></li>
+	  <li><a href="/archive.html">Archive</a></li>
+	  <li><a href="/resources.html">Resources</a></li>
+	  <li><a href="/installing.html">Installing</a></li>
+	  <li><a href="/links.html">Links</a></li>
+	  <li><a href="https://github.com/joearms/joearms.github.com/">Source</a></li>
+	</ul>
+      </div>
+    </div>
+    
+    <div class="customize">
+      <div class="row-fluid">
+	<div class="span7 offset1">
+	  <div>
+  <div id="title">
+  
+    <h1>Minimal Viable Programs</h1>
+    <span class="meta">25 Jun 2014</span>
+    <p></p>
+  </div>
+
+  <div id="content">
+    <p>A minimal viable program is the smallest program that solves a
+particular problem.  It is small and beautiful. It has no additional
+features.</p>
+
+<p>If you removed a single feature it would be totally useless. If you
+added a new feature that feature would not be essential, you could use
+the program without making use of the new feature.</p>
+
+<p>Very few of the programs I use are minimal viable programs, but some
+are. I’ll describe one such program. This is the ticket system that
+was used in the Erlang distribution.</p>
+
+<h1 id="the-erlang-ticket-system">The Erlang Ticket System</h1>
+
+<p>The Erlang ticket system was designed and implemented by Peter Högfeldt
+in 1986.  We needed a ticket system that was easy to use, intuitive,
+reliable and we wanted it yesterday, so Peter got the job, since he
+was very busy and didn’t have time to take on any new jobs.</p>
+
+<p>If you want a job done find the busiest person you know and give them
+an extra job.  This is because the reason they are busy is that lot’s
+of people want them to do things because they are good at doing things
+and that’s why they are busy.</p>
+
+<p>Peter built the ticket system in a couple of hours and we’ve been
+using it ever since. I guess the couple of hours were divided into an
+hours drinking coffee and drawing things on a white board and twenty
+minutes programming.</p>
+
+<h1 id="the-ticket-system">The Ticket System</h1>
+
+<p>Peter’s ticket system was simple in the extreme. There was one command.
+You typed <strong>newticket</strong> in the shell and got an integer back. Like this:</p>
+
+<pre>
+$ new_ticket
+23
+</pre>
+
+<p>The system had made a new file in <strong>${HOME}/tickets/23</strong> and the content 
+of the file would be:</p>
+
+<pre>
+ticket: 23
+responsible:joe@erix
+status:open
+title: ?
+----
+Describe your problem here
+</pre>
+
+<p>This file was also checked into a global CVS archive that all project
+members had access to. Today one might use GIT or SVN but any revision
+control system would do.</p>
+
+<p>The ticket system had a few simple rules:</p>
+
+<ul>
+  <li>The status is open or closed</li>
+  <li>The responsible person cannot be changed to somebody new without the permission of the new person</li>
+</ul>
+
+<p>Project management wanted a reporting system. This was pretty easy,
+this was done with a few simple shell scripts. For example to
+find the number of open tickets a simple shell script does the job:</p>
+
+<pre>
+#!/bin/sh
+grep 'status:open' ${HOME}/tickets/* | wc
+</pre>
+
+<p>The first ticket system was operational in 1985 and we have used it ever since.</p>
+
+<h1 id="adding-features">Adding features</h1>
+
+<p>Do we need to add additional features? The first point to note is
+there is no time or dates - but wait a moment, this file is checked into
+a revision control system, so the times when the file is created and modified
+are in the revision control system and do not need to be added to the ticket.</p>
+
+<h1 id="what-happened-later">What happened later?</h1>
+
+<p>Feature were added - but none that broke the original spirit of the design.</p>
+
+<h1 id="but-we-cant-make-money-from-a-mvp">But we can’t make money from a MVP</h1>
+
+<p>Many companies sell “features” - so an MVP will be useless - a product
+needs new features. But the MVP program will do exactly the same thing
+in 100 years time as it did yesterday.</p>
+
+<p>New features mean new sales opportunities, good for the company but
+not good for the user.</p>
+
+<p>New features mean new untested code, and backwards incompatibility
+with earlier versions of the program. Things that are stable for a
+long time are good.</p>
+
+<p>The problem with adding features to MVP is that when we ship more
+complex products like complete operating systems that are packed with
+programs, the complexity of the individual programs contributes to the
+complexity of the whole.</p>
+
+<p>If a system shipped with one complex program it probably would not
+matter - and it’s difficult to imagine the idea of a MVP applying to
+a complex program like photoshop.</p>
+
+<p>If the individual components in a system are not MVPs we will soon be
+overburdened by complexity when we start combining programs to build
+larger systems.</p>
+
+<p>If we to have any control over complexity then we should ensure that the
+basic components are MVPs.</p>
+
+<p>I really like systems that do one essential thing and do it well.
+Good examples are Dropbox and Twitter. Dropbox just works. Twitter
+has a no fuss 140 character tweet box. Simple, easy to understand
+and minimalist.</p>
+
+  </div>
+
+  <div id="tags">
+    Tagged:
+    
+  </div>
+  <p></p>
+
+  <hr />
+  
+  <!-- the tweet button -->
+  <p>
+    <a href="https://twitter.com/share"  class="twitter-share-button" 
+       data-url="http://joearms.github.com/2014/06/25/minimal-viable-program.html">Tweet</a>
+  </p>
+  
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+  <!-- end of tweet button -->
+
+  <p>Comments:</p>
+  
+  <div id="disqus">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      // var disqus_developer = 1;
+      var disqus_shortname = 'joearmstrongsblog';
+      var disqus_identifier = '/2014/06/25/minimal-viable-program';
+      var disqus_url = 'http://joearms.github.com/2014/06/25/minimal-viable-program.html';
+      (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+  </div>
+  
+  <noscript>
+    Please enable JavaScript to view the <a
+    href="http://disqus.com/?ref_noscript">comments powered by
+    Disqus.</a>
+  </noscript>
+</div>
+
+	</div>
+	<div class="span3">
+	  
+	</div>
+      </div>
+    </div>
+    
+    <!-- Footer  ==================================== -->
+    <footer class="footer">
+      <div class="container">
+	<p>&copy; 2013 Joe Armstrong</p>
+	  Theme and code from <a href="https://github.com/mojombo">Tom
+	  Preston-Werner</a>.<br /> Hosted by <a
+	  href="https://github.com/networc/networc.github.com/">GitHub</a>
+	  and powered by <a
+	  href="https://github.com/mojombo/jekyll">Jekyll</a>.
+	  Source code <a href="https://github.com/joearms/joearms.github.com">here</a>.
+	</p>
+	<p>
+	  joearms@gmail.com <a href="http://github.com/joearms/">github.com/joearms</a>
+	  <a href="http://twitter.com/joeerl/">twitter.com/joeerl</a>
+	</p>
+      </div>
+    </footer>
+
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+
+    <!-- Google Analytics -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      
+      ga('create', 'UA-39670657-1', 'github.com');
+      ga('send', 'pageview');
+    </script>
+    <!-- Google Analytics end -->
+    
+  </body>
+</html>

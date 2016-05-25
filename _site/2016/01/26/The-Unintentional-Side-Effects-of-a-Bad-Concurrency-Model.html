@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="author" content="Joe Armstrong" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    
+    <title>The Unintentional side-effects of a bad concurrency model</title>
+    
+    <!-- Bootstrap -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet" media="screen" />
+    <link href="/css/bootstrap-responsive.min.css" rel="stylesheet" />
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css" type="text/css" />
+    <!-- RSS -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml" />
+    <link rel="stylesheet" href="/css/screen.css" type="text/css" 
+	  media="screen, projection" />
+  </head>
+
+  <body>
+    <div class="navbar">
+      <div class="navbar-inner">
+	<a class="brand" href="/index.html">Joe Armstrong - Erlang and other stuff</a>
+	<ul class="nav">
+	  <li><a href="/index.html">Home</a></li>
+	  <li><a href="/archive.html">Archive</a></li>
+	  <li><a href="/resources.html">Resources</a></li>
+	  <li><a href="/installing.html">Installing</a></li>
+	  <li><a href="/links.html">Links</a></li>
+	  <li><a href="https://github.com/joearms/joearms.github.com/">Source</a></li>
+	</ul>
+      </div>
+    </div>
+    
+    <div class="customize">
+      <div class="row-fluid">
+	<div class="span7 offset1">
+	  <div>
+  <div id="title">
+  
+    <h1>The Unintentional side-effects of a bad concurrency model</h1>
+    <span class="meta">26 Jan 2016</span>
+    <p></p>
+  </div>
+
+  <div id="content">
+    <p>This is the first of four related articles about how we
+organize software. The others are:</p>
+
+<ul>
+  <li>
+    <p><a href="http://joearms.github.io/2016/01/27/Controlling-Live-Music.html">Controlling Live Music</a></p>
+  </li>
+  <li>
+    <p><a href="http://joearms.github.io/2016/01/28/A-Badass-Way-To-Connect-Programs-Together.html">A Badass Way to Connect Programs Together</a></p>
+  </li>
+  <li>
+    <p><a href="http://joearms.github.io/2016/01/29/Controlling-Sound-with-OSC-Messages.html">Controlling Sound With OSC Messages</a></p>
+  </li>
+</ul>
+
+<p>How we collaborate, the organizations we work in and the
+programming languages we use effect software architectures in ways that
+are not immediately obvious.</p>
+
+<p>In this article I argue that monolithic GitHub projects, inflexible
+organizational structures and sequential programming languages all lead
+to bad software architectures.</p>
+
+<p>This effect is unintentional and a side effect which I believe stems
+from a poor understanding of concurrency.</p>
+
+<p>Software architectures are all about collaboration - we solve complex
+problems by breaking them into simpler parts, and the simpler parts
+collaborate to solve the larger problem.</p>
+
+<p>Any system that cannot flexibly create simpler parts and allow them to
+work in parallel will be difficult to work with.</p>
+
+<p>Ideally if the problem can be describe as the interaction between N
+independent interaction agents, then it should be programmed or
+organized as N independent interacting agents.</p>
+
+<p>Conversely if a problem cannot be described in terms of independent
+communicating parts it will be difficult to understand and difficult to
+implement.</p>
+
+<p>The ease with which we can change the number of
+parts and how they interact has profound consequences for
+the success of the architecture.</p>
+
+<p>Have said this, I’ll examine three factors that influence architectures
+in an unintentionally bad manner.</p>
+
+<h1 id="static-organizational-structures">Static Organizational Structures</h1>
+
+<p>Thirty odd years ago I got a job at Ericsson and was introduced to
+the architecture of the AXE system. I was initially confused when I
+learned about the software architecture of the AXE system since it appeared
+to be very similar to the organizational structure of a large part of
+the company.</p>
+
+<p>Sometimes I saw diagrams describing the organization, other times
+I saw documents describing the software structure and they appeared to be the
+same.</p>
+
+<blockquote>
+  <p>What I did’t initially understand that they were the same - The
+organizations structure was exactly the same as the software
+structure. One block, one group, they were identical.</p>
+</blockquote>
+
+<p>This made a lot of sense - the software was stable and mature
+and the architecture did not change.</p>
+
+<p>Now changing an organizational structure is far more difficult than changing
+a software architecture - so software structure can change quickly but
+organizations cannot.</p>
+
+<p>Later, I moved to different projects and discovered that the software
+architecture follows the organizational structure.</p>
+
+<p>Suppose a new
+project was being started, and at the time when it was being started
+three groups of programmers became free having finished another project.
+Guess how many major components the new project would have? You
+guessed right, three, because three groups had become available at the
+time when the new project started.</p>
+
+<p>So the problem of designing a system architecture, became the problem
+of splitting the initial problem into three approximately equal
+programming tasks and not the problem of finding a natural division
+of the problem into small interacting parts.</p>
+
+<p>I view this as a kind of concurrency problem. If the problem could be
+described in terms of five interacting components, then it would be
+best programmed by five interacting groups, and not three, or seven
+because the organization happen to have three or seven groups
+available at the time.</p>
+
+<h1 id="collaboration-methods">Collaboration Methods</h1>
+
+<p>How do we collaborate in software projects? - specifically how we
+collaborate in Open Source projects? The dominant model of
+collaboration is by manipulation of a common
+archive. Typically GitHub.</p>
+
+<p>GibHub collaborations are essentially shared memory transactions. The
+transaction manager (project owner) decides to commit a new set of
+changes or disallow them.  As with all shared memory concurrent reads
+are possible but concurrent writes are disallowed and must be
+sequentially ordered - otherwise chaos will ensue.</p>
+
+<p>Some of us think that shared memory programming is a nightmare -
+people tinkering with my code or my tinkering with other peoples code
+that I don’t really understand is a recipe for disaster.</p>
+
+<p>Collaborating in a communal project is not easy. The biggest problem
+is getting into the mind set of the people who built and maintain the
+project. Mature open source projects can have thousands of files and
+directories and knowing exactly where to add your stuff is by no means
+easy. Even though you think you know what you’re doing a change that
+appears to work can easily break somebody else’s code.</p>
+
+<p>This is incidentally how two humans interact and collaborate. If I
+want to collaborate with my friend I don’t open up their head with a
+carving knife, insert new neural synapses, then sew up everything and
+hope that it will work. No I talk to them, I say “can you do this?”
+and they talk back - we interact by exchanging messages.</p>
+
+<p>This is how distributed applications work - they work by exchanging
+messages.  In fact this is the only way they possibly could work. The
+clue lies in the name <strong>distributed</strong> - distributed means that the parts
+of the application are indifferent physical places so they have to
+collaborate by exchanging messages which in the best case travel at
+the speed of light, and in most case a lot lot slower.</p>
+
+<p>The most common way to build distributed things and the most
+successful way of creating collaborative things is the WWW. Of all
+the ways of building object on the Internet the dominant way is to use the
+HTTP protocol layered over TCP sockets. I’ll call this HTTP-over-TCP.</p>
+
+<p>Of course HTTP-over-TCP is not the only way of doing things, there are
+many other combinations we could choose.</p>
+
+<p>Recently I’ve been experimenting with two alternatives JSON-over-TCP and
+OSC-over-UDP - both have their advantages and disadvantages, so I’m
+going to discuss these here:</p>
+
+<p>Firstly I want to use JSON-over-TCP and OSC-over-UDP for purely
+<em>internal</em> collaboration. These messages are never intended to escape
+the local machine/Internet boundary so I don’t have to worry about security.</p>
+
+<p>What are these little projects:</p>
+
+<p>The first is JSON-over-TCP, this started with my <a href="http://joearms.github.io/2016/01/04/fun-with-swift.html">Fun with
+Swift</a>
+article. After I published this I was contacted by Chris Eidhof who very kindly sent
+me a copy of <a href="https://www.objc.io/books/functional-swift/">Functional
+Swift</a> which he had
+co-authored so I was very glad to hear from him. Some of my hours of
+struggling were solved by a quick tip from Chris.</p>
+
+<p>Chris and I started mailing each other and he soon had made a simple
+JSON-over-TCP proof of concept where we can build a remote GUI by
+sending JSON messages over TCP. The project is still in
+proof-of-concept stage but there is some code to play with at
+<a href="https://github.com/chriseidhof/tcp-json-swift">https://github.com/chriseidhof/tcp-json-swift</a>
+and I was able to send messages from Erlang to Swift and a window 
+popped up.  Early days, but looking good.</p>
+
+<p>Chris and I would like to implement something like
+<a href="http://shoesrb.com/">Shoes</a> – for those of you who have never
+used shoes the first version
+was written by the extremely talented
+<a href="https://en.wikipedia.org/wiki/Why_the_lucky_stiff">Why the Lucky Stiff</a>.</p>
+
+<blockquote>
+  <p>Unfortunately the Internet does not have permanent references, so
+much of what the Lucky Stiff wrote seems to have vanished.  This is
+why we should all support Juan Benet in his attempts to build <a href="http://ipfs.io/">The
+Interplanetary File System</a> and resist storing our
+data in impermanent clouds.  Let’s not destroy history for future
+generations by sticking our data in a proprietary cloud.</p>
+</blockquote>
+
+<p>The nice thing about separating the GUI client from the GUI
+server is that neither of us needs to know <em>anything</em> about the
+internal structure of the other guys project. <span style="color:red">My project is written in Erlang</span>
+and has a directory structure and build system that I’m happy with. <span style="color:red">Chris’s project is
+written in Swift</span> and has a directory structure and build system that he
+is happy with, but <span style="color:red">neither of us needs to know how the other side has
+implemented their code</span>.  All we need to agree on are what messages
+should be send and what the messages mean.</p>
+
+<p>The second project is a collaboration with Sam Aaron focused on the
+<a href="http://sonic-pi.net/">Sonic Pi</a> This project uses OSC messaging with
+UDP transport, which I’ll call OSC-over-UDP.</p>
+
+<p>OSC-over-UDP as a way of gluing projects together is described in a <a href="http://joearms.github.io/2016/01/28/A-Badass-Way-To-Connect-Programs-Together.html">A Badass Way
+to Connect Things Together</a>.</p>
+
+<h1 id="programming-languages">Programming Languages</h1>
+
+<p>Why do we have monolithic projects? I believe this is because it is
+difficult to build communicating components in what are essentially
+sequential programming languages. Concurrency has been forgotten in
+most programming languages, and when it has been added it seems like a
+afterthought, not as an act of conscious design.</p>
+
+<p>In a very large number of programming languages the only way to program
+a concurrent application is to ``do it yourself’’ and simulate
+concurrency by storing the state of a suspended process in a data
+base or some equally horrid constructions involving a mess of callback
+and promises.</p>
+
+<p>Sequential languages are designed to write sequential programs, and the
+only way for a sequential program to grow in functionality is for it
+to get larger. It’s technically difficult to split it into cooperating
+processes so this is not usually done. The concurrency in the
+application cannot be used to structure the application.</p>
+
+<blockquote>
+  <p>We should grow things by adding more small communicating objects,
+rather than making larger and larger non-communicating objects.</p>
+</blockquote>
+
+<p>Concentrating on the communication provides a higher level of
+abstraction than concentrating on the function APIs used within the
+system.  Black-box equivalence says that two systems are equivalent if
+they cannot be distinguished by observing their communication
+patterns. Two black-boxes are equivalent if they have identical
+input/output behavior.</p>
+
+<p>When we connect black boxes together we don’t care what programming
+languages have been used inside the black boxes, we don’t care how
+the code inside the black boxes has been organized, we just have to
+obey the communication protocols.</p>
+
+<p>If you look at most GitHub projects - they are built as monolithic
+single language applications, they are not built from small
+communicating components written in different languages.</p>
+
+<p>In the Internet world, we program differently. Here it is possible to
+structure applications as <code class="highlighter-rouge">micro-services</code> usually using
+HTTP-over-TCP or JSON-over-TCP AJAX and so on, but this is not used
+<em>internally</em> inside the OS to any large extent.</p>
+
+<blockquote>
+  <p>Erlang programs are the exception. Erlang programs are
+intentionally structured as communicating processes - they are the ultimate
+micro-services.</p>
+</blockquote>
+
+<p>Large Erlang applications have a flat ``bus like’’ structure. They
+are structured as independent parallel applications hanging off a
+common communication bus. This leads to architectures that are easy
+to understand and debug and collaborations which are easy to program.</p>
+
+  </div>
+
+  <div id="tags">
+    Tagged:
+    
+    <a href="/blog/tag/Software">Software</a> &nbsp;
+    
+    <a href="/blog/tag/Messaging">Messaging</a> &nbsp;
+    
+    <a href="/blog/tag/Architectures">Architectures</a> &nbsp;
+    
+    <a href="/blog/tag/Organizations">Organizations</a> &nbsp;
+    
+  </div>
+  <p></p>
+
+  <hr />
+  
+  <!-- the tweet button -->
+  <p>
+    <a href="https://twitter.com/share"  class="twitter-share-button" 
+       data-url="http://joearms.github.com/2016/01/26/The-Unintentional-Side-Effects-of-a-Bad-Concurrency-Model.html">Tweet</a>
+  </p>
+  
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+  <!-- end of tweet button -->
+
+  <p>Comments:</p>
+  
+  <div id="disqus">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      // var disqus_developer = 1;
+      var disqus_shortname = 'joearmstrongsblog';
+      var disqus_identifier = '/2016/01/26/The-Unintentional-Side-Effects-of-a-Bad-Concurrency-Model';
+      var disqus_url = 'http://joearms.github.com/2016/01/26/The-Unintentional-Side-Effects-of-a-Bad-Concurrency-Model.html';
+      (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+  </div>
+  
+  <noscript>
+    Please enable JavaScript to view the <a
+    href="http://disqus.com/?ref_noscript">comments powered by
+    Disqus.</a>
+  </noscript>
+</div>
+
+	</div>
+	<div class="span3">
+	  
+	</div>
+      </div>
+    </div>
+    
+    <!-- Footer  ==================================== -->
+    <footer class="footer">
+      <div class="container">
+	<p>&copy; 2013 Joe Armstrong</p>
+	  Theme and code from <a href="https://github.com/mojombo">Tom
+	  Preston-Werner</a>.<br /> Hosted by <a
+	  href="https://github.com/networc/networc.github.com/">GitHub</a>
+	  and powered by <a
+	  href="https://github.com/mojombo/jekyll">Jekyll</a>.
+	  Source code <a href="https://github.com/joearms/joearms.github.com">here</a>.
+	</p>
+	<p>
+	  joearms@gmail.com <a href="http://github.com/joearms/">github.com/joearms</a>
+	  <a href="http://twitter.com/joeerl/">twitter.com/joeerl</a>
+	</p>
+      </div>
+    </footer>
+
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+
+    <!-- Google Analytics -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      
+      ga('create', 'UA-39670657-1', 'github.com');
+      ga('send', 'pageview');
+    </script>
+    <!-- Google Analytics end -->
+    
+  </body>
+</html>

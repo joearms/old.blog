@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="author" content="Joe Armstrong" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    
+    <title>Testing testing 123</title>
+    
+    <!-- Bootstrap -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet" media="screen" />
+    <link href="/css/bootstrap-responsive.min.css" rel="stylesheet" />
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css" type="text/css" />
+    <!-- RSS -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml" />
+    <link rel="stylesheet" href="/css/screen.css" type="text/css" 
+	  media="screen, projection" />
+  </head>
+
+  <body>
+    <div class="navbar">
+      <div class="navbar-inner">
+	<a class="brand" href="/index.html">Joe Armstrong - Erlang and other stuff</a>
+	<ul class="nav">
+	  <li><a href="/index.html">Home</a></li>
+	  <li><a href="/archive.html">Archive</a></li>
+	  <li><a href="/resources.html">Resources</a></li>
+	  <li><a href="/installing.html">Installing</a></li>
+	  <li><a href="/links.html">Links</a></li>
+	  <li><a href="https://github.com/joearms/joearms.github.com/">Source</a></li>
+	</ul>
+      </div>
+    </div>
+    
+    <div class="customize">
+      <div class="row-fluid">
+	<div class="span7 offset1">
+	  <div>
+  <div id="title">
+  
+    <h1>Testing testing 123</h1>
+    <span class="meta">26 Mar 2013</span>
+    <p></p>
+  </div>
+
+  <div id="content">
+    <p>This is a test of Jekyll. If it works I’ll move all my blogs to github.</p>
+
+<h1 id="todo">ToDo</h1>
+
+<ul>
+  <li>
+    <strike>Fix RSS feeds</strike>
+  </li>
+</ul>
+
+<h1 id="rss">RSS</h1>
+
+<p>I have set up an RSS atom feed. Hope it works</p>
+
+<h1 id="reference-material">Reference Material</h1>
+
+<ul>
+  <li>http://cobyism.com/jekyll/docs/home/</li>
+  <li>http://paulstamatiou.com/how-to-wordpress-to-jekyll</li>
+  <li>http://spparker.com/posts/2011-04-26-keeping-jekyll-classy</li>
+  <li>http://help.github.com/articles/github-flavored-markdown.html</li>
+</ul>
+
+<h1 id="code-highlighting-test">Code highlighting test</h1>
+
+<p>Can we highlight Erlang code?</p>
+
+<figure class="highlight"><pre><code class="language-erlang" data-lang="erlang"><span class="nf">start</span><span class="p">([</span><span class="nv">Config</span><span class="p">])</span> <span class="o">-&gt;</span>
+    <span class="nv">File</span> <span class="o">=</span> <span class="p">(</span><span class="nb">atom_to_list</span><span class="p">(</span><span class="nv">Config</span><span class="p">)),</span>
+    <span class="nn">io</span><span class="p">:</span><span class="nf">format</span><span class="p">(</span><span class="s">"ws start:</span><span class="si">~p~n</span><span class="s">"</span><span class="p">,[</span><span class="nv">File</span><span class="p">]),</span>
+    <span class="nv">Conf</span> <span class="o">=</span> <span class="nf">read_config</span><span class="p">(</span><span class="nv">File</span><span class="p">),</span>
+    <span class="nf">start_link</span><span class="p">(</span><span class="nv">Conf</span><span class="p">).</span></code></pre></figure>
+
+<p>Yes!</p>
+
+<h1 id="quotes-test">Quotes test</h1>
+
+<p>Quotes seem to work properly. I can make “curly quotes” and
+``regular quotes’’.</p>
+
+<h1 id="stuff-that-is-broken">Stuff that is broken</h1>
+
+<ul>
+  <li>Colored quoting of text</li>
+  <li>My tweet button is wrong</li>
+</ul>
+
+<h1 id="making-autolinking-work">Making Autolinking work</h1>
+
+<p>To get autolinking to work needs some changes to <b>_config.yml</b></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>rdiscount:
+    extensions: [smart, autolink]
+</code></pre>
+</div>
+
+<h1 id="comments">Comments</h1>
+
+<p>I have used Disqus for this. It seems to work nicely.
+If anybody knows how to make a tweet link or why URLs are not autolinked please
+add a comment.</p>
+
+<h1 id="tests">Tests</h1>
+
+<p>Page.title = (Testing testing 123)
+Page.url = (/2013/03/26/testing-testing-123.html)</p>
+
+
+  </div>
+
+  <div id="tags">
+    Tagged:
+    
+    <a href="/blog/tag/jekyll">jekyll</a> &nbsp;
+    
+    <a href="/blog/tag/bootstrap">bootstrap</a> &nbsp;
+    
+    <a href="/blog/tag/github">github</a> &nbsp;
+    
+    <a href="/blog/tag/disqus">disqus</a> &nbsp;
+    
+  </div>
+  <p></p>
+
+  <hr />
+  
+  <!-- the tweet button -->
+  <p>
+    <a href="https://twitter.com/share"  class="twitter-share-button" 
+       data-url="http://joearms.github.com/2013/03/26/testing-testing-123.html">Tweet</a>
+  </p>
+  
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+  <!-- end of tweet button -->
+
+  <p>Comments:</p>
+  
+  <div id="disqus">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      // var disqus_developer = 1;
+      var disqus_shortname = 'joearmstrongsblog';
+      var disqus_identifier = '/2013/03/26/testing-testing-123';
+      var disqus_url = 'http://joearms.github.com/2013/03/26/testing-testing-123.html';
+      (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+  </div>
+  
+  <noscript>
+    Please enable JavaScript to view the <a
+    href="http://disqus.com/?ref_noscript">comments powered by
+    Disqus.</a>
+  </noscript>
+</div>
+
+	</div>
+	<div class="span3">
+	  
+	</div>
+      </div>
+    </div>
+    
+    <!-- Footer  ==================================== -->
+    <footer class="footer">
+      <div class="container">
+	<p>&copy; 2013 Joe Armstrong</p>
+	  Theme and code from <a href="https://github.com/mojombo">Tom
+	  Preston-Werner</a>.<br /> Hosted by <a
+	  href="https://github.com/networc/networc.github.com/">GitHub</a>
+	  and powered by <a
+	  href="https://github.com/mojombo/jekyll">Jekyll</a>.
+	  Source code <a href="https://github.com/joearms/joearms.github.com">here</a>.
+	</p>
+	<p>
+	  joearms@gmail.com <a href="http://github.com/joearms/">github.com/joearms</a>
+	  <a href="http://twitter.com/joeerl/">twitter.com/joeerl</a>
+	</p>
+      </div>
+    </footer>
+
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+
+    <!-- Google Analytics -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      
+      ga('create', 'UA-39670657-1', 'github.com');
+      ga('send', 'pageview');
+    </script>
+    <!-- Google Analytics end -->
+    
+  </body>
+</html>
