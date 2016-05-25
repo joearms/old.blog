@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="author" content="Joe Armstrong" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    
+    <title>The web of names, hashes and UUIDs</title>
+    
+    <!-- Bootstrap -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet" media="screen" />
+    <link href="/css/bootstrap-responsive.min.css" rel="stylesheet" />
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css" type="text/css" />
+    <!-- RSS -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml" />
+    <link rel="stylesheet" href="/css/screen.css" type="text/css" 
+	  media="screen, projection" />
+  </head>
+
+  <body>
+    <div class="navbar">
+      <div class="navbar-inner">
+	<a class="brand" href="/index.html">Joe Armstrong - Erlang and other stuff</a>
+	<ul class="nav">
+	  <li><a href="/index.html">Home</a></li>
+	  <li><a href="/archive.html">Archive</a></li>
+	  <li><a href="/resources.html">Resources</a></li>
+	  <li><a href="/installing.html">Installing</a></li>
+	  <li><a href="/links.html">Links</a></li>
+	  <li><a href="https://github.com/joearms/joearms.github.com/">Source</a></li>
+	</ul>
+      </div>
+    </div>
+    
+    <div class="customize">
+      <div class="row-fluid">
+	<div class="span7 offset1">
+	  <div>
+  <div id="title">
+  
+    <h1>The web of names, hashes and UUIDs</h1>
+    <span class="meta">12 Mar 2015</span>
+    <p></p>
+  </div>
+
+  <div id="content">
+    <p>Subtitle: A step towards cleaning up the mess we’re in.</p>
+
+<p>How do we keep track of documents that change?</p>
+
+<p>This is a sub-problem to the more general problem <code class="highlighter-rouge">how do we keep
+track of things'' which in it's turn involves solving the problem
+</code>how do we name things’’ and this is a sub problem to the problem of
+cleaning up <a href="https://www.youtube.com/watch?v=lKXe3HUG2l4">the mess we’re
+in</a>.</p>
+
+<p>I’ll start with the problem of naming things.</p>
+
+<h1 id="naming-things">Naming things</h1>
+
+<p>Naming things is one of the toughest problems in computer science and
+philosophy.  As soon as we name something there is an implied context
+- take away the context, or use the name in a different context and we
+are lost.</p>
+
+<p>My son is called Thomas - in the context of our family <code class="highlighter-rouge">Thomas'' means
+</code>my son’’ and uniquely identifies him. In the context of my workplace
+Thomas means one of 646 different people (and yes I ran a search to
+see). Google comes up with 1.58 Billion Thomases - so the name Thomas
+is both very useful (in the context of my family) and useless (in the
+wider context).</p>
+
+<p>How could we give a precise name to Thomas? - that’s easy (in theory)
+- we scan Thomas’s Genome and compute the SHA1 checksum of the genome
+(and we’d need some fancy error correction algorithm since I guess two
+scans of the genome would not produce bit identical results).</p>
+
+<h1 id="naming-things-by-their-content">Naming things by their content</h1>
+
+<p>Inside computers things are stored in files, this raises two
+very tricky problems:</p>
+
+<ul>
+  <li>How should we name the files?</li>
+  <li>In which directory should the files be stored?</li>
+</ul>
+
+<p>The easiest way to name a file is by its content.
+All we do is compute the <a href="http://en.wikipedia.org/wiki/SHA-1">SHA1</a>
+checksum of the content of the file - and bingo we have
+a unique filename. Then we can stick all the files in the same
+directory. This solves both our problems.</p>
+
+<p>We’ve also created a new and totally different problem - ``How do I
+find the filename of a file that contains some data I’m interested
+in’’.</p>
+
+<p>The latter problem (finding the file) is solved by indexing the
+contents of the file. The file can contain hashtags of certain names
+that have meaning, and we can search for these.</p>
+
+<p>Once we have the SHA1 name of a file we can safely request this file
+from any server and don’t need to bother with security.</p>
+
+<p>For example, if I request a file with SHA1
+cf23df2207d99a74fbe169e3eaa035e623b65d94 from a server then I can
+check that the data I got back was correct by computing its SHA1
+checksum.</p>
+
+<p>This mechanism is immune to a <a href="http://en.wikipedia.org/wiki/Man-in-the-middle_attack">Man in the Middle
+Attack</a> so
+regular unencrypted socket transport can be used.  If a man in the
+middle changes the content of the file then the SHA1 checksums will
+not tally and the client requesting the data will know that the data
+is corrupt and cannot be trusted.</p>
+
+<p>Given that we have a SHA1 checksum of some data, how can we find the
+address of a server that hosts this file. Well this problem was solved
+a long time ago. Just put the data into a
+<a href="http://en.wikipedia.org/wiki/Distributed_hash_table">DHT</a>
+(Distributed Hash Table) such as
+<a href="http://en.wikipedia.org/wiki/Kademlia">Kademlia</a> or
+<a href="http://en.wikipedia.org/wiki/Chord_(peer-to-peer\)">Chord</a>
+and let it work its magic. Bit torrent
+clients and servers have routinely using this technique for the last
+ten years or more.</p>
+
+<h1 id="the-web-of-hashes">The Web of Hashes</h1>
+
+<p>To enable a network for serving immutable content I’d like to see the
+emergence of what I have called ``the web of hashes’’ so we’d see web
+address like:</p>
+
+<blockquote>
+  <p>sha1://cf23df2207d99a74fbe169e3eaa035e623b65d94</p>
+</blockquote>
+
+<p>Instead of addresses like:</p>
+
+<blockquote>
+  <p>http://some.host.some.country/some.name</p>
+</blockquote>
+
+<h1 id="what-about-content-that-changes">What about content that Changes?</h1>
+
+<p>SHA1 checksums are fine for content that is immutable (doesn’t change)
+- but what about a file whose content changes with time?</p>
+
+<p>To solve this I propose adding 
+<a href="http://en.wikipedia.org/wiki/Universally_unique_identifier">UUIDs</a> to
+files.  UUIDs can be generated locally without using a centralized
+server.</p>
+
+<p>So Erlang files might start something like:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code> -module(xyz).
+ -uuid("de305d54-75b4-431b-adb2-eb6b9e546013")
+</code></pre>
+</div>
+
+<p>and HTML:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code> &lt;meta name="uuid" content="de305d54-75b4-431b-adb2-eb6b9e546013"&gt;
+</code></pre>
+</div>
+
+<p>Once a file has a UUID it can be renamed, edited, cloned etc. As
+long as you don’t remove the UUID then we can track the location
+with a DHT. After a while the contents of files with the same UUID
+will diverge and at that time we can think of changing the UUIDs</p>
+
+<p>I think this would be a rather good mechanism. Imagine the following:</p>
+
+<ul>
+  <li>We create file and make sure it contains a UUID.</li>
+  <li>The file gets modified, or renamed. At this stage there is still only one file
+with this UUID.</li>
+  <li>We copy the file to a new file. Now we have two files with the same UUID. Each can be
+independently edited renamed or copied. By keeping a database of UUID to filename
+mappings we can easily track down all modifications of the file. At a certain stage
+we might look at all the files containing the same UUID and decide that some of the
+modifications are so large as to warrant a name change, in this case we add a new UUID
+to the
+file - and we can also add a <code class="highlighter-rouge">parent:UUID</code> tag in the file saying that this file
+was derived from an earlier file with this UUID. Using the parent tag we’d be able
+to track the evolution of a file.</li>
+  <li>If we send the file to a friend or post it to the net, copies, renamings
+and editing will
+happen - but we will still be able to track these if the original UUID is not changed.</li>
+</ul>
+
+<h1 id="the-web-of-uuids">The Web of UUIDs</h1>
+
+<p>Now we create the web of UUIDs. As for the web of hashes I’d like to
+see a web of UUIDs, so we could request data for a resource with identifier:</p>
+
+<blockquote>
+  <p>uuid://de305d54-75b4-431b-adb2-eb6b9e546013</p>
+</blockquote>
+
+<p>This time we might get many different replies, since there might be
+multiple copies of the file.  What should a request like the above
+reply? Possible a list of SHA1’s – I’m not sure here.</p>
+
+<h1 id="the-web-of-names">The Web of Names</h1>
+
+<p>Today we have a web of names. Things like</p>
+
+<p>http://some.name.of.a.server.someplace/some.name.of.a.file</p>
+
+<p>But we don’t have either a web of hashes or a web of UUIDs</p>
+
+<p>I think we need all three.</p>
+
+<h1 id="why-three-webs">Why three webs?</h1>
+
+<ul>
+  <li>The web of names is convenient and easy to use</li>
+  <li>The web of UUIDs allows us to track content that changes with time</li>
+  <li>The web of hashes (SHA1) allows total precision in managing content</li>
+</ul>
+
+<h1 id="whats-the-point-of-all-of-this">What’s the point of all of this?</h1>
+
+<p>You might ask where I’m going with this? - If you’ve watched my lecture
+<a href="https://www.youtube.com/watch?v=lKXe3HUG2l4">the mess we’re
+in</a>.
+you’ll get the answer. The Web and computer software is in a total mess.
+It has evolved faster than our ability to understand what we are doing.</p>
+
+<blockquote>
+  <p>Once there was not enough software, then it was about right, and now there’s too much</p>
+</blockquote>
+
+<p>It’s easy to understand how the total amount of software in existence
+increases, this is a law of nature - entropy always increases. The
+amount of software increases because files get copied, edited
+cloned and modified.</p>
+
+<p>We need mechanisms to reverse this process. By adding UUIDs to files
+we can track down all copies and modification to a file, and possible
+<strong>reduce</strong> the number of files by throwing away bad modifications
+that make no sense and by keeping the best of all the modifications.</p>
+
+<p>This is part of my <strong>reversing entropy</strong> plan - that hopefully will
+clear up the mess we’re in.</p>
+
+<h1 id="update-1">Update 1</h1>
+
+<p>Since I published this article my attention has been drawn
+(thank’s to Twitter and some private communications)  to a number of
+projects with goals that are broadly similar or overlapping with what
+I’m suggesting:</p>
+
+<p><a href="http://www.ccnx.org/what-is-ccn/">CNNx</a> is a project that wants
+content to be addressed by name, not by machine address and using
+secured content.</p>
+
+<p><a href="http://named-data.net/project/">Named Data Networking</a> wants to 
+secure content.</p>
+
+<p><a href="http://ipfs.io">IFPS</a> wants to make the entire web into a secure
+distributed file system.</p>
+
+<p>It seems like many people have similar ideas - which is
+great. Hopefully this will lead to better and more secure systems.</p>
+
+  </div>
+
+  <div id="tags">
+    Tagged:
+    
+    <a href="/blog/tag/web">web</a> &nbsp;
+    
+    <a href="/blog/tag/names">names</a> &nbsp;
+    
+    <a href="/blog/tag/hashes">hashes</a> &nbsp;
+    
+    <a href="/blog/tag/uuid">uuid</a> &nbsp;
+    
+    <a href="/blog/tag/sha1">sha1</a> &nbsp;
+    
+    <a href="/blog/tag/erlang">erlang</a> &nbsp;
+    
+  </div>
+  <p></p>
+
+  <hr />
+  
+  <!-- the tweet button -->
+  <p>
+    <a href="https://twitter.com/share"  class="twitter-share-button" 
+       data-url="http://joearms.github.com/2015/03/12/The_web_of_names.html">Tweet</a>
+  </p>
+  
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+  <!-- end of tweet button -->
+
+  <p>Comments:</p>
+  
+  <div id="disqus">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      // var disqus_developer = 1;
+      var disqus_shortname = 'joearmstrongsblog';
+      var disqus_identifier = '/2015/03/12/The_web_of_names';
+      var disqus_url = 'http://joearms.github.com/2015/03/12/The_web_of_names.html';
+      (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+  </div>
+  
+  <noscript>
+    Please enable JavaScript to view the <a
+    href="http://disqus.com/?ref_noscript">comments powered by
+    Disqus.</a>
+  </noscript>
+</div>
+
+	</div>
+	<div class="span3">
+	  
+	</div>
+      </div>
+    </div>
+    
+    <!-- Footer  ==================================== -->
+    <footer class="footer">
+      <div class="container">
+	<p>&copy; 2013 Joe Armstrong</p>
+	  Theme and code from <a href="https://github.com/mojombo">Tom
+	  Preston-Werner</a>.<br /> Hosted by <a
+	  href="https://github.com/networc/networc.github.com/">GitHub</a>
+	  and powered by <a
+	  href="https://github.com/mojombo/jekyll">Jekyll</a>.
+	  Source code <a href="https://github.com/joearms/joearms.github.com">here</a>.
+	</p>
+	<p>
+	  joearms@gmail.com <a href="http://github.com/joearms/">github.com/joearms</a>
+	  <a href="http://twitter.com/joeerl/">twitter.com/joeerl</a>
+	</p>
+      </div>
+    </footer>
+
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+
+    <!-- Google Analytics -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      
+      ga('create', 'UA-39670657-1', 'github.com');
+      ga('send', 'pageview');
+    </script>
+    <!-- Google Analytics end -->
+    
+  </body>
+</html>

@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="author" content="Joe Armstrong" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    
+    <title>A Badass Way to Connect Programs Together</title>
+    
+    <!-- Bootstrap -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet" media="screen" />
+    <link href="/css/bootstrap-responsive.min.css" rel="stylesheet" />
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css" type="text/css" />
+    <!-- RSS -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml" />
+    <link rel="stylesheet" href="/css/screen.css" type="text/css" 
+	  media="screen, projection" />
+  </head>
+
+  <body>
+    <div class="navbar">
+      <div class="navbar-inner">
+	<a class="brand" href="/index.html">Joe Armstrong - Erlang and other stuff</a>
+	<ul class="nav">
+	  <li><a href="/index.html">Home</a></li>
+	  <li><a href="/archive.html">Archive</a></li>
+	  <li><a href="/resources.html">Resources</a></li>
+	  <li><a href="/installing.html">Installing</a></li>
+	  <li><a href="/links.html">Links</a></li>
+	  <li><a href="https://github.com/joearms/joearms.github.com/">Source</a></li>
+	</ul>
+      </div>
+    </div>
+    
+    <div class="customize">
+      <div class="row-fluid">
+	<div class="span7 offset1">
+	  <div>
+  <div id="title">
+  
+    <h1>A Badass Way to Connect Programs Together</h1>
+    <span class="meta">28 Jan 2016</span>
+    <p></p>
+  </div>
+
+  <div id="content">
+    <h1 id="what-is-osc">What is OSC?</h1>
+
+<p><a href="http://opensoundcontrol.org">Open Sound Control</a>  is a binary
+protocol for exchanging data between machines.</p>
+
+<blockquote>
+  <p><strong>Open Sound Control</strong> is just about <span style="color:red">the
+worse possible name</span> for a protocol since I’d thought for a long
+time that this protocol could only be used to control sounds.  Nothing
+is further from the truth. <span style="color:red">OSC should be
+renamed OAC – Open <strong>Anything Control</strong></span> - which would be a far
+better name since it can be used to control <em>anything</em></p>
+</blockquote>
+
+<p>OSC-over-UDP is just OSC packed data sent over a UDP connection.
+My first serious encounter with OSC-over-UDP was when I
+attended strangloop and talked about <a href="https://www.youtube.com/watch?v=lKXe3HUG2l4">The Mess We’re In</a>.</p>
+
+<p>I bumped into Sam Aaron, the unstoppable force behind
+<a href="http://sonic-pi.net/">Sonic Pi</a>.
+and said that it would be really cool to control Sonic Pi from Erlang.
+…</p>
+
+<p>Sam told me that to control <code class="highlighter-rouge">Sonic Pi</code> all I had to do was send it OSC encoded
+messages over UDP.</p>
+
+<p>I was first rather skeptical to using OSC-over-UDP but have rapidly
+came to believe that this is a really-really good way to proceed. My
+initial dislike of OSC-over-UDP was colored by my JSON-over-TCP
+experience. TCP is session based which make life easy (for some of
+us) and JSON is popular. On the other hand UDP can suffer from packet
+loss and OSC is an obscure protocol - <strong>digging deeper I found
+myself being more and more attracted to OSC-over-UDP</strong>.</p>
+
+<h1 id="why-do-i-like-osc-over-udp">Why do I like OSC-over-UDP?</h1>
+
+<p>To start with OSC is beautiful and what I call ``simple by design’’ -
+more on this later. A complete OSC encoder is tiny and
+can be written in any decent language in a few pages of code.  My
+(incomplete) implementation
+<a href="https://github.com/joearms/music_experiments/blob/master/osc.erl">osc.erl</a>
+is tiny.  It’s trivial to implement and extremely efficient. JSON on
+the other hand is not so easy to implement.</p>
+
+<p>I’ve always been attracted to things that are simple and powerful.
+Simplicity means they can be implemented in few lines of code.  Fewer
+lines of code mean less possibility of errors and less to maintain.</p>
+
+<p>Session based TCP programs are trivial to write in Erlang but a bugger
+in any sequential language. TCP uses the idea a session and the only
+rational way to program a session is as a process or (horrors) as a
+thread.</p>
+
+<blockquote>
+  <p>In Erlang session management is easier than falling off a log - one
+session equals one controlling process and as many sub-processes as you
+feel like.</p>
+</blockquote>
+
+<p>In most other languages session management involves
+mutable state concurrency. A program that is a dozen lines of Erlang
+escalates into a mess of locks and mutexes or callbacks which in most
+languages is a thin layer over a pthreads implementation.</p>
+
+<p>For those of you who haven’t written a multi-threaded TCP socket
+server in C using pthreads I can only say ``don’t go there, it’s not a
+pleasant experience’’ I’ve been there done that, and have the grey
+hairs to prove it.</p>
+
+<p>UDP is a lot simpler than TCP and is far easier to use
+in sequential languages. There are no sessions in UDP only messages.
+Servers don’t have to be multi-threaded to support sessions but
+can be interrupt driven and run in a single thread. This is wonderful
+news for systems like Node.js whose concurrency model is non-existent
+and whose idea of having a fun time is throwing promises into the
+future and hoping that nobody breaks them.</p>
+
+<p>Well as anybody who has watched Casablanca knows promises can be
+broken.</p>
+
+<p>For many years I’ve been saying that it would be nice to collaborate
+by sending message to each other and not by grocking around in each
+other’s messes. I basically don’t want to know how you’ve implemented
+your pile of shit, I just want to send it message to tell it what to
+do. I’d naively assumed that something like Anything-over-TCP would be
+fine and easy to implement, so I made a system called
+<a href="http://ubf.github.io/ubf/">UBF</a> which is a layered on top of TCP and
+hoped that everybody would use it.</p>
+
+<blockquote>
+  <p>I guess I’d underestimated the difficulty of implementing 
+Anything-over-TCP in a sequential language. Just because it’s really really
+easy in Erlang doesn’t mean to say it’s easy in sequential languages.</p>
+</blockquote>
+
+<p>TCP sessions map 1:1 onto Erlang programs and the programs are trivial.
+But in a sequential language they map N:1 onto a single process, which is
+a pain in the butt.</p>
+
+<p>For easy of implementation nothing I know of beats OSC-over-UDP - it’s really easy.</p>
+
+<p>My first experience with this was at the Strangeloop conference in St
+Louis in 2014 - I bumped into Sam Aaron and we got talking. I asked
+him if I could remote control the Sonic Pi - and he said “sure just
+send it some OSC messages” we sat down, I Googled a bit and found an
+OSC library for Erlang and ten minutes later we were collaborating.</p>
+
+<p>I could collaborate with him by sending him OSC messages over UDP and
+didn’t have to understand one iota of how his application was built
+and structured. It didn’t matter all I had to do was understand
+the messaging protocol.</p>
+
+<p>Time passed and I’d almost forgot	ot this - but the other day I started
+wondering how to make sounds - I’d done this in 
+<a href="http://joearms.github.io/2016/01/06/fun_with_swift_and_midi.html">Fun with Swift and Midi</a>
+ and wondered
+idly how the Sonic Pi did this.</p>
+
+<p>I though to myself ``I know what I’ll do, I’ll build the Sonic Pi from
+the sources and in doing so get to understand how the sound generating
+works.’’ Well as we all know building from the sources is not easy.
+<span style="color:red">I tried and failed</span> and tweeted</p>
+
+<p><img src="/images/blessed_tweet.png" /></p>
+
+<p>I’m now at an impasse - I’m mailed some guys on the Sonic Pi
+list who have what we think to be an identical setup - only the build
+works for them and not for me. Does that sound familiar? You bet your
+sweet lives it does. And why does it work for them and not for me?
+Answer: Because the initial state of our machines is different and we
+have know way of describing what the initial state is.</p>
+
+<p>A little more digging in the Sonic Pi code revealed that it was really
+the SuperCollider <code class="highlighter-rouge">scsynth</code> program that was making the noises and that
+this talked to the Sonic Pi by sending OSC-over-UDP messages - I
+wonder where Sam Arron got this idea from.</p>
+
+<h1 id="time-to-learn-the-supercollider-and-trace-the-osc-messages">Time to learn the SuperCollider and trace the OSC messages</h1>
+
+<p>Sam helped
+me trace the OSC messages to the SuperCollider and after a few hours
+hacking I could send messages to <code class="highlighter-rouge">sysnth</code> with OSC-over-UDP
+messaging. Now I can build my project without having to build nor
+understand that internal structure of the <code class="highlighter-rouge">scsynth</code> or even the Sonic
+Pi.</p>
+
+<p>Sam wants to add a few features to the Sonic Pi and we’ll try and do
+this with an OSC-over-UDP component written in Erlang. If this works
+it will show that we can collaborate without messing with each
+others code.</p>
+
+<p>All of this made me realize that the conventional way of collaboration
+is to mess with each others code, simply because it’s technically
+rather complicated to build session based servers using
+Anything-over-TCP semantics so the way we collaborate is an
+unintentional consequence of a bad (or nonexistent) concurrency model.</p>
+
+<p>Now I’m quite excited - the SuperCollider, Sonic Pi and Pure Data are
+all insanely great projects - if we can get them all talking together
+through communication channels when we can make a new way of
+interworking not based on the silly idea of performing open brain
+surgery on other peoples code.</p>
+
+<p>We can send messages to things and ask them to do things.</p>
+
+<blockquote>
+  <p>Sending message to things to get them do do things is the <em>central</em> idea
+in OO programming - As <a href="http://c2.com/cgi/wiki?AlanKayOnMessaging">Alan Kay wrote</a></p>
+</blockquote>
+
+<p><img src="/images/kay_quote.png" /></p>
+
+<p>Pity nobody does this properly for purely local applications.</p>
+
+<p>I’ve always thought that people should be allowed to program in their
+favorite programming language - if they like Badtran-7 they they
+should program in Badtran-7 but If want to collaborate with them I
+should not be forced to program in Badtran-7.</p>
+
+<p>I like to write my code in Erlang so to collaborate I’ll write my code in
+Erlang you write your code in Badtran-7 and we’ll communicate in
+Anything-over-Whatnot. For ease of implementation OSC-over-UDP looks
+really good.</p>
+
+<h1 id="so-whats-so-good-about-osc">So what’s so good about OSC?</h1>
+
+<p>To explain why I like OSC I’ll first back off and talk about
+Tag-Length-Value encodings.</p>
+
+<p><strong>Tag-Length-Value</strong> (TLV) encodings are used to 
+describe data structures in packets that can be send ``on
+the wire’’.</p>
+
+<p>TLV data structures are simple and look like this:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>+-----+--------+-------+
+| Tag | Length | Value |
++-----+--------+-------+
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">Tag</code> says what the type of the data which follows is, <code class="highlighter-rouge">Length</code> is the size of
+the data and <code class="highlighter-rouge">Value</code> the data itself.</p>
+
+<p>One slight problem with TLV encodings is alignment. If we’re sending
+4 byte integers or 8 byte IEEE floats we’d want the items to be
+aligned on 4 byte boundaries.</p>
+
+<p>For languages that don’t care about word alignment (like Erlang, Smalltalk, and a few
+others) byte aligned TLVs are efficient and extremely easy to implement.</p>
+
+<p>For word aligned languages, we want to align on word boundaries.</p>
+
+<p>The OSC protocol (Open Sound Control) protocol takes a different
+approach. It it’s <code class="highlighter-rouge">Verb-Tag*-Value*</code> encoded.</p>
+
+<p>First comes a <code class="highlighter-rouge">Verb</code> which is a zero terminated string padded to a four byte boundary.
+Then comments a sequence of tags (which is also encoded as a string)
+then a sequence of values - each value corresponds to a single tag.</p>
+
+<p>The tags are <code class="highlighter-rouge">i</code> for an integer <code class="highlighter-rouge">d</code> for a double <code class="highlighter-rouge">s</code> for a string and so on.</p>
+
+<p>So the tag string <code class="highlighter-rouge">iisif</code> means that the values in the packet
+are <code class="highlighter-rouge">int32</code> <code class="highlighter-rouge">int32</code> <code class="highlighter-rouge">string</code> <code class="highlighter-rouge">int32</code> <code class="highlighter-rouge">float</code> in that order. Both the
+encoder and decoder know how these data types are encoded
+so no additional information is necessary.</p>
+
+<p>The tag string also suffices as a <code class="highlighter-rouge">type descriptor</code> that accurately describes
+the type of the data in the message - <em>yes OSC is strongly typed</em>.</p>
+
+<h1 id="simplicity-by-design">Simplicity by Design</h1>
+
+<p>The interesting thing about OSC encoding is that:</p>
+
+<ul>
+  <li>It is extremely efficient.</li>
+  <li>encoders/decoders can be implemented in a few lines of code.</li>
+  <li>It is strongly typed.</li>
+  <li>Complex nested data structures cannot be represented.</li>
+</ul>
+
+<p>The last point is interesting - it means that we’ll have to restrict our messages
+to flat data structure built from simple things like integers and strings.</p>
+
+<p>To my mind this is a good thing - <strong>this is simplicity by design</strong>. Most
+applications that I have seen do not require deeply nested complex
+data structures in the communication protocols - and if they use such
+data structures they’ve probably been designed by a committee (and yes
+3GPP I’m looking at you :-).</p>
+
+<blockquote>
+  <p>Let’s compare this to JSON - JSON is flexible, untyped, tricky to
+parse and represent and wasteful of space <code class="highlighter-rouge">on the wire</code>. In other
+words JSON has everything that a wire line protocol should not have.</p>
+</blockquote>
+
+<h1 id="why-binary-protocols-are-important">Why binary protocols are important</h1>
+
+<p>2014 was the tipping point, where more people access the Internet
+though mobile terminals (phones) than wire-line terminals (fixed
+computers). For mobile data, every bit counts. The radio spectrum is
+a limited resource. Within a given mobile cell the total bandwidth
+available is a finite and fixed amount, and this must be divided by
+the number of device in the cell that are simultaneously
+communicating. This is why everything slows down in peak periods when
+everybody is connected up at the same time.</p>
+
+<p>It is therefore essential not to waste bandwidth - I think it is
+totally crazy to send JSON or XML ``over the air’’ since this will
+degrade the performance of the applications giving a bad user
+experience and higher bills - since ultimately we pay for every bit of
+data.</p>
+
+<p>Even in fiber nets we pay one way or another - here the costs are in
+terms of energy - it uses more energy to encode/decode verbose data
+structures than well designed ones.</p>
+
+<p>In the Telcomms Industry there’s been a great deal of effort to minimize
+the overheads in communication protocols - ASN.1 sweats blood to save
+bits - which are then wasted by programmers sending JSON down the
+wire.</p>
+
+<p>Not only does JSON/XML on the wire waste energy, and costs more - the
+user experience in a congested net is degraded - applications that
+minimize net bandwidth will there be more attractive in a congested net
+than applications that waste bandwidth.</p>
+
+<p>When writing a distributed application where the
+components send messages to each other, you’d better know
+well in advance exactly what messages you’re going to send and receive
+and what their types are.</p>
+
+<blockquote>
+  <p>OSC messages with type signatures seems to be the perfect balance
+between power and expressiveness.</p>
+</blockquote>
+
+<p>They are expressive - but not too expressive (limiting the types to flat
+sequences of atomic types) seems a good idea - it certainly gets the
+job done and are ``good enough’’ for most purposes.</p>
+
+<p>If a protocol cannot be expressed in sequences of OSC messages it
+probably should not be used.</p>
+
+<p>Finding an appropriate level for encoding messages is difficult.</p>
+
+<p>At a low level of abstractions we could just send integers over the
+wire but this would be too low level. At a higher level we could use
+some form of S-expression (like XML or JSON, which are just verbose
+S-expressions) but this is <em>too</em> expressive.</p>
+
+<p>OSC seems to strike the right balance.</p>
+
+<p>OSC has an additional advantage - the internal representation of an OSC
+message in the programming language of your choice is easy - why is
+this? Precisely because OSC does not have deeply nested recursive data
+structures.</p>
+
+<p>If you parse XML or JSON you need to map the parse tree onto some
+object structure in your language, and since the parse trees in complex,
+the object in your programming language will be complex.</p>
+
+<p>The intrinsically flat structure of OSC is attractive, since not only
+the protocols are simple, but the code to handle then will have a
+simple flat structure - again simplicity by design rather than
+accident.</p>
+
+<p>We could also stick OSC messages in files, which would be easy to
+parse and again have the balance of expressiveness contra simplicity.</p>
+
+<blockquote>
+  <p>One measure of how good a protocol is is the size of the implementation
+and the time it took to write it. As I said implementing OSC
+is really easy, thanks mainly to the simplicity of the design.</p>
+</blockquote>
+
+<p>I’ve written a number of XML parsers in my time, and it is not easy
+and there are some unpleasant edge cases. JSON parsers are also cumbersome beasts.</p>
+
+<p>To see just exactly how easy this is I’ve made a lttle GitHub procject where
+to test these ideas. The (incomplete) OSC encoder
+is in 
+<a href="https://github.com/joearms/music_experiments/blob/master/osc.erl">osc.erl</a>.</p>
+
+<p>The library is being used to connect to three diffent programs and is
+described in <a href="http://joearms.github.io/2016/01/29/Controlling-Sound-with-OSC-Messages.html">Controlling Sound With OSC
+Messages</a>.</p>
+
+
+  </div>
+
+  <div id="tags">
+    Tagged:
+    
+    <a href="/blog/tag/OSC">OSC</a> &nbsp;
+    
+    <a href="/blog/tag/Networking">Networking</a> &nbsp;
+    
+  </div>
+  <p></p>
+
+  <hr />
+  
+  <!-- the tweet button -->
+  <p>
+    <a href="https://twitter.com/share"  class="twitter-share-button" 
+       data-url="http://joearms.github.com/2016/01/28/A-Badass-Way-To-Connect-Programs-Together.html">Tweet</a>
+  </p>
+  
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+  <!-- end of tweet button -->
+
+  <p>Comments:</p>
+  
+  <div id="disqus">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      // var disqus_developer = 1;
+      var disqus_shortname = 'joearmstrongsblog';
+      var disqus_identifier = '/2016/01/28/A-Badass-Way-To-Connect-Programs-Together';
+      var disqus_url = 'http://joearms.github.com/2016/01/28/A-Badass-Way-To-Connect-Programs-Together.html';
+      (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+  </div>
+  
+  <noscript>
+    Please enable JavaScript to view the <a
+    href="http://disqus.com/?ref_noscript">comments powered by
+    Disqus.</a>
+  </noscript>
+</div>
+
+	</div>
+	<div class="span3">
+	  
+	</div>
+      </div>
+    </div>
+    
+    <!-- Footer  ==================================== -->
+    <footer class="footer">
+      <div class="container">
+	<p>&copy; 2013 Joe Armstrong</p>
+	  Theme and code from <a href="https://github.com/mojombo">Tom
+	  Preston-Werner</a>.<br /> Hosted by <a
+	  href="https://github.com/networc/networc.github.com/">GitHub</a>
+	  and powered by <a
+	  href="https://github.com/mojombo/jekyll">Jekyll</a>.
+	  Source code <a href="https://github.com/joearms/joearms.github.com">here</a>.
+	</p>
+	<p>
+	  joearms@gmail.com <a href="http://github.com/joearms/">github.com/joearms</a>
+	  <a href="http://twitter.com/joeerl/">twitter.com/joeerl</a>
+	</p>
+      </div>
+    </footer>
+
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+
+    <!-- Google Analytics -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      
+      ga('create', 'UA-39670657-1', 'github.com');
+      ga('send', 'pageview');
+    </script>
+    <!-- Google Analytics end -->
+    
+  </body>
+</html>

@@ -1,0 +1,2596 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Joe Armstrong's blog</title>
+		<description>Joe Armstrong's Erlang and other stuff blog</description>
+		<link>http://joearms.github.com/feed.xml</link>
+		<atom:link href="http://joearms.github.com/feed.xml" rel="self" type="application/rss+xml" />
+		
+			<item>
+				<title>Why Markdown Sucks</title>
+				<description>&lt;blockquote&gt;
+  &lt;p&gt;“There are only two kinds of languages: the ones people complain about and the ones nobody uses.” – Bjarne Stroustrup&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Markdown really sucks, I’ll grant you that it’s useful, there’s no
+doubt about that but the lack of a standard, and the fact that no two
+markdown convertors do the same thing is terrible.&lt;/p&gt;
+
+&lt;h1 id=&quot;changes-to-markdown-regularily-break-my-content&quot;&gt;Changes to markdown regularily break my content&lt;/h1&gt;
+
+&lt;p&gt;The last time I updated my blog, I did my usual, &lt;code class=&quot;highlighter-rouge&quot;&gt;git poke me in the eye&lt;/code&gt; and
+then got a threatening mail back from github. Here it is:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;The page build completed successfully, but returned the following warning:
+
+You are currently using the &#39;rdiscount&#39; Markdown engine, which will
+not be supported on GitHub Pages after May 1st. At that time, your
+site will use &#39;kramdown&#39; for markdown rendering instead. To suppress
+this warning, remove the &#39;markdown&#39; setting in your site&#39;s
+&#39;_config.yml&#39; file and confirm your site renders as expected. For more
+information, see
+https://help.github.com/articles/updating-your-markdown-processor-to-kramdown.
+
+GitHub Pages was recently upgraded to Jekyll 3.0. It may help to confirm you&#39;re using the correct dependencies:
+
+  https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0
+
+For information on troubleshooting Jekyll see:
+
+  https://help.github.com/articles/troubleshooting-jekyll-builds
+
+If you have any questions you can contact us by replying to this email.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;I made the changes suggested in the email and the next time I made a change to
+my blog I got no build warnings, “good,” I thought.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;But then I discovered that about a third of my old blog entries were
+incorrectly formatted …&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;So having taken great trouble to make the content look nice, github decided
+to make a non backwards compatible changes that muck up my old pages.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;I was for exactly this reason that I left my &lt;a href=&quot;http://armstrongonsoftware.blogspot.se/&quot;&gt;old blog
+  site&lt;/a&gt; and moved to
+  github. Google messed around with the formatting of my content so I
+  moved to Jekyll and Github.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h1 id=&quot;youve-just-broken-a-lot-of-my-old-content&quot;&gt;You’ve just broken a lot of my old content&lt;/h1&gt;
+
+&lt;p&gt;I did as the mail suggested. Brilliant, but it broke the formatting of
+a lot of my old blogs posts. Here are two non-backwards compatible
+changes:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Smart quotes (a la LaTeX) no longer work and are not a kramdown option&lt;/li&gt;
+  &lt;li&gt;Fenced code blocks now are limited by tildes and not backquotes. Which breaks most of my old code examples&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;So what am I supposed to do? - go back and edit all my old blog posts?&lt;/p&gt;
+
+&lt;h1 id=&quot;markdown-renders-any-old-crap-without-producing-error-messages&quot;&gt;Markdown renders any old crap without producing error messages&lt;/h1&gt;
+
+&lt;p&gt;Editing my old pages is more difficult than it seems, since neither
+the old dialect of markdown &lt;code class=&quot;highlighter-rouge&quot;&gt;rdiscount&lt;/code&gt; nor the new &lt;code class=&quot;highlighter-rouge&quot;&gt;kramdown&lt;/code&gt; have a
+formal grammar and I haven’t a clue what output they will produce,
+since it is not formally specified.&lt;/p&gt;
+
+&lt;p&gt;Abrupt and non-backwards compatible changes to a text formatting
+system are extremely irritating, text that was formatted nicely and
+that worked in the past will in the future look bad - and who get the
+blame. Me probably.&lt;/p&gt;
+
+&lt;p&gt;If this is a problem in a the perspective of a few months (I say a few
+months since github seems to want to change it’s formatting system
+every few months and break my old content) what will happen in the
+future?&lt;/p&gt;
+
+&lt;p&gt;If people in a few hundred years from now want to see what their
+ancestors wrote, what will they find, a mess of badly formatted crap?&lt;/p&gt;
+
+&lt;h1 id=&quot;how-to-make-future-proof-markdown&quot;&gt;How to make future proof markdown&lt;/h1&gt;
+
+&lt;p&gt;I am reluctant to say this, but there is a future proof way of making
+markdown - that’s to write documents directly in XML with a strict DTD
+and then &lt;strong&gt;generate&lt;/strong&gt; markdown from the XML - that way whatever
+incompatibilities the latest markdown de jour has to offer can be
+accommodated with a tweak to the code generator.&lt;/p&gt;
+
+&lt;h1 id=&quot;so-if-i-hate-markdown-what-do-i-like&quot;&gt;So if I hate markdown what do I like?&lt;/h1&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Pencil and paper is best. Boots instantly - very flexible.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;LaTeX is better than markdown by far, but it has a fundamental
+flaw. The computer decides where the text goes, not me - I want to be
+in command.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;PDF is great - I am in command but generating it is a pain.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;XSL-FO is wonderful, and I love Apache FOP. But XSLT is not my
+favorite programming language.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;For high quality text, I choose XML markup with my own custom DTD,
+then an Erlang program to transform this to XSL-FO using an Apache FOP
+backend. This is more-or-less how all the documentation on erlang.org
+is made.&lt;/p&gt;
+
+&lt;p&gt;Having strict parse trees for all the documentation, is a
+pre-condition for automatically manipulating the documentation and
+integrating it into various forms.&lt;/p&gt;
+
+&lt;p&gt;For low-quality text (like blogs) and emails, markdown is fine - but
+please don’t change the formatting rules after you’ve written dozens
+of large documents.&lt;/p&gt;
+
+</description>
+				<pubDate>Mon, 21 Mar 2016 00:00:00 +0100</pubDate>
+				<link>http://joearms.github.com/2016/03/21/Why-Markdown-Sucks.html</link>
+				<guid isPermaLink="true">http://joearms.github.com/2016/03/21/Why-Markdown-Sucks.html</guid>
+			</item>
+		
+			<item>
+				<title>Managing two million web servers</title>
+				<description>&lt;p&gt;This has been bugging me for a long time. There are some things we
+explain because we know other people don’t understand them and there
+are some things we don’t explain because we assume that
+everybody else knows them.&lt;/p&gt;
+
+&lt;p&gt;So this is about web-servers written in Erlang and Elixir.  The idea
+to write this came after watching the &lt;a href=&quot;https://www.youtube.com/watch?v=XJ9ckqCMiKk&quot;&gt;Making the Web
+Functional&lt;/a&gt; presentation
+by Chris McCord and Evan Czaplicki at the &lt;a href=&quot;http://www.erlang-factory.com/sfbay2016&quot;&gt;2016 Erlang Factory in San
+Francisco&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Imagine an Erlang or Elixir HTTP server managing a couple of million
+user sessions.  Time and again I’ve heard this said:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;We have a (Erlang or Elixir) web server managing 2 million user sessions.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;But this statement is incorrect and stems from a fundamental misconception.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;We do not have ONE web-server handling 2 millions sessions. We have
+2 million webservers handling one session each.&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;The reason people think we have one webserver handling a couple of
+million users is because this is the way it works in a sequential web
+server. A server like Apache is actually a single webserver that
+handles a few million connections.&lt;/p&gt;
+
+&lt;p&gt;In Erlang we create very lightweight processes, one per connection and
+within that process spin up a web server. So we might end up with a
+few million web-servers with one user each.&lt;/p&gt;
+
+&lt;p&gt;If we can accept say 20K requests/second - this is equivalent to
+saying we can create 20K webservers/second.&lt;/p&gt;
+
+&lt;p&gt;On the surface things look very similar. But there is a fundamental
+difference between having one webserver handling two million
+connections, and two million web servers handling one connection each.&lt;/p&gt;
+
+&lt;p&gt;If there is a software error and the server software crashes we lose
+either two million connections or one depending upon the model.&lt;/p&gt;
+
+&lt;p&gt;In Erlang if the web server software itself is incorrect we’ll lose a
+single connection, which is OK. Since the software is incorrect and
+crashes we don’t know what to do so crashing is a good
+alternative. What is important is that one session crashing does not
+effect all the other sessions.&lt;/p&gt;
+
+&lt;p&gt;This requirement, goes way back to when we designed Erlang in the mid
+1980’s.  In Telecoms systems, losing one connection due to a software
+error was acceptable, losing them all due to a bug was big time bad
+news.&lt;/p&gt;
+
+&lt;h1 id=&quot;chat-or-presence-servers&quot;&gt;Chat or Presence Servers&lt;/h1&gt;
+
+&lt;p&gt;So what happens if you want to make a chat or presence server? Well
+we’ve already got one process per connection, so let’s also make one
+process per user and send messages between the connections and user
+processes when connections come and go - this is so simple that the
+code practically writes itself.&lt;/p&gt;
+
+&lt;p&gt;So why did WhatsApp use Erlang and why does the
+&lt;a href=&quot;http://www.phoenixframework.org/&quot;&gt;Phoenix Framework&lt;/a&gt;
+outperform Ruby on Rails? - precisely because we have millions of tiny
+webservers - and when we have lots of small things it’s easy to spread
+them over lots of processors and make the system fault-tolerant and scalable.&lt;/p&gt;
+
+&lt;p&gt;Packing Erlang or Elixir processes onto cores is easy because they are
+small and are like packing physical objects. If we want to pack sand
+in barrels it’s easy. The grains of sand are so small that it’s easy
+to completely fill the barrels. Packing huge boulders is difficult,
+they don’t pack well and much space is wasted.&lt;/p&gt;
+
+&lt;h1 id=&quot;adding-fault-tolerance-and-scalability&quot;&gt;Adding fault-tolerance and scalability&lt;/h1&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Because we have one web server per user  we can easily make the
+system fault tolerant or scalable&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;To make a fault tolerent system we use two or more processes per user;
+One is the master process, the others are replicas on different
+machines. They must be on different machines since the entire machine
+where the master runs might crash. We can make it scalable  by just
+buying more machines and spreading the processes out over the
+machines.&lt;/p&gt;
+
+</description>
+				<pubDate>Sun, 13 Mar 2016 00:00:00 +0100</pubDate>
+				<link>http://joearms.github.com/2016/03/13/Managing-two-million-webservers.html</link>
+				<guid isPermaLink="true">http://joearms.github.com/2016/03/13/Managing-two-million-webservers.html</guid>
+			</item>
+		
+			<item>
+				<title>Calling Elixir from Erlang</title>
+				<description>&lt;p&gt;I’ve been feeling inspired following Dave Thomas and Bruces Tate’s inspirational talk
+&lt;a href=&quot;https://www.youtube.com/watch?v=fklep3sUSWo]&quot;&gt;We are Blessed&lt;/a&gt;
+that they gave at the &lt;a href=&quot;http://www.erlang-factory.com/sfbay2016&quot;&gt;Erlang factory&lt;/a&gt;
+so I started playing …&lt;/p&gt;
+
+&lt;p&gt;Part of the lecture described how Dave had thrown out a challenge to Bruce -
+``Do something difficult in Elixir for a month’’ then talk to be about it.&lt;/p&gt;
+
+&lt;p&gt;Great I thought - I’ll cross compile Erlang into Elixir and see what happens -
+I mentioned this to Dave and somebody in the coffee queue overheard the
+conversation and said it was impossible - to which I though ``even
+better, when can I start.’’ Attacking impossible problems is so much
+more fun that attacking easy problems that you know you can solve.&lt;/p&gt;
+
+&lt;p&gt;And as Alan Kay said - ``If you don’t fail at least 90% of the time,
+you’re not aiming high enough.’’&lt;/p&gt;
+
+&lt;p&gt;Cross compilation is just a matter of diddling with parse trees, so it should
+in be principle ``be easy’’&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;If a computer scientist says that something is easy in principle, it
+  means it might be really really difficult in practice, but they
+  don’t know ‘cos they haven’t failed yet.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;So wanted to mess with the parse trees representing Erlang programs
+and Elixir programs. I know what Erlang parse trees look like and what
+they mean, but what about Elixir?&lt;/p&gt;
+
+&lt;p&gt;Specifically I wanted to parse an Elixir module, then turn the AST back to textual
+representation and whap it into a file. Hopefully I’d get back what I started with.&lt;/p&gt;
+
+&lt;p&gt;We’ll see …&lt;/p&gt;
+
+&lt;h1 id=&quot;getting-the-parse-tree&quot;&gt;Getting the parse tree&lt;/h1&gt;
+
+&lt;p&gt;So now I wanted to call Elixir from Erlang so that I could explore the goodness of
+Elixir from Erlang, but ran into a tiny problem.&lt;/p&gt;
+
+&lt;p&gt;Calling Erlang from Elixir is well documented but not the other way around.&lt;/p&gt;
+
+&lt;p&gt;After  a little tinkering I found that I could parse an Elixir file like this:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:ok,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;ast&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;Code.string_to_quoted(File.read!(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;module.ex&quot;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;and turn the ast into a string with&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Macro.to_string(ast)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;With my Erlang hat on I thought the inverse of
+&lt;code class=&quot;highlighter-rouge&quot;&gt;Code.string_to_quoted&lt;/code&gt; would be &lt;code class=&quot;highlighter-rouge&quot;&gt;Code.quoted_to_string&lt;/code&gt; &lt;strong&gt;but I was wrong&lt;/strong&gt;
+and the principle of least astonishment was violated again.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h1 id=&quot;moving-on&quot;&gt;Moving on…&lt;/h1&gt;
+
+&lt;p&gt;I now wanted to call &lt;code class=&quot;highlighter-rouge&quot;&gt;Code.string_to_quoted&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;File.read!&lt;/code&gt; from
+Erlang - so I ran into the - &lt;em&gt;where is this stuff&lt;/em&gt; and &lt;em&gt;what is it
+called&lt;/em&gt; problem.&lt;/p&gt;
+
+&lt;h1 id=&quot;where-is-my-elixir-stuff-and-how-can-erlang-find-it&quot;&gt;Where is my Elixir stuff and how can Erlang find it?&lt;/h1&gt;
+
+&lt;p&gt;I messed around a bit and figured out that Erlang could find my Elixir code if I made
+a &lt;code class=&quot;highlighter-rouge&quot;&gt;.erlang&lt;/code&gt; file with the following:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;code:add_path(&quot;/usr/local/lib/elixir/lib/elixir/ebin/&quot;).
+io:format(&quot;Elixir paths set~n&quot;).
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;And whoopydo happy days are here again, Erlang knows where the Elixir code is.&lt;/p&gt;
+
+&lt;h1 id=&quot;what-are-the-functions-called&quot;&gt;What are the functions called?&lt;/h1&gt;
+
+&lt;p&gt;But what are the functions called? Well &lt;code class=&quot;highlighter-rouge&quot;&gt;File.read!&lt;/code&gt; in Elixir is just
+&lt;code class=&quot;highlighter-rouge&quot;&gt;&#39;Elixir.File&#39;:&#39;read!&#39;&lt;/code&gt; in Erlang. That was easy. So now I wrote the Erlang code:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;test() -&amp;gt;
+   X = &#39;Elixir.File&#39;:&#39;read!&#39;(&quot;module.ex&quot;),
+   Ast = &#39;Elixir.Code&#39;:string_to_quoted(X).
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Keeping my figures crossed I ran this in the Erlang shell:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt; test:test().
+** exception error: bad argument
+ in function  ets:lookup/2
+    called as ets:lookup(elixir_config,compiler_options)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Ouch. Whaaaat the $#@!!$%$#@#&lt;script type=&quot;math/tex&quot;&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;Ooops I’ve gotta set some stuff up. &lt;strong&gt;How do I do this?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;So Now what? I could:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Google Google Google … (boring)&lt;/li&gt;
+  &lt;li&gt;Read the sources (deep sigh, do I really have to?)&lt;/li&gt;
+  &lt;li&gt;Write a blog article and hope some kind person adds a comment telling me how to do this&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;In retrospect blogging and tweeting the blog is probably the fastest way to program.
+I’ll time it and see.&lt;/p&gt;
+
+&lt;p&gt;Somebody out there knows how to do this, but I don’t know who.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;This is the big problem with software - probably all software we want
+has already been written - but we can’t find it so we do it ourselves.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Now I’m off for lunch - hopefully when I get back somebody will have solved
+it.&lt;/p&gt;
+
+&lt;p&gt;Have a nice one.&lt;/p&gt;
+
+&lt;h1 id=&quot;added-notes&quot;&gt;Added notes&lt;/h1&gt;
+
+&lt;p&gt;Yes - the experiment worked. By the time I’d got back from lunch, two
+people had tweeted what to do. Both said ``start the Elixir application first.’’&lt;/p&gt;
+
+&lt;p&gt;So I tried this:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt; application:start(elixir).
+{error,{not_started,compiler}}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Not quite but getting warm: So yet another try:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1&amp;gt; application:start(compiler).
+ok
+2&amp;gt; application:start(elixir).  
+ok
+3&amp;gt; test:test().                
+{ok,{defmodule,[{line,2}],
+           [{&#39;__aliases__&#39;,[{counter,0},{line,2}],[&#39;ModuleName&#39;]},
+
+   ...
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;...&lt;/code&gt; above is because the shell output and the markdown
+processor are not on speaking terms
+and life is too short to wonder what:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Liquid Exception: Liquid syntax error: Variable ...
+was not properly terminated with regexp:
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;and 3 more lines of gibberish means.&lt;/p&gt;
+
+&lt;p&gt;Not only does the mardown processor not do what I thought it should do
+- but also the error message that it produces cannot be cut and paste into
+this blog since this triggers the same error.&lt;/p&gt;
+
+&lt;p&gt;Which leave me wondering just exactly how difficult is it to bonk a bit of verbatim
+text into a web page. Parse the stuff - wrap it in a HTML &lt;code class=&quot;highlighter-rouge&quot;&gt;pre&lt;/code&gt; tag and quote the
+less than and ampersand characters.&lt;/p&gt;
+
+&lt;p&gt;Life is full of surprises - and programming more so.&lt;/p&gt;
+
+</description>
+				<pubDate>Sun, 13 Mar 2016 00:00:00 +0100</pubDate>
+				<link>http://joearms.github.com/2016/03/13/Calling-Elixir-From_Erlang.html</link>
+				<guid isPermaLink="true">http://joearms.github.com/2016/03/13/Calling-Elixir-From_Erlang.html</guid>
+			</item>
+		
+			<item>
+				<title>Controlling Sound with OSC Messages</title>
+				<description>&lt;p&gt;In earlier articles I have talked about 
+&lt;a href=&quot;http://joearms.github.io/2016/01/27/Controlling-Live-Music.html&quot;&gt;Controlling Live Music&lt;/a&gt;
+and
+&lt;a href=&quot;http://joearms.github.io/2016/01/28/A-Badass-Way-To-Connect-Programs-Together.html&quot;&gt;A Badass Way to Connect Programs Together&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;In this article I’ll show how I have interfaced Erlang to the
+&lt;a href=&quot;http://sonic-pi.net/&quot;&gt;Sonic Pi&lt;/a&gt;, the
+&lt;a href=&quot;http://www.audiosynth.com/&quot;&gt;SuperCollider&lt;/a&gt; and
+&lt;a href=&quot;https://puredata.info/&quot;&gt;Pure Data&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;The code for described here is available at
+https://github.com/joearms/music_experiments&lt;/p&gt;
+
+&lt;p&gt;The code I’m described is at ``proof of concept’’ stage - you can
+download it and run it - but there are no build instructions, so
+familiarity with Erlang/OSC and the target systems is implied.&lt;/p&gt;
+
+&lt;h1 id=&quot;act1--connecting-sonic-pi-to-erlang&quot;&gt;Act1 : Connecting Sonic PI to Erlang.&lt;/h1&gt;
+
+&lt;p&gt;This all started when Sam Arron showed me how to do remotely control
+Sonic Pi.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;It&#39;s easy,&#39;&#39; he said&lt;/code&gt;&lt;span style=&quot;color:red&quot;&gt;Just open port 4557 and send it
+a run_code message&lt;/span&gt;.’’ Actually he didn’t say &lt;em&gt;exactly&lt;/em&gt; this
+but he might say this if I asked again.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;So it’s really really easy. Any of the programs you see in a sonic pi window
+can be turned into a fragment of Erlang code&lt;/p&gt;
+
+&lt;p&gt;Here’s a very simple program in Sonic Pi:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/sonic_pi.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;To run this in Sonic Pi you just press the run button, and you’ll hear
+a noise.&lt;/p&gt;
+
+&lt;p&gt;Here’s the code to do the same thing in Erlang:&lt;/p&gt;
+
+&lt;p&gt;````
+test1() -&amp;gt;
+    run_code(“use_synth :fm\nplay 50\n”).&lt;/p&gt;
+
+&lt;p&gt;run_code(Prog) -&amp;gt;
+    %% Prog is a io-list
+    P1 = lists:flatten(Prog),
+    M = [“/run-code” , “erl-id”, P1],
+    E = osc:encode(M),
+    {ok, Socket} = gen_udp:open(0,[binary]),
+    ok = gen_udp:send(Socket, “localhost”, 4557, E),
+    gen_udp:close(Socket).
+````&lt;/p&gt;
+
+&lt;p&gt;The entire program is in
+&lt;a href=&quot;https://github.com/joearms/music_experiments/blob/master/sonic.erl&quot;&gt;sonic.erl&lt;/a&gt;
+the OSC encoder
+is in 
+&lt;a href=&quot;https://github.com/joearms/music_experiments/blob/master/osc.erl&quot;&gt;osc.erl&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Fantastic&lt;/strong&gt; I say.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Note: I can collaborate with the Sonic PI without messing in the
+Sonic Pi source code tree - all I do is send it messages that it understands.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h1 id=&quot;act2--connecting-the-supercollider-to-erlang&quot;&gt;Act2 : Connecting The SuperCollider to Erlang.&lt;/h1&gt;
+
+&lt;p&gt;Having connected the Sonic Pi to Erlang I started idly wondering
+``How does the Sonic Pi actually make sounds? does it do it itself
+or does in use some other code to do this’’ - I downloaded the
+sources to find out - the documentation doesn’t say.&lt;/p&gt;
+
+&lt;p&gt;Low and behold the Sonic Pi makes sounds by sending OSC-over-UDP
+messages to the SuperCollider. I say the SuperCollider here, since
+this is the name of the program you have to download to perform these
+experiments. But actually the SuperCollider itself is actually two
+programs, which communicate by (guess what) OSC-over-UDP.&lt;/p&gt;
+
+&lt;p&gt;A program called &lt;code class=&quot;highlighter-rouge&quot;&gt;scsynth&lt;/code&gt; which is part of the SuperCollider program
+generates the actual sounds. ``Why is it done this way?’’ you’re probably asking.
+It’s because the author of the SuperCollider wanted to separate the program
+into a real-time part (&lt;code class=&quot;highlighter-rouge&quot;&gt;scsynth&lt;/code&gt;) and a control part (which has less stringent control
+problems) - the music should play (via &lt;code class=&quot;highlighter-rouge&quot;&gt;scsynth&lt;/code&gt;) even if the controller is
+busy or crashed for a short time - a very nice design.&lt;/p&gt;
+
+&lt;p&gt;Sam kindly told me how to trace the OSC messages to the SuperCollider
+and I turned this into an Erlang program.&lt;/p&gt;
+
+&lt;p&gt;So to control the SuperCollider I open UDP port 4556 and send it a
+stream of OSC messages - ie I’m doing exactly what the Sonic Pi did,
+only I’m doing it from Erlang and without the user interface.&lt;/p&gt;
+
+&lt;p&gt;The code is in
+&lt;a href=&quot;https://github.com/joearms/music_experiments/blob/master/sc.erl&quot;&gt;sc.erl&lt;/a&gt;
+All I’ve done is start a &lt;code class=&quot;highlighter-rouge&quot;&gt;scsynth&lt;/code&gt; server listening to port 4556
+(this is done in
+&lt;a href=&quot;https://github.com/joearms/music_experiments/blob/master/start_scsynth.sh&quot;&gt;start_scsynth.sh&lt;/a&gt;) and send it a load of OSC commands.&lt;/p&gt;
+
+&lt;p&gt;Working in the SuperCollider was an eye opener. It a REPL &lt;em&gt;without&lt;/em&gt; a terminal
+and is similar to the Plan9
+&lt;a href=&quot;https://en.wikipedia.org/wiki/Acme_%28text_editor%29&quot;&gt;ACME&lt;/a&gt; shell/editor.&lt;/p&gt;
+
+&lt;p&gt;I’d read about ACME but never experienced it.  It’s a Visceral
+experience. &lt;strong&gt;You never type code twice&lt;/strong&gt;. If it’s on the screen you
+click it, the answer appears ``somewhere else’’.&lt;/p&gt;
+
+&lt;p&gt;Interestingly &lt;code class=&quot;highlighter-rouge&quot;&gt;Pure data&lt;/code&gt; makes exactly the same design decision.&lt;/p&gt;
+
+&lt;p&gt;Why why why? Because it’s faster to interact with. No typing just
+clicking - this is important for live performance.  Musicians
+instruments are not laptops with keyboards - they are things you can
+hit and stroke.&lt;/p&gt;
+
+&lt;h1 id=&quot;act-3---pure-data&quot;&gt;Act 3 - Pure Data&lt;/h1&gt;
+
+&lt;p&gt;Finally &lt;a href=&quot;https://puredata.info/&quot;&gt;Pure Data&lt;/a&gt;. PD programs have no
+textual representation, there is only a graphic interface to a data-flow language.&lt;/p&gt;
+
+&lt;p&gt;The program is in https://github.com/joearms/music_experiments/blob/master/pd_osc.pd:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/pd_osc.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The Erlang code
+&lt;a href=&quot;https://github.com/joearms/music_experiments/blob/master/pd.erl&quot;&gt;pd.erl&lt;/a&gt;
+is extremely simple:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;play(N) -&amp;gt; run_code([&quot;/playNote&quot;, N]).
+
+run_code(M) -&amp;gt;
+    E = osc:encode(M),
+    {ok, Socket} = gen_udp:open(0,[binary]),
+    ok = gen_udp:send(Socket, &quot;localhost&quot;, 6677, E),
+    gen_udp:close(Socket).
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+</description>
+				<pubDate>Fri, 29 Jan 2016 00:00:00 +0100</pubDate>
+				<link>http://joearms.github.com/2016/01/29/Controlling-Sound-with-OSC-Messages.html</link>
+				<guid isPermaLink="true">http://joearms.github.com/2016/01/29/Controlling-Sound-with-OSC-Messages.html</guid>
+			</item>
+		
+			<item>
+				<title>A Badass Way to Connect Programs Together</title>
+				<description>&lt;h1 id=&quot;what-is-osc&quot;&gt;What is OSC?&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://opensoundcontrol.org&quot;&gt;Open Sound Control&lt;/a&gt;  is a binary
+protocol for exchanging data between machines.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;Open Sound Control&lt;/strong&gt; is just about &lt;span style=&quot;color:red&quot;&gt;the
+worse possible name&lt;/span&gt; for a protocol since I’d thought for a long
+time that this protocol could only be used to control sounds.  Nothing
+is further from the truth. &lt;span style=&quot;color:red&quot;&gt;OSC should be
+renamed OAC – Open &lt;strong&gt;Anything Control&lt;/strong&gt;&lt;/span&gt; - which would be a far
+better name since it can be used to control &lt;em&gt;anything&lt;/em&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;OSC-over-UDP is just OSC packed data sent over a UDP connection.
+My first serious encounter with OSC-over-UDP was when I
+attended strangloop and talked about &lt;a href=&quot;https://www.youtube.com/watch?v=lKXe3HUG2l4&quot;&gt;The Mess We’re In&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;I bumped into Sam Aaron, the unstoppable force behind
+&lt;a href=&quot;http://sonic-pi.net/&quot;&gt;Sonic Pi&lt;/a&gt;.
+and said that it would be really cool to control Sonic Pi from Erlang.
+…&lt;/p&gt;
+
+&lt;p&gt;Sam told me that to control &lt;code class=&quot;highlighter-rouge&quot;&gt;Sonic Pi&lt;/code&gt; all I had to do was send it OSC encoded
+messages over UDP.&lt;/p&gt;
+
+&lt;p&gt;I was first rather skeptical to using OSC-over-UDP but have rapidly
+came to believe that this is a really-really good way to proceed. My
+initial dislike of OSC-over-UDP was colored by my JSON-over-TCP
+experience. TCP is session based which make life easy (for some of
+us) and JSON is popular. On the other hand UDP can suffer from packet
+loss and OSC is an obscure protocol - &lt;strong&gt;digging deeper I found
+myself being more and more attracted to OSC-over-UDP&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;h1 id=&quot;why-do-i-like-osc-over-udp&quot;&gt;Why do I like OSC-over-UDP?&lt;/h1&gt;
+
+&lt;p&gt;To start with OSC is beautiful and what I call ``simple by design’’ -
+more on this later. A complete OSC encoder is tiny and
+can be written in any decent language in a few pages of code.  My
+(incomplete) implementation
+&lt;a href=&quot;https://github.com/joearms/music_experiments/blob/master/osc.erl&quot;&gt;osc.erl&lt;/a&gt;
+is tiny.  It’s trivial to implement and extremely efficient. JSON on
+the other hand is not so easy to implement.&lt;/p&gt;
+
+&lt;p&gt;I’ve always been attracted to things that are simple and powerful.
+Simplicity means they can be implemented in few lines of code.  Fewer
+lines of code mean less possibility of errors and less to maintain.&lt;/p&gt;
+
+&lt;p&gt;Session based TCP programs are trivial to write in Erlang but a bugger
+in any sequential language. TCP uses the idea a session and the only
+rational way to program a session is as a process or (horrors) as a
+thread.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;In Erlang session management is easier than falling off a log - one
+session equals one controlling process and as many sub-processes as you
+feel like.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;In most other languages session management involves
+mutable state concurrency. A program that is a dozen lines of Erlang
+escalates into a mess of locks and mutexes or callbacks which in most
+languages is a thin layer over a pthreads implementation.&lt;/p&gt;
+
+&lt;p&gt;For those of you who haven’t written a multi-threaded TCP socket
+server in C using pthreads I can only say ``don’t go there, it’s not a
+pleasant experience’’ I’ve been there done that, and have the grey
+hairs to prove it.&lt;/p&gt;
+
+&lt;p&gt;UDP is a lot simpler than TCP and is far easier to use
+in sequential languages. There are no sessions in UDP only messages.
+Servers don’t have to be multi-threaded to support sessions but
+can be interrupt driven and run in a single thread. This is wonderful
+news for systems like Node.js whose concurrency model is non-existent
+and whose idea of having a fun time is throwing promises into the
+future and hoping that nobody breaks them.&lt;/p&gt;
+
+&lt;p&gt;Well as anybody who has watched Casablanca knows promises can be
+broken.&lt;/p&gt;
+
+&lt;p&gt;For many years I’ve been saying that it would be nice to collaborate
+by sending message to each other and not by grocking around in each
+other’s messes. I basically don’t want to know how you’ve implemented
+your pile of shit, I just want to send it message to tell it what to
+do. I’d naively assumed that something like Anything-over-TCP would be
+fine and easy to implement, so I made a system called
+&lt;a href=&quot;http://ubf.github.io/ubf/&quot;&gt;UBF&lt;/a&gt; which is a layered on top of TCP and
+hoped that everybody would use it.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;I guess I’d underestimated the difficulty of implementing 
+Anything-over-TCP in a sequential language. Just because it’s really really
+easy in Erlang doesn’t mean to say it’s easy in sequential languages.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;TCP sessions map 1:1 onto Erlang programs and the programs are trivial.
+But in a sequential language they map N:1 onto a single process, which is
+a pain in the butt.&lt;/p&gt;
+
+&lt;p&gt;For easy of implementation nothing I know of beats OSC-over-UDP - it’s really easy.&lt;/p&gt;
+
+&lt;p&gt;My first experience with this was at the Strangeloop conference in St
+Louis in 2014 - I bumped into Sam Aaron and we got talking. I asked
+him if I could remote control the Sonic Pi - and he said “sure just
+send it some OSC messages” we sat down, I Googled a bit and found an
+OSC library for Erlang and ten minutes later we were collaborating.&lt;/p&gt;
+
+&lt;p&gt;I could collaborate with him by sending him OSC messages over UDP and
+didn’t have to understand one iota of how his application was built
+and structured. It didn’t matter all I had to do was understand
+the messaging protocol.&lt;/p&gt;
+
+&lt;p&gt;Time passed and I’d almost forgot	ot this - but the other day I started
+wondering how to make sounds - I’d done this in 
+&lt;a href=&quot;http://joearms.github.io/2016/01/06/fun_with_swift_and_midi.html&quot;&gt;Fun with Swift and Midi&lt;/a&gt;
+ and wondered
+idly how the Sonic Pi did this.&lt;/p&gt;
+
+&lt;p&gt;I though to myself ``I know what I’ll do, I’ll build the Sonic Pi from
+the sources and in doing so get to understand how the sound generating
+works.’’ Well as we all know building from the sources is not easy.
+&lt;span style=&quot;color:red&quot;&gt;I tried and failed&lt;/span&gt; and tweeted&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/blessed_tweet.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;I’m now at an impasse - I’m mailed some guys on the Sonic Pi
+list who have what we think to be an identical setup - only the build
+works for them and not for me. Does that sound familiar? You bet your
+sweet lives it does. And why does it work for them and not for me?
+Answer: Because the initial state of our machines is different and we
+have know way of describing what the initial state is.&lt;/p&gt;
+
+&lt;p&gt;A little more digging in the Sonic Pi code revealed that it was really
+the SuperCollider &lt;code class=&quot;highlighter-rouge&quot;&gt;scsynth&lt;/code&gt; program that was making the noises and that
+this talked to the Sonic Pi by sending OSC-over-UDP messages - I
+wonder where Sam Arron got this idea from.&lt;/p&gt;
+
+&lt;h1 id=&quot;time-to-learn-the-supercollider-and-trace-the-osc-messages&quot;&gt;Time to learn the SuperCollider and trace the OSC messages&lt;/h1&gt;
+
+&lt;p&gt;Sam helped
+me trace the OSC messages to the SuperCollider and after a few hours
+hacking I could send messages to &lt;code class=&quot;highlighter-rouge&quot;&gt;sysnth&lt;/code&gt; with OSC-over-UDP
+messaging. Now I can build my project without having to build nor
+understand that internal structure of the &lt;code class=&quot;highlighter-rouge&quot;&gt;scsynth&lt;/code&gt; or even the Sonic
+Pi.&lt;/p&gt;
+
+&lt;p&gt;Sam wants to add a few features to the Sonic Pi and we’ll try and do
+this with an OSC-over-UDP component written in Erlang. If this works
+it will show that we can collaborate without messing with each
+others code.&lt;/p&gt;
+
+&lt;p&gt;All of this made me realize that the conventional way of collaboration
+is to mess with each others code, simply because it’s technically
+rather complicated to build session based servers using
+Anything-over-TCP semantics so the way we collaborate is an
+unintentional consequence of a bad (or nonexistent) concurrency model.&lt;/p&gt;
+
+&lt;p&gt;Now I’m quite excited - the SuperCollider, Sonic Pi and Pure Data are
+all insanely great projects - if we can get them all talking together
+through communication channels when we can make a new way of
+interworking not based on the silly idea of performing open brain
+surgery on other peoples code.&lt;/p&gt;
+
+&lt;p&gt;We can send messages to things and ask them to do things.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Sending message to things to get them do do things is the &lt;em&gt;central&lt;/em&gt; idea
+in OO programming - As &lt;a href=&quot;http://c2.com/cgi/wiki?AlanKayOnMessaging&quot;&gt;Alan Kay wrote&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/kay_quote.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Pity nobody does this properly for purely local applications.&lt;/p&gt;
+
+&lt;p&gt;I’ve always thought that people should be allowed to program in their
+favorite programming language - if they like Badtran-7 they they
+should program in Badtran-7 but If want to collaborate with them I
+should not be forced to program in Badtran-7.&lt;/p&gt;
+
+&lt;p&gt;I like to write my code in Erlang so to collaborate I’ll write my code in
+Erlang you write your code in Badtran-7 and we’ll communicate in
+Anything-over-Whatnot. For ease of implementation OSC-over-UDP looks
+really good.&lt;/p&gt;
+
+&lt;h1 id=&quot;so-whats-so-good-about-osc&quot;&gt;So what’s so good about OSC?&lt;/h1&gt;
+
+&lt;p&gt;To explain why I like OSC I’ll first back off and talk about
+Tag-Length-Value encodings.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Tag-Length-Value&lt;/strong&gt; (TLV) encodings are used to 
+describe data structures in packets that can be send ``on
+the wire’’.&lt;/p&gt;
+
+&lt;p&gt;TLV data structures are simple and look like this:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;+-----+--------+-------+
+| Tag | Length | Value |
++-----+--------+-------+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Tag&lt;/code&gt; says what the type of the data which follows is, &lt;code class=&quot;highlighter-rouge&quot;&gt;Length&lt;/code&gt; is the size of
+the data and &lt;code class=&quot;highlighter-rouge&quot;&gt;Value&lt;/code&gt; the data itself.&lt;/p&gt;
+
+&lt;p&gt;One slight problem with TLV encodings is alignment. If we’re sending
+4 byte integers or 8 byte IEEE floats we’d want the items to be
+aligned on 4 byte boundaries.&lt;/p&gt;
+
+&lt;p&gt;For languages that don’t care about word alignment (like Erlang, Smalltalk, and a few
+others) byte aligned TLVs are efficient and extremely easy to implement.&lt;/p&gt;
+
+&lt;p&gt;For word aligned languages, we want to align on word boundaries.&lt;/p&gt;
+
+&lt;p&gt;The OSC protocol (Open Sound Control) protocol takes a different
+approach. It it’s &lt;code class=&quot;highlighter-rouge&quot;&gt;Verb-Tag*-Value*&lt;/code&gt; encoded.&lt;/p&gt;
+
+&lt;p&gt;First comes a &lt;code class=&quot;highlighter-rouge&quot;&gt;Verb&lt;/code&gt; which is a zero terminated string padded to a four byte boundary.
+Then comments a sequence of tags (which is also encoded as a string)
+then a sequence of values - each value corresponds to a single tag.&lt;/p&gt;
+
+&lt;p&gt;The tags are &lt;code class=&quot;highlighter-rouge&quot;&gt;i&lt;/code&gt; for an integer &lt;code class=&quot;highlighter-rouge&quot;&gt;d&lt;/code&gt; for a double &lt;code class=&quot;highlighter-rouge&quot;&gt;s&lt;/code&gt; for a string and so on.&lt;/p&gt;
+
+&lt;p&gt;So the tag string &lt;code class=&quot;highlighter-rouge&quot;&gt;iisif&lt;/code&gt; means that the values in the packet
+are &lt;code class=&quot;highlighter-rouge&quot;&gt;int32&lt;/code&gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;int32&lt;/code&gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;string&lt;/code&gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;int32&lt;/code&gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;float&lt;/code&gt; in that order. Both the
+encoder and decoder know how these data types are encoded
+so no additional information is necessary.&lt;/p&gt;
+
+&lt;p&gt;The tag string also suffices as a &lt;code class=&quot;highlighter-rouge&quot;&gt;type descriptor&lt;/code&gt; that accurately describes
+the type of the data in the message - &lt;em&gt;yes OSC is strongly typed&lt;/em&gt;.&lt;/p&gt;
+
+&lt;h1 id=&quot;simplicity-by-design&quot;&gt;Simplicity by Design&lt;/h1&gt;
+
+&lt;p&gt;The interesting thing about OSC encoding is that:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;It is extremely efficient.&lt;/li&gt;
+  &lt;li&gt;encoders/decoders can be implemented in a few lines of code.&lt;/li&gt;
+  &lt;li&gt;It is strongly typed.&lt;/li&gt;
+  &lt;li&gt;Complex nested data structures cannot be represented.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The last point is interesting - it means that we’ll have to restrict our messages
+to flat data structure built from simple things like integers and strings.&lt;/p&gt;
+
+&lt;p&gt;To my mind this is a good thing - &lt;strong&gt;this is simplicity by design&lt;/strong&gt;. Most
+applications that I have seen do not require deeply nested complex
+data structures in the communication protocols - and if they use such
+data structures they’ve probably been designed by a committee (and yes
+3GPP I’m looking at you :-).&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Let’s compare this to JSON - JSON is flexible, untyped, tricky to
+parse and represent and wasteful of space &lt;code class=&quot;highlighter-rouge&quot;&gt;on the wire&lt;/code&gt;. In other
+words JSON has everything that a wire line protocol should not have.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h1 id=&quot;why-binary-protocols-are-important&quot;&gt;Why binary protocols are important&lt;/h1&gt;
+
+&lt;p&gt;2014 was the tipping point, where more people access the Internet
+though mobile terminals (phones) than wire-line terminals (fixed
+computers). For mobile data, every bit counts. The radio spectrum is
+a limited resource. Within a given mobile cell the total bandwidth
+available is a finite and fixed amount, and this must be divided by
+the number of device in the cell that are simultaneously
+communicating. This is why everything slows down in peak periods when
+everybody is connected up at the same time.&lt;/p&gt;
+
+&lt;p&gt;It is therefore essential not to waste bandwidth - I think it is
+totally crazy to send JSON or XML ``over the air’’ since this will
+degrade the performance of the applications giving a bad user
+experience and higher bills - since ultimately we pay for every bit of
+data.&lt;/p&gt;
+
+&lt;p&gt;Even in fiber nets we pay one way or another - here the costs are in
+terms of energy - it uses more energy to encode/decode verbose data
+structures than well designed ones.&lt;/p&gt;
+
+&lt;p&gt;In the Telcomms Industry there’s been a great deal of effort to minimize
+the overheads in communication protocols - ASN.1 sweats blood to save
+bits - which are then wasted by programmers sending JSON down the
+wire.&lt;/p&gt;
+
+&lt;p&gt;Not only does JSON/XML on the wire waste energy, and costs more - the
+user experience in a congested net is degraded - applications that
+minimize net bandwidth will there be more attractive in a congested net
+than applications that waste bandwidth.&lt;/p&gt;
+
+&lt;p&gt;When writing a distributed application where the
+components send messages to each other, you’d better know
+well in advance exactly what messages you’re going to send and receive
+and what their types are.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;OSC messages with type signatures seems to be the perfect balance
+between power and expressiveness.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;They are expressive - but not too expressive (limiting the types to flat
+sequences of atomic types) seems a good idea - it certainly gets the
+job done and are ``good enough’’ for most purposes.&lt;/p&gt;
+
+&lt;p&gt;If a protocol cannot be expressed in sequences of OSC messages it
+probably should not be used.&lt;/p&gt;
+
+&lt;p&gt;Finding an appropriate level for encoding messages is difficult.&lt;/p&gt;
+
+&lt;p&gt;At a low level of abstractions we could just send integers over the
+wire but this would be too low level. At a higher level we could use
+some form of S-expression (like XML or JSON, which are just verbose
+S-expressions) but this is &lt;em&gt;too&lt;/em&gt; expressive.&lt;/p&gt;
+
+&lt;p&gt;OSC seems to strike the right balance.&lt;/p&gt;
+
+&lt;p&gt;OSC has an additional advantage - the internal representation of an OSC
+message in the programming language of your choice is easy - why is
+this? Precisely because OSC does not have deeply nested recursive data
+structures.&lt;/p&gt;
+
+&lt;p&gt;If you parse XML or JSON you need to map the parse tree onto some
+object structure in your language, and since the parse trees in complex,
+the object in your programming language will be complex.&lt;/p&gt;
+
+&lt;p&gt;The intrinsically flat structure of OSC is attractive, since not only
+the protocols are simple, but the code to handle then will have a
+simple flat structure - again simplicity by design rather than
+accident.&lt;/p&gt;
+
+&lt;p&gt;We could also stick OSC messages in files, which would be easy to
+parse and again have the balance of expressiveness contra simplicity.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;One measure of how good a protocol is is the size of the implementation
+and the time it took to write it. As I said implementing OSC
+is really easy, thanks mainly to the simplicity of the design.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;I’ve written a number of XML parsers in my time, and it is not easy
+and there are some unpleasant edge cases. JSON parsers are also cumbersome beasts.&lt;/p&gt;
+
+&lt;p&gt;To see just exactly how easy this is I’ve made a lttle GitHub procject where
+to test these ideas. The (incomplete) OSC encoder
+is in 
+&lt;a href=&quot;https://github.com/joearms/music_experiments/blob/master/osc.erl&quot;&gt;osc.erl&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;The library is being used to connect to three diffent programs and is
+described in &lt;a href=&quot;http://joearms.github.io/2016/01/29/Controlling-Sound-with-OSC-Messages.html&quot;&gt;Controlling Sound With OSC
+Messages&lt;/a&gt;.&lt;/p&gt;
+
+</description>
+				<pubDate>Thu, 28 Jan 2016 00:00:00 +0100</pubDate>
+				<link>http://joearms.github.com/2016/01/28/A-Badass-Way-To-Connect-Programs-Together.html</link>
+				<guid isPermaLink="true">http://joearms.github.com/2016/01/28/A-Badass-Way-To-Connect-Programs-Together.html</guid>
+			</item>
+		
+			<item>
+				<title>Controlling Live Music</title>
+				<description>&lt;p&gt;If you think about, it controlling live music is far more difficult
+than controlling a web browser.&lt;/p&gt;
+
+&lt;p&gt;If you think that reactive programming in a web browser is difficult
+then think again - this is really really easy compared to control a
+live-gig performance setup with two or three musicians, a dozen
+synthesizers and half a dozen computers.&lt;/p&gt;
+
+&lt;p&gt;In the 2014 Strangeloop keynote &lt;a href=&quot;https://www.youtube.com/watch?v=3_zW63dcZB0&quot;&gt;Our Shared Joy of
+Programming&lt;/a&gt; Carin Meier
+and Sam Aaron had drones dancing to live music (look at the video 43
+minutes from the start). This is &lt;strong&gt;Bigtime badass reactive
+programming&lt;/strong&gt; and is something far more difficult than anything ``reactive’’ done
+in a browser. This is real-world objects reacting in
+real-time to messages.&lt;/p&gt;
+
+&lt;p&gt;One of the most difficult control problems I can imagine
+involves an orchestra of 50 musicians.&lt;/p&gt;
+
+&lt;p&gt;An orchestral musician has two main inputs, ears and eyes, the conductor
+has an advance gesture control device, a wooden stick which predates
+the Internet of things and works remarkably well.
+It boots instantly, requires no cloud storage, and doesn’t need
+firmware updates, and doesn’t nag you every day about not having been backed up.&lt;/p&gt;
+
+&lt;p&gt;The orchestra is controlled by waving the stick.&lt;/p&gt;
+
+&lt;p&gt;Listening to sound from multiple instruments and transcribing it
+accurately is something no computer can yet do with any accuracy.&lt;/p&gt;
+
+&lt;p&gt;Timing in musical performance is critical, delays of more than a few
+milliseconds are noticeable, tempo shifts not so important, provided all the
+musicians change tempo at the same rate.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Music as a control problem is terribly difficult - it pushes
+our understanding of interfaces to the limit.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;This is why the methods and the software designed for live performance
+is worthy of study - I’ve started looking at this in some detail
+and  I think there’s a lot we can learn from it, and that this
+should influences how we design software and how we interact with things.&lt;/p&gt;
+
+&lt;p&gt;This is particularly relevant as we move into a world of the Internet
+Of Thinsg.  Is there really a better way of conducting an orchestra
+than waving a bit of wood, or has thousands of years of evolution and
+experimentation resulted in the perfect control device - a stick?&lt;/p&gt;
+
+&lt;h1 id=&quot;music-is-performed-by-multiple-instruments-and-musicians-in-real-time&quot;&gt;Music is performed by multiple instruments and musicians in real-time&lt;/h1&gt;
+
+&lt;p&gt;So the problem is intrinsically parallel, distributed and soft real-time.&lt;/p&gt;
+
+&lt;p&gt;``Auugh you’re thinking,’’ are there any programming languages
+designed to be intrinsically parallel, distributed and soft real-time?’’&lt;/p&gt;
+
+&lt;p&gt;Answer: Yes.&lt;/p&gt;
+
+&lt;p&gt;So the match between Erlang and Music control is pretty obvious - it’s just that
+Erlang has been used for the soft real-time control of distributed telecommunication
+systems and not orchestras.&lt;/p&gt;
+
+&lt;p&gt;I thought I’d take a look at how some systems designed for live performance look.&lt;/p&gt;
+
+&lt;p&gt;Several things are immediately apparent (and this is based on observation of three
+systems,  &lt;a href=&quot;http://sonic-pi.net/&quot;&gt;Sonic Pi&lt;/a&gt;,
+&lt;a href=&quot;http://www.audiosynth.com/&quot;&gt;SuperCollider&lt;/a&gt; and
+&lt;a href=&quot;https://puredata.info/&quot;&gt;Pure Data&lt;/a&gt; - to start with
+the controls have a declarative feel - the interfaces
+are simple, and these are build from many components which operate in parallel.&lt;/p&gt;
+
+&lt;p&gt;All the above systems interact with each other by exchanging
+OSC messages over UDP, I’ve described this in
+&lt;a href=&quot;http://joearms.github.io/2016/01/28/A-Badass-Way-To-Connect-Programs-Together.html&quot;&gt;A Badass Way to Connect Programs Together&lt;/a&gt;
+and
+&lt;a href=&quot;http://joearms.github.io/2016/01/29/Controlling-Sound-with-OSC-Messages.html&quot;&gt;Controlling Sound With OSC Messages&lt;/a&gt;.&lt;/p&gt;
+
+</description>
+				<pubDate>Wed, 27 Jan 2016 00:00:00 +0100</pubDate>
+				<link>http://joearms.github.com/2016/01/27/Controlling-Live-Music.html</link>
+				<guid isPermaLink="true">http://joearms.github.com/2016/01/27/Controlling-Live-Music.html</guid>
+			</item>
+		
+			<item>
+				<title>The Unintentional side-effects of a bad concurrency model</title>
+				<description>&lt;p&gt;This is the first of four related articles about how we
+organize software. The others are:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;http://joearms.github.io/2016/01/27/Controlling-Live-Music.html&quot;&gt;Controlling Live Music&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;http://joearms.github.io/2016/01/28/A-Badass-Way-To-Connect-Programs-Together.html&quot;&gt;A Badass Way to Connect Programs Together&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;http://joearms.github.io/2016/01/29/Controlling-Sound-with-OSC-Messages.html&quot;&gt;Controlling Sound With OSC Messages&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;How we collaborate, the organizations we work in and the
+programming languages we use effect software architectures in ways that
+are not immediately obvious.&lt;/p&gt;
+
+&lt;p&gt;In this article I argue that monolithic GitHub projects, inflexible
+organizational structures and sequential programming languages all lead
+to bad software architectures.&lt;/p&gt;
+
+&lt;p&gt;This effect is unintentional and a side effect which I believe stems
+from a poor understanding of concurrency.&lt;/p&gt;
+
+&lt;p&gt;Software architectures are all about collaboration - we solve complex
+problems by breaking them into simpler parts, and the simpler parts
+collaborate to solve the larger problem.&lt;/p&gt;
+
+&lt;p&gt;Any system that cannot flexibly create simpler parts and allow them to
+work in parallel will be difficult to work with.&lt;/p&gt;
+
+&lt;p&gt;Ideally if the problem can be describe as the interaction between N
+independent interaction agents, then it should be programmed or
+organized as N independent interacting agents.&lt;/p&gt;
+
+&lt;p&gt;Conversely if a problem cannot be described in terms of independent
+communicating parts it will be difficult to understand and difficult to
+implement.&lt;/p&gt;
+
+&lt;p&gt;The ease with which we can change the number of
+parts and how they interact has profound consequences for
+the success of the architecture.&lt;/p&gt;
+
+&lt;p&gt;Have said this, I’ll examine three factors that influence architectures
+in an unintentionally bad manner.&lt;/p&gt;
+
+&lt;h1 id=&quot;static-organizational-structures&quot;&gt;Static Organizational Structures&lt;/h1&gt;
+
+&lt;p&gt;Thirty odd years ago I got a job at Ericsson and was introduced to
+the architecture of the AXE system. I was initially confused when I
+learned about the software architecture of the AXE system since it appeared
+to be very similar to the organizational structure of a large part of
+the company.&lt;/p&gt;
+
+&lt;p&gt;Sometimes I saw diagrams describing the organization, other times
+I saw documents describing the software structure and they appeared to be the
+same.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;What I did’t initially understand that they were the same - The
+organizations structure was exactly the same as the software
+structure. One block, one group, they were identical.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;This made a lot of sense - the software was stable and mature
+and the architecture did not change.&lt;/p&gt;
+
+&lt;p&gt;Now changing an organizational structure is far more difficult than changing
+a software architecture - so software structure can change quickly but
+organizations cannot.&lt;/p&gt;
+
+&lt;p&gt;Later, I moved to different projects and discovered that the software
+architecture follows the organizational structure.&lt;/p&gt;
+
+&lt;p&gt;Suppose a new
+project was being started, and at the time when it was being started
+three groups of programmers became free having finished another project.
+Guess how many major components the new project would have? You
+guessed right, three, because three groups had become available at the
+time when the new project started.&lt;/p&gt;
+
+&lt;p&gt;So the problem of designing a system architecture, became the problem
+of splitting the initial problem into three approximately equal
+programming tasks and not the problem of finding a natural division
+of the problem into small interacting parts.&lt;/p&gt;
+
+&lt;p&gt;I view this as a kind of concurrency problem. If the problem could be
+described in terms of five interacting components, then it would be
+best programmed by five interacting groups, and not three, or seven
+because the organization happen to have three or seven groups
+available at the time.&lt;/p&gt;
+
+&lt;h1 id=&quot;collaboration-methods&quot;&gt;Collaboration Methods&lt;/h1&gt;
+
+&lt;p&gt;How do we collaborate in software projects? - specifically how we
+collaborate in Open Source projects? The dominant model of
+collaboration is by manipulation of a common
+archive. Typically GitHub.&lt;/p&gt;
+
+&lt;p&gt;GibHub collaborations are essentially shared memory transactions. The
+transaction manager (project owner) decides to commit a new set of
+changes or disallow them.  As with all shared memory concurrent reads
+are possible but concurrent writes are disallowed and must be
+sequentially ordered - otherwise chaos will ensue.&lt;/p&gt;
+
+&lt;p&gt;Some of us think that shared memory programming is a nightmare -
+people tinkering with my code or my tinkering with other peoples code
+that I don’t really understand is a recipe for disaster.&lt;/p&gt;
+
+&lt;p&gt;Collaborating in a communal project is not easy. The biggest problem
+is getting into the mind set of the people who built and maintain the
+project. Mature open source projects can have thousands of files and
+directories and knowing exactly where to add your stuff is by no means
+easy. Even though you think you know what you’re doing a change that
+appears to work can easily break somebody else’s code.&lt;/p&gt;
+
+&lt;p&gt;This is incidentally how two humans interact and collaborate. If I
+want to collaborate with my friend I don’t open up their head with a
+carving knife, insert new neural synapses, then sew up everything and
+hope that it will work. No I talk to them, I say “can you do this?”
+and they talk back - we interact by exchanging messages.&lt;/p&gt;
+
+&lt;p&gt;This is how distributed applications work - they work by exchanging
+messages.  In fact this is the only way they possibly could work. The
+clue lies in the name &lt;strong&gt;distributed&lt;/strong&gt; - distributed means that the parts
+of the application are indifferent physical places so they have to
+collaborate by exchanging messages which in the best case travel at
+the speed of light, and in most case a lot lot slower.&lt;/p&gt;
+
+&lt;p&gt;The most common way to build distributed things and the most
+successful way of creating collaborative things is the WWW. Of all
+the ways of building object on the Internet the dominant way is to use the
+HTTP protocol layered over TCP sockets. I’ll call this HTTP-over-TCP.&lt;/p&gt;
+
+&lt;p&gt;Of course HTTP-over-TCP is not the only way of doing things, there are
+many other combinations we could choose.&lt;/p&gt;
+
+&lt;p&gt;Recently I’ve been experimenting with two alternatives JSON-over-TCP and
+OSC-over-UDP - both have their advantages and disadvantages, so I’m
+going to discuss these here:&lt;/p&gt;
+
+&lt;p&gt;Firstly I want to use JSON-over-TCP and OSC-over-UDP for purely
+&lt;em&gt;internal&lt;/em&gt; collaboration. These messages are never intended to escape
+the local machine/Internet boundary so I don’t have to worry about security.&lt;/p&gt;
+
+&lt;p&gt;What are these little projects:&lt;/p&gt;
+
+&lt;p&gt;The first is JSON-over-TCP, this started with my &lt;a href=&quot;http://joearms.github.io/2016/01/04/fun-with-swift.html&quot;&gt;Fun with
+Swift&lt;/a&gt;
+article. After I published this I was contacted by Chris Eidhof who very kindly sent
+me a copy of &lt;a href=&quot;https://www.objc.io/books/functional-swift/&quot;&gt;Functional
+Swift&lt;/a&gt; which he had
+co-authored so I was very glad to hear from him. Some of my hours of
+struggling were solved by a quick tip from Chris.&lt;/p&gt;
+
+&lt;p&gt;Chris and I started mailing each other and he soon had made a simple
+JSON-over-TCP proof of concept where we can build a remote GUI by
+sending JSON messages over TCP. The project is still in
+proof-of-concept stage but there is some code to play with at
+&lt;a href=&quot;https://github.com/chriseidhof/tcp-json-swift&quot;&gt;https://github.com/chriseidhof/tcp-json-swift&lt;/a&gt;
+and I was able to send messages from Erlang to Swift and a window 
+popped up.  Early days, but looking good.&lt;/p&gt;
+
+&lt;p&gt;Chris and I would like to implement something like
+&lt;a href=&quot;http://shoesrb.com/&quot;&gt;Shoes&lt;/a&gt; – for those of you who have never
+used shoes the first version
+was written by the extremely talented
+&lt;a href=&quot;https://en.wikipedia.org/wiki/Why_the_lucky_stiff&quot;&gt;Why the Lucky Stiff&lt;/a&gt;.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Unfortunately the Internet does not have permanent references, so
+much of what the Lucky Stiff wrote seems to have vanished.  This is
+why we should all support Juan Benet in his attempts to build &lt;a href=&quot;http://ipfs.io/&quot;&gt;The
+Interplanetary File System&lt;/a&gt; and resist storing our
+data in impermanent clouds.  Let’s not destroy history for future
+generations by sticking our data in a proprietary cloud.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;The nice thing about separating the GUI client from the GUI
+server is that neither of us needs to know &lt;em&gt;anything&lt;/em&gt; about the
+internal structure of the other guys project. &lt;span style=&quot;color:red&quot;&gt;My project is written in Erlang&lt;/span&gt;
+and has a directory structure and build system that I’m happy with. &lt;span style=&quot;color:red&quot;&gt;Chris’s project is
+written in Swift&lt;/span&gt; and has a directory structure and build system that he
+is happy with, but &lt;span style=&quot;color:red&quot;&gt;neither of us needs to know how the other side has
+implemented their code&lt;/span&gt;.  All we need to agree on are what messages
+should be send and what the messages mean.&lt;/p&gt;
+
+&lt;p&gt;The second project is a collaboration with Sam Aaron focused on the
+&lt;a href=&quot;http://sonic-pi.net/&quot;&gt;Sonic Pi&lt;/a&gt; This project uses OSC messaging with
+UDP transport, which I’ll call OSC-over-UDP.&lt;/p&gt;
+
+&lt;p&gt;OSC-over-UDP as a way of gluing projects together is described in a &lt;a href=&quot;http://joearms.github.io/2016/01/28/A-Badass-Way-To-Connect-Programs-Together.html&quot;&gt;A Badass Way
+to Connect Things Together&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h1 id=&quot;programming-languages&quot;&gt;Programming Languages&lt;/h1&gt;
+
+&lt;p&gt;Why do we have monolithic projects? I believe this is because it is
+difficult to build communicating components in what are essentially
+sequential programming languages. Concurrency has been forgotten in
+most programming languages, and when it has been added it seems like a
+afterthought, not as an act of conscious design.&lt;/p&gt;
+
+&lt;p&gt;In a very large number of programming languages the only way to program
+a concurrent application is to ``do it yourself’’ and simulate
+concurrency by storing the state of a suspended process in a data
+base or some equally horrid constructions involving a mess of callback
+and promises.&lt;/p&gt;
+
+&lt;p&gt;Sequential languages are designed to write sequential programs, and the
+only way for a sequential program to grow in functionality is for it
+to get larger. It’s technically difficult to split it into cooperating
+processes so this is not usually done. The concurrency in the
+application cannot be used to structure the application.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;We should grow things by adding more small communicating objects,
+rather than making larger and larger non-communicating objects.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Concentrating on the communication provides a higher level of
+abstraction than concentrating on the function APIs used within the
+system.  Black-box equivalence says that two systems are equivalent if
+they cannot be distinguished by observing their communication
+patterns. Two black-boxes are equivalent if they have identical
+input/output behavior.&lt;/p&gt;
+
+&lt;p&gt;When we connect black boxes together we don’t care what programming
+languages have been used inside the black boxes, we don’t care how
+the code inside the black boxes has been organized, we just have to
+obey the communication protocols.&lt;/p&gt;
+
+&lt;p&gt;If you look at most GitHub projects - they are built as monolithic
+single language applications, they are not built from small
+communicating components written in different languages.&lt;/p&gt;
+
+&lt;p&gt;In the Internet world, we program differently. Here it is possible to
+structure applications as &lt;code class=&quot;highlighter-rouge&quot;&gt;micro-services&lt;/code&gt; usually using
+HTTP-over-TCP or JSON-over-TCP AJAX and so on, but this is not used
+&lt;em&gt;internally&lt;/em&gt; inside the OS to any large extent.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Erlang programs are the exception. Erlang programs are
+intentionally structured as communicating processes - they are the ultimate
+micro-services.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Large Erlang applications have a flat ``bus like’’ structure. They
+are structured as independent parallel applications hanging off a
+common communication bus. This leads to architectures that are easy
+to understand and debug and collaborations which are easy to program.&lt;/p&gt;
+</description>
+				<pubDate>Tue, 26 Jan 2016 00:00:00 +0100</pubDate>
+				<link>http://joearms.github.com/2016/01/26/The-Unintentional-Side-Effects-of-a-Bad-Concurrency-Model.html</link>
+				<guid isPermaLink="true">http://joearms.github.com/2016/01/26/The-Unintentional-Side-Effects-of-a-Bad-Concurrency-Model.html</guid>
+			</item>
+		
+			<item>
+				<title>Really bad websites</title>
+				<description>&lt;h1 id=&quot;marquee-im-hoping-somebody-can-help-me-heremarquee&quot;&gt;&lt;marquee&gt; I&#39;m hoping somebody can help me here.&lt;/marquee&gt;&lt;/h1&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/construction.gif&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;A year of so ago I stumbled upon a &lt;em&gt;really bad&lt;/em&gt; website – it was 
+stunningly bad. Unfortunately I lost the link. I also lost a link to
+what was a pretty good MS-DOS style interface.&lt;/p&gt;
+
+&lt;marquee&gt;&lt;font color=&quot;red&quot;&gt;And I&#39;d Forgotten about the
+&amp;lt;marquee&amp;gt; tag&lt;/font&gt;&lt;/marquee&gt;
+
+&lt;p&gt;And tragically the &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;blink&amp;gt;&lt;/code&gt; tag doesn’t work any more…&lt;/p&gt;
+
+&lt;p&gt;Added note: Within a couple of hours of publishing this
+artice Roger Lipscombe added this link in the comments
+http://code.divshot.com/geo-bootstrap/ – this is the site I was thinking
+about. Thanks Roger.&lt;/p&gt;
+
+&lt;p&gt;So what’s on a really bad website?&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;It’s pre CSS - with hand-written HTML&lt;/li&gt;
+  &lt;li&gt;It has totally crap layout&lt;/li&gt;
+  &lt;li&gt;It has rotating scrolling banners&lt;/li&gt;
+  &lt;li&gt;The background color clashes with the text colors making the text unreadable&lt;/li&gt;
+  &lt;li&gt;It has a &lt;code class=&quot;highlighter-rouge&quot;&gt;this this site is being constructed&lt;/code&gt; icon shown a man digging&lt;/li&gt;
+  &lt;li&gt;It plays midi bagpipe music when you visit the page (there was a Hotel on Loch Ness - that played bagpipe music and had bagpipers waving at you) - I shall have to find this in the web archive.&lt;/li&gt;
+  &lt;li&gt;The entire page was a few KBytes&lt;/li&gt;
+  &lt;li&gt;It was written by amateurs&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Now unfortunately these works of art have vanished from the net.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Now all I see are boring websites made with Twitter Bootstrap and with 200 KB of JavaScript that tracks you&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Please help me find these old sites and post links in the comments.&lt;/p&gt;
+
+&lt;p&gt;Once I’ve found suitable horrible examples I’ll try and remake my blog
+to make it visually more attractive.&lt;/p&gt;
+
+&lt;p&gt;Are then any CSS frameworks that help you make truly horrible websites?&lt;/p&gt;
+
+&lt;h1 id=&quot;marqueeadded-notesmarquee&quot;&gt;&lt;marquee&gt;Added notes&lt;/marquee&gt;&lt;/h1&gt;
+
+&lt;p&gt;http://www.wonder-tonic.com/geocitiesizer/index.php
+will transform any site into
+a slighly less readable version. 
+Here is &lt;a href=&quot;http://www.wonder-tonic.com/geocitiesizer/content.php?theme=3&amp;amp;music=8&amp;amp;url=joearms.github.io/2016/01/07/really-bad-websites.html&quot;&gt;this article transformed&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h1 id=&quot;example-sites&quot;&gt;Example Sites&lt;/h1&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;http://code.divshot.com/geo-bootstrap/&lt;/li&gt;
+  &lt;li&gt;https://kristopolous.github.io/BOOTSTRA.386/&lt;/li&gt;
+  &lt;li&gt;http://web.archive.org/web/20100813142028/http://havenworks.com/&lt;/li&gt;
+  &lt;li&gt;http://www.lingscars.com/&lt;/li&gt;
+  &lt;li&gt;http://www.angelfire.com/super/badwebs/&lt;/li&gt;
+  &lt;li&gt;http://webkingusa.com/computer-services/index.html&lt;/li&gt;
+  &lt;li&gt;http://dhtmlconf.com/&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+				<pubDate>Thu, 07 Jan 2016 00:00:00 +0100</pubDate>
+				<link>http://joearms.github.com/2016/01/07/really-bad-websites.html</link>
+				<guid isPermaLink="true">http://joearms.github.com/2016/01/07/really-bad-websites.html</guid>
+			</item>
+		
+			<item>
+				<title>Fun with Swift and Midi</title>
+				<description>&lt;p&gt;Seems like I can control core audio directly from the command line in Swift.
+no horrid Xcode is involved.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;One quick example seems to be worth a thousand words, so here’s a
+version of &lt;code class=&quot;highlighter-rouge&quot;&gt;PlaySoftMidi.cpp&lt;/code&gt; converted to Swift.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;em&gt;PlaySoftMidi&lt;/em&gt; has
+been in the Mac Developer library since 2007 and is just about the
+only program I can understand that &lt;em&gt;uses&lt;/em&gt; the CoreAudio stuff.&lt;/p&gt;
+
+&lt;p&gt;If you have swift2.1 on your machine save &lt;code class=&quot;highlighter-rouge&quot;&gt;PlaySoftMidi.swift&lt;/code&gt; in a file and
+give the command:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;swift PlaySoftMidi.swift
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;And the program will play samples from the inbuilt synthesizer.&lt;/p&gt;
+
+&lt;p&gt;Here are the programs:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://developer.apple.com/library/mac/samplecode/PlaySoftMIDI/Listings/main_cpp.html&quot;&gt;PLaySoftMidi.cpp&lt;/a&gt; – Apple origonal program&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/joearms/joearms.github.com/tree/master/_posts/swift/PlaySoftMidi.swift&quot;&gt;PlaySoftMidi.swift&lt;/a&gt; – The above converted to Swift and modified&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;These two program also show the equivalence between &lt;code class=&quot;highlighter-rouge&quot;&gt;C++&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;Swift&lt;/code&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;the-bad&quot;&gt;The Bad&lt;/h1&gt;
+
+&lt;p&gt;For example in C++ we say:&lt;/p&gt;
+
+&lt;pre&gt;
+enum {
+    kMidiMessage_ControlChange      = 0xB,
+    kMidiMessage_ProgramChange      = 0xC,
+    kMidiMessage_BankMSBControl     = 0,
+    kMidiMessage_BankLSBControl     = 32,
+    kMidiMessage_NoteOn             = 0x9
+};
+&lt;/pre&gt;
+
+&lt;p&gt;And to use a constant just refer to it by name.&lt;/p&gt;
+
+&lt;p&gt;And In Swift we say:&lt;/p&gt;
+
+&lt;pre&gt;
+enum Midi : UInt32 {
+    case kMidiMessage_ControlChange = 0xB
+    case kMidiMessage_ProgramChange = 0xC
+    case kMidiMessage_BankMSBControl = 0
+    case kMidiMessage_BankLSBControl = 32
+    case kMidiMessage_NoteOn = 0x9
+    case kMidiMessageProgramChange = 0xC0
+}
+&lt;/pre&gt;
+
+&lt;p&gt;And to use a value say something like: &lt;code class=&quot;highlighter-rouge&quot;&gt;Midi.kMidiMessageProgramChange.rawValue&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;I hope this is not a trend - just when you though programming language
+couldn’t get any more verbose, they did.&lt;/p&gt;
+
+&lt;h1 id=&quot;the-good&quot;&gt;The Good&lt;/h1&gt;
+
+&lt;p&gt;Type casts seem to be functions. If &lt;code class=&quot;highlighter-rouge&quot;&gt;x&lt;/code&gt; in Swift is an &lt;code class=&quot;highlighter-rouge&quot;&gt;Int&lt;/code&gt; and I
+want to convert it to a variable &lt;code class=&quot;highlighter-rouge&quot;&gt;y&lt;/code&gt; of type &lt;code class=&quot;highlighter-rouge&quot;&gt;UInt32&lt;/code&gt; I say:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;y = UInt32(x)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;And NOT &lt;code class=&quot;highlighter-rouge&quot;&gt;y = (UInt32) x&lt;/code&gt; – &lt;em&gt;horay&lt;/em&gt; say I.&lt;/p&gt;
+
+&lt;h1 id=&quot;next-steps&quot;&gt;Next Steps&lt;/h1&gt;
+
+&lt;p&gt;When I’ve got a socket interface working I’ll connect this to Erlang so that I can
+hit the midi interface from Erlang – then the fun can begin.&lt;/p&gt;
+
+</description>
+				<pubDate>Wed, 06 Jan 2016 00:00:00 +0100</pubDate>
+				<link>http://joearms.github.com/2016/01/06/fun_with_swift_and_midi.html</link>
+				<guid isPermaLink="true">http://joearms.github.com/2016/01/06/fun_with_swift_and_midi.html</guid>
+			</item>
+		
+			<item>
+				<title>Fun with Swift</title>
+				<description>&lt;p&gt;I don’t know where to start this. It started off as my post turkey
+festive season relaxation and just gets longer and longer.&lt;/p&gt;
+
+&lt;p&gt;I thought to myself &lt;code class=&quot;highlighter-rouge&quot;&gt;I&#39;ll try and make a GUI in Swift using only
+emacs and the Swift REPL&#39;&#39; - I Googled a bit (as one does these days)
+and found an amazing bit of code in [Swift from the command
+line](https://forums.developer.apple.com/thread/5137). 
+&lt;/code&gt;Jens’’ gave the following code example:&lt;/p&gt;
+
+&lt;pre&gt;
+#!/usr/bin/swift  
+
+import WebKit  
+let application = NSApplication.sharedApplication()  
+application.setActivationPolicy(NSApplicationActivationPolicy.Regular)  
+let window = NSWindow(contentRect: NSMakeRect(0, 0, 960, 720),
+                      styleMask: NSTitledWindowMask | NSClosableWindowMask |
+                                 NSMiniaturizableWindowMask,
+                      backing: .Buffered, `defer`: false)  
+window.center()  
+window.title = &quot;Minimal Swift WebKit Browser&quot;  
+window.makeKeyAndOrderFront(window)  
+class WindowDelegate: NSObject, NSWindowDelegate {  
+    func windowWillClose(notification: NSNotification) {  
+        NSApplication.sharedApplication().terminate(0)  
+    }  
+}  
+let windowDelegate = WindowDelegate()  
+window.delegate = windowDelegate  
+class ApplicationDelegate: NSObject, NSApplicationDelegate {  
+    var _window: NSWindow  
+    init(window: NSWindow) {  
+        self._window = window  
+    }  
+    func applicationDidFinishLaunching(notification: NSNotification) {  
+        let webView = WebView(frame: self._window.contentView!.frame)  
+        self._window.contentView!.addSubview(webView)  
+        webView.mainFrame.loadRequest(NSURLRequest(URL: NSURL(string: &quot;https://forums.developer.apple.com/thread/5137&quot;)!))  
+    }  
+}  
+let applicationDelegate = ApplicationDelegate(window: window)  
+application.delegate = applicationDelegate  
+application.activateIgnoringOtherApps(true)  
+application.run()  
+
+&lt;/pre&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-swift&quot; data-lang=&quot;swift&quot;&gt;&lt;span class=&quot;cp&quot;&gt;#!/usr/bin/swift  &lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;WebKit&lt;/span&gt;  
+&lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;application&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;NSApplication&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;sharedApplication&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;  
+&lt;span class=&quot;n&quot;&gt;application&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;setActivationPolicy&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;NSApplicationActivationPolicy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;Regular&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;  
+&lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;window&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;NSWindow&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;contentRect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;NSMakeRect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;960&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;720&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+                      &lt;span class=&quot;nv&quot;&gt;styleMask&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;NSTitledWindowMask&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;NSClosableWindowMask&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+                                 &lt;span class=&quot;kt&quot;&gt;NSMiniaturizableWindowMask&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                      &lt;span class=&quot;nv&quot;&gt;backing&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;Buffered&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;defer&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;  
+&lt;span class=&quot;n&quot;&gt;window&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;center&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;  
+&lt;span class=&quot;n&quot;&gt;window&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;title&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Minimal Swift WebKit Browser&quot;&lt;/span&gt;  
+&lt;span class=&quot;n&quot;&gt;window&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;makeKeyAndOrderFront&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;window&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;  
+&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;WindowDelegate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;NSObject&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;NSWindowDelegate&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;  
+    &lt;span class=&quot;kd&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;windowWillClose&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;notification&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;NSNotification&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;  
+        &lt;span class=&quot;kt&quot;&gt;NSApplication&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;sharedApplication&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;terminate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;  
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;  
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;  
+&lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;windowDelegate&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;WindowDelegate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;  
+&lt;span class=&quot;n&quot;&gt;window&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;delegate&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;windowDelegate&lt;/span&gt;  
+&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;ApplicationDelegate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;NSObject&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;NSApplicationDelegate&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;  
+    &lt;span class=&quot;k&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;_window&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;NSWindow&lt;/span&gt;  
+    &lt;span class=&quot;nf&quot;&gt;init&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;window&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;NSWindow&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;  
+        &lt;span class=&quot;k&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_window&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;window&lt;/span&gt;  
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;  
+    &lt;span class=&quot;kd&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;applicationDidFinishLaunching&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;notification&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;NSNotification&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;  
+        &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;webView&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;WebView&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;frame&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_window&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;contentView&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;frame&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;  
+        &lt;span class=&quot;k&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_window&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;contentView&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;addSubview&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;webView&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;  
+        &lt;span class=&quot;n&quot;&gt;webView&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mainFrame&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;loadRequest&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;NSURLRequest&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;URL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;NSURL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;https://forums.developer.apple.com/thread/5137&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;  
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;  
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;  
+&lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;applicationDelegate&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;ApplicationDelegate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;window&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;window&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;  
+&lt;span class=&quot;n&quot;&gt;application&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;delegate&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;applicationDelegate&lt;/span&gt;  
+&lt;span class=&quot;n&quot;&gt;application&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;activateIgnoringOtherApps&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;  
+&lt;span class=&quot;n&quot;&gt;application&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;  &lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Which when I stuck in a file called &lt;code class=&quot;highlighter-rouge&quot;&gt;browser.swift&lt;/code&gt; and gave the shell command
+`swift browser.swift’  up popped the following window:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/browser.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;I later found very similar code with more explanation at
+http://practicalswift.com/.&lt;/p&gt;
+
+&lt;p&gt;My immediate reaction was ``Golly – Swift might just be usable’’ and
+I was hooked.  I’d also read that Swift was a functional language
+which again piqued my interest.&lt;/p&gt;
+
+&lt;p&gt;In the next week or so I found that Swift was certainly not a pure
+functional language but that it was whole lot better than
+Objective-C. Above all it had a REPL and I could program outside Xcode
+(which I hate). I can use my dear and very old friend emacs whose
+commands are located somewhere near the base of my spine.&lt;/p&gt;
+
+&lt;h1 id=&quot;how-we-programmed-guis-in-the-good-ol-days&quot;&gt;How we programmed GUIs in the good ‘ol days&lt;/h1&gt;
+
+&lt;p&gt;Once upon a time GUIs were windows containing a few buttons and some
+text. When you clicked the buttons the text changed. We were easily amused
+in the old days.&lt;/p&gt;
+
+&lt;p&gt;Writing a program to create a GUI was really easy.  I’d write
+some code that looked something like this:&lt;/p&gt;
+
+&lt;pre&gt;
+window = make_window(Width, Height, Title)
+b1 = make_button(window, X, Y, Width, Ht, Label)
+e1 = make_entry(window, X, Y, Width, Ht)
+l1 = make_label(window, X, Y, Width, Ht)
+b1.onclick = function
+                X = read(e1)
+                write(l1, X)
+             end
+&lt;/pre&gt;
+
+&lt;p&gt;I’d use my favorite text editor, stick this in a file &lt;code class=&quot;highlighter-rouge&quot;&gt;my_gui.bas&lt;/code&gt; and
+say the magic words:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt; basic my_gui.bas
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Then the wife, kids, cats, dogs and the entire neighborhood would
+rejoice a GUI would appear as if by magic.&lt;/p&gt;
+
+&lt;p&gt;I’d hardly call this programming, all we had to do was figure out the
+positions and labels on the objects and type them into a computer.&lt;/p&gt;
+
+&lt;p&gt;As time went on tools were built to ``assist’’ writing such programs
+as if it were too difficult to figure out the coordinates of where
+those pesky little buttons should go.  Figuring out the coordinates
+could be done in a drag and drop interface and we could offer the user
+a vast library of widgets that could be used - not just buttons and
+text entries, but sliders and date selection widgets and goodness-knows-what-they-do
+selectors.&lt;/p&gt;
+
+&lt;p&gt;The languages to program GUIs became more complicated, and the number
+of functions available to manipulate the widgets became so large that
+nobody could ever remember them all.&lt;/p&gt;
+
+&lt;p&gt;So we made integrated IDEs that hid thousands of commands from the
+users and which offered hundred of widgets and could be used to build
+amazing shiny things.&lt;/p&gt;
+
+&lt;p&gt;But the tools became larger and larger to the point of unusability and
+the simple ways of making a GUI which a beginner programmer could
+knock up in a few minutes were lost.&lt;/p&gt;
+
+&lt;p&gt;I’m an old-style programmer. I like to understand &lt;em&gt;every&lt;/em&gt; line of code
+I write.  I like to write my code in files and study the results.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;This is my attempt to make an old-style GUI in Swift.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;All the code for the GUI must be in a single Swift file which I’ll
+launch from the terminal. I’ll use only the Apple Swift compiler, Emacs
+and Make.&lt;/p&gt;
+
+&lt;p&gt;I’m a beginner at Swift and Cocoa - I’ve asked a number of questions
+in the article and I hope that some of you who read this can provide
+answers to these questions. All the source is on-line and so you can
+send me pull requests or add comments at the end of the article.&lt;/p&gt;
+
+&lt;p&gt;Another goal is to shorten and/or clarify the programs. So if you can
+remove a line of code which you feel is irrelevant, or improve the
+explanation please tell me.&lt;/p&gt;
+
+&lt;p&gt;Brevity of expression is not a primary goal - since I’d favor slightly
+more verbose code if it is clearer than extremely terse code. The goal
+is clear obviously correct code and code patterns that are easy to
+scale and reproduce.&lt;/p&gt;
+
+&lt;p&gt;To help you navigate you can jump straight to the code or read the
+entire article from start to finish:&lt;/p&gt;
+
+&lt;h1 id=&quot;part-1---primitive-functions&quot;&gt;Part 1 - primitive functions&lt;/h1&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;#experiment0&quot;&gt;experiment 0 - Not really a window&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#experiment1&quot;&gt;experiment 1 - A minimal window&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#experiment2&quot;&gt;experiment 2 - A window with specific size and a title &lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#experiment3&quot;&gt;experiment 3 - A window with a button &lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#experiment4&quot;&gt;experiment 4 - A window with a text field&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#experiment5&quot;&gt;experiment 5 - Connecting the button to a text field&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#experiment6&quot;&gt;experiment 6 - A window with an image&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;part-2---abstractions&quot;&gt;Part 2 - Abstractions&lt;/h1&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;#parameters&quot;&gt;Parameter naming gobbledygook&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#combined&quot;&gt;Putting it all together&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;part-3---philosophy&quot;&gt;Part 3 - Philosophy&lt;/h1&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;#swift_fpl&quot;&gt;Swift as a functional language&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#why_i_use_text&quot;&gt;Why I use text and not XCode&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#references&quot;&gt;References&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The programs have been tested on OS X Yosemite version 10.10.5 with
+Xcode version 7.2 and Swift version 2.1.&lt;/p&gt;
+
+&lt;p&gt;Each program is in a single file
+called &lt;code class=&quot;highlighter-rouge&quot;&gt;experiment1.swift&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;experiment2.swift&lt;/code&gt; and so on.&lt;/p&gt;
+
+&lt;p&gt;The source can be found &lt;a href=&quot;https://github.com/joearms/joearms.github.com/_posts/swift&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h1 id=&quot;running-and-compiling-the-examples&quot;&gt;Running and compiling the examples&lt;/h1&gt;
+
+&lt;p&gt;To run the an example in a terminal give the command&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;swift experiment&amp;lt;K&amp;gt;.swift
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;To compile &lt;code class=&quot;highlighter-rouge&quot;&gt;example&amp;lt;K&amp;gt;&lt;/code&gt; give the command:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;switftc -o experiment&amp;lt;K&amp;gt; experiment&amp;lt;K&amp;gt;.swift
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;This will generate an executable called &lt;code class=&quot;highlighter-rouge&quot;&gt;experiment&amp;lt;K&amp;gt;&lt;/code&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;part-1---primitive-functions-1&quot;&gt;Part 1 - Primitive Functions&lt;/h1&gt;
+
+&lt;h1 id=&quot;a-nameexperiment0a-experiment-0---how-not-to-make-a-window&quot;&gt;&lt;a name=&quot;experiment0&quot;&gt;&lt;/a&gt; Experiment 0 - How not to make a window&lt;/h1&gt;
+
+&lt;p&gt;If we start Xcode, do &lt;code class=&quot;highlighter-rouge&quot;&gt;File-&amp;gt;New-&amp;gt;Project&lt;/code&gt; and select &lt;code class=&quot;highlighter-rouge&quot;&gt;Cocoa Application&lt;/code&gt;
+then set the language to &lt;code class=&quot;highlighter-rouge&quot;&gt;Swift&lt;/code&gt; then Xcode will create a file called
+&lt;code class=&quot;highlighter-rouge&quot;&gt;ApplicationDelegate.swift&lt;/code&gt; with the following content:&lt;/p&gt;
+
+&lt;pre&gt;
+//
+//  AppDelegate.swift
+//  Project
+//
+//  Created by joseph armstrong on 28/12/15.
+//  Copyright © 2015 joseph armstrong. All rights reserved.
+//
+
+import Cocoa
+
+@NSApplicationMain
+class AppDelegate: NSObject, NSApplicationDelegate {
+
+    @IBOutlet weak var window: NSWindow!
+
+    func applicationDidFinishLaunching(aNotification: NSNotification) {
+        // Insert code here to initialize your application
+    }
+
+    func applicationWillTerminate(aNotification: NSNotification) {
+        // Insert code here to tear down your application
+    }
+}
+
+&lt;/pre&gt;
+
+&lt;p&gt;This file cannot be run outside Xcode - here’s what happens if we try to
+run this directly in a terminal:&lt;/p&gt;
+
+&lt;p&gt;```
+swift AppDelegate.swift
+AppDelegate.swift:11:1: error: ‘NSApplicationMain’ attribute cannot be used in a module that contains top-level code
+@NSApplicationMain&lt;/p&gt;
+&lt;p&gt;AppDelegate.swift:1:1: note: top-level code defined in this source file
+//&lt;/p&gt;
+&lt;p&gt;```&lt;/p&gt;
+
+&lt;p&gt;So this doesn’t work - but after a little Googling and some small
+edits we can modify this so that we can create a window in the shell, this is show in the next
+section.&lt;/p&gt;
+
+&lt;h1 id=&quot;a-nameexperiment1a-experiment-1---a-simple-window&quot;&gt;&lt;a name=&quot;experiment1&quot;&gt;&lt;/a&gt; Experiment 1 - A simple window&lt;/h1&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/experiment1.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;This window is created with the following code - which is
+derived from &lt;code class=&quot;highlighter-rouge&quot;&gt;AppDelegate.swift&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;
+// experiment1.swift
+// run with:
+//  $ swift experiment1.swift
+
+import Cocoa
+
+class AppDelegate: NSObject, NSApplicationDelegate {
+
+    let window = NSWindow()
+
+    func applicationDidFinishLaunching(aNotification: NSNotification) {
+        window.makeKeyAndOrderFront(window)
+        window.level = 1
+    }
+}
+
+let app = NSApplication.sharedApplication()
+let controller = AppDelegate()
+
+app.delegate = controller
+app.run()
+
+&lt;/pre&gt;
+
+&lt;p&gt;To run the program store the above in a file &lt;code class=&quot;highlighter-rouge&quot;&gt;experiment1.swift&lt;/code&gt; and run
+the program in a terminal with the following command:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ swift experiment1.swift
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h1 id=&quot;a-nameexperiment2a-experiment-2---a-window-with-a-title-and-specific-size&quot;&gt;&lt;a name=&quot;experiment2&quot;&gt;&lt;/a&gt; Experiment 2 - A window with a title and specific size&lt;/h1&gt;
+
+&lt;p&gt;Now I’ll make a larger window and add a title:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/experiment2.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Here I’ve make the window a specific size a title and some controls
+to the title bar:&lt;/p&gt;
+
+&lt;pre&gt;
+// experiment2.swift
+// run with:
+//  $ swift experiment2.swift
+
+import Cocoa
+
+class AppDelegate: NSObject, NSApplicationDelegate
+{
+    let window = NSWindow()
+    
+    func applicationDidFinishLaunching(aNotification: NSNotification)
+    {
+        window.setContentSize(NSSize(width:600, height:200))
+        window.styleMask = NSTitledWindowMask | NSClosableWindowMask |
+                           NSMiniaturizableWindowMask |
+                           NSResizableWindowMask
+        
+        window.opaque = false
+        window.center();
+        window.title = &quot;Experiment 2&quot;
+        window.makeKeyAndOrderFront(window)
+        window.level = 1
+    }
+}
+
+let app = NSApplication.sharedApplication()
+let controller = AppDelegate()
+
+app.delegate = controller
+app.run()
+
+&lt;/pre&gt;
+
+&lt;h1 id=&quot;adding-controls&quot;&gt;Adding controls&lt;/h1&gt;
+
+&lt;p&gt;Now we can make a simple window. The next step is to add some controls.
+I’ve added one control in each experiment.&lt;/p&gt;
+
+&lt;h1 id=&quot;a-nameexperiment3a-experiment-3---a-window-with-a-button&quot;&gt;&lt;a name=&quot;experiment3&quot;&gt;&lt;/a&gt; Experiment 3 - A window with a button&lt;/h1&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/experiment3.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Here’s a window with a button in it - note that nothing happens when
+we click the button - in experiment 5 I’ll add a click action to the
+button.&lt;/p&gt;
+
+&lt;p&gt;The code is as follows:&lt;/p&gt;
+
+&lt;pre&gt;
+// experiment3.swift
+// run with:
+//  $ swift experiment3.swift
+
+import Cocoa
+
+class AppDelegate: NSObject, NSApplicationDelegate
+{
+    let window = NSWindow()
+    
+    func applicationDidFinishLaunching(aNotification: NSNotification)
+    {
+        window.setContentSize(NSSize(width:600, height:200))
+        window.styleMask = NSTitledWindowMask | NSClosableWindowMask |
+                           NSMiniaturizableWindowMask |
+                           NSResizableWindowMask
+        
+        window.opaque = false
+        window.center();
+        window.title = &quot;Experiment 3&quot;
+
+        let button = NSButton(frame: NSMakeRect(20, 100, 180, 30))
+        button.bezelStyle =  .ThickSquareBezelStyle
+        button.title = &quot;Click Me&quot;
+        button.target = NSApp
+        window.contentView!.addSubview(button)
+
+        window.makeKeyAndOrderFront(window)
+        window.level = 1
+    }
+}
+
+let app = NSApplication.sharedApplication()
+let controller = AppDelegate()
+
+app.delegate = controller
+app.run()
+
+&lt;/pre&gt;
+
+&lt;p&gt;&lt;em&gt;Exercise:&lt;/em&gt; Try Googling &lt;code class=&quot;highlighter-rouge&quot;&gt;ThickSquareBezelStyle&lt;/code&gt; you should be able to
+find all the available button styles. Try making small edits to the
+program to see what happens.&lt;/p&gt;
+
+&lt;h1 id=&quot;a-nameexperiment4a-experiment-4---a-window-with-a-text-field&quot;&gt;&lt;a name=&quot;experiment4&quot;&gt;&lt;/a&gt; experiment 4 - A window with a text field&lt;/h1&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/experiment4.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;This is actually a &lt;code class=&quot;highlighter-rouge&quot;&gt;TextView&lt;/code&gt; where I’ve set the background color to the window
+background color.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Exercise:&lt;/em&gt; Make a better or alternative version.&lt;/p&gt;
+
+&lt;pre&gt;
+// experiment4.swift
+// run with:
+//  $ swift experiment4.swift
+
+import Cocoa
+
+class AppDelegate: NSObject, NSApplicationDelegate
+{
+    let window = NSWindow()
+    
+    func applicationDidFinishLaunching(aNotification: NSNotification)
+    {
+        window.setContentSize(NSSize(width:600, height:200))
+        window.styleMask = NSTitledWindowMask | NSClosableWindowMask |
+                           NSMiniaturizableWindowMask |
+                           NSResizableWindowMask
+        
+        window.opaque = false
+        window.center();
+        window.title = &quot;Experiment 4&quot;
+
+        let text = NSTextView(frame: NSMakeRect(20, 150, 180, 30))
+
+        text.string = &quot;Some Text&quot;
+        text.editable = false
+        text.backgroundColor = window.backgroundColor
+        text.selectable = false
+        window.contentView!.addSubview(text)
+        
+        window.makeKeyAndOrderFront(window)
+        window.level = 1
+    }
+}
+
+let app = NSApplication.sharedApplication()
+let controller = AppDelegate()
+
+app.delegate = controller
+app.run()
+
+&lt;/pre&gt;
+
+&lt;h1 id=&quot;a-nameexperiment5a-experiment-5---connecting-the-button-to-the-text-field&quot;&gt;&lt;a name=&quot;experiment5&quot;&gt;&lt;/a&gt; Experiment 5 - Connecting the button to the text field&lt;/h1&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/experiment5.png&quot; /&gt;&lt;/p&gt;
+&lt;pre&gt;
+// experiment5.swift
+// run with:
+//  $ swift experiment5.swift
+
+import Cocoa
+
+class AppDelegate: NSObject, NSApplicationDelegate
+{
+    var text = NSTextView(frame: NSMakeRect(20, 150, 180, 30))
+    let window = NSWindow()
+
+    @IBAction func myAction(sender: AnyObject) {
+        text.string = &quot;Wow I&#39;ve been clicked&quot;
+    }
+    
+    func applicationDidFinishLaunching(aNotification: NSNotification)
+    {
+        window.setContentSize(NSSize(width:600, height:200))
+        window.styleMask = NSTitledWindowMask | NSClosableWindowMask |
+                           NSMiniaturizableWindowMask |
+                           NSResizableWindowMask
+        
+        window.opaque = false
+        window.center();
+        window.title = &quot;Experiment 5&quot;
+
+        let button = NSButton(frame: NSMakeRect(20, 100, 280, 30))
+        button.bezelStyle =  .ThickSquareBezelStyle
+        button.title = &quot;Click me and the text will change&quot;
+        button.target = self;
+        button.action = &quot;myAction:&quot; // Note the colon 
+        window.contentView!.addSubview(button)
+
+        text.string = &quot;Some Text&quot;
+        text.editable = false
+        text.backgroundColor = window.backgroundColor
+        text.selectable = false
+        window.contentView!.addSubview(text)
+        
+        window.makeKeyAndOrderFront(window)
+        window.level = 1
+    }
+}
+
+let app = NSApplication.sharedApplication()
+let controller = AppDelegate()
+
+app.delegate = controller
+app.run()
+
+&lt;/pre&gt;
+
+&lt;p&gt;This code is a bit of a mess, it had to be carefully constructed so
+that the variable &lt;code class=&quot;highlighter-rouge&quot;&gt;text&lt;/code&gt; was defined &lt;em&gt;before&lt;/em&gt; the button callback
+function &lt;code class=&quot;highlighter-rouge&quot;&gt;myAction&lt;/code&gt; (since &lt;code class=&quot;highlighter-rouge&quot;&gt;text&lt;/code&gt; is referred to in the body of the
+&lt;code class=&quot;highlighter-rouge&quot;&gt;myAction&lt;/code&gt; function).&lt;/p&gt;
+
+&lt;p&gt;This is a tad tricky and would indeed be impossible if the relationships
+between the controls could not be ordered (for example, it would be
+impossible to create two buttons &lt;code class=&quot;highlighter-rouge&quot;&gt;b1&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;b2&lt;/code&gt; which when clicked
+change the labels of the ``other’’ button) - I’ll solve this problem
+later by allowing the click action on a button to be defined &lt;em&gt;after&lt;/em&gt;
+the all the controls have been created.&lt;/p&gt;
+
+&lt;h1 id=&quot;a-nameexperiment6aexperiment-6---a-window-with-an-image&quot;&gt;&lt;a name=&quot;experiment6&quot;&gt;&lt;/a&gt;Experiment 6 - A window with an image&lt;/h1&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/experiment6.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The image is from Sydney Padua’s most
+excellent book &lt;a href=&quot;http://sydneypadua.com/2dgoggles/&quot;&gt;The Thrilling Adventures of Lovelace and Babbage&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;
+// experiment6.swift
+// run with:
+//  $ swift experiment6.swift
+
+import Cocoa
+
+class AppDelegate: NSObject, NSApplicationDelegate
+{
+    let window = NSWindow()
+    
+    func applicationDidFinishLaunching(aNotification: NSNotification)
+    {
+        window.setContentSize(NSSize(width:500, height:260))
+        window.styleMask = NSTitledWindowMask | NSClosableWindowMask |
+                           NSMiniaturizableWindowMask |
+                           NSResizableWindowMask
+        
+        window.opaque = false
+        window.center();
+        window.title = &quot;Experiment 6&quot;
+
+        // load and display an image
+        let path = &quot;../images/ada.png&quot;
+        let img = NSImage(contentsOfFile: path)!
+        let imgView = NSImageView(frame: NSMakeRect(10, 10, 480, 240))
+        imgView.image = img
+        window.contentView!.addSubview(imgView)
+        
+        window.makeKeyAndOrderFront(window)
+        window.level = 1
+    }
+}
+
+let app = NSApplication.sharedApplication()
+let controller = AppDelegate()
+
+app.delegate = controller
+app.run()
+
+&lt;/pre&gt;
+
+&lt;h1 id=&quot;part-2---abstractions-1&quot;&gt;Part 2 - Abstractions&lt;/h1&gt;
+
+&lt;p&gt;The goal of this part is to make a simple set of functions that hides
+most of the detail of making windows and adding controls to them.&lt;/p&gt;
+
+&lt;p&gt;The end result is going to be a  program fragment that looks like this:&lt;/p&gt;
+
+&lt;pre&gt;
+let entry1  = make_entry(window, (200, 80, 180, 30), &quot;1&quot;)
+let text1   = make_text(window, (20, 80, 180, 30), &quot;Hello from me&quot;)
+let text2   = make_text(window, (20, 120, 180, 30), &quot;Another field&quot;)
+let button1 = make_button(window, (120, 40, 80, 30), &quot;Click&quot;)
+     
+// make a click function
+let f1 = {() -&amp;gt; Bool in
+            text1.string = &quot;Callback worked&quot;
+            print(entry1.textStorage!.string)
+            text2.string = entry1.textStorage!.string
+            return true} //
+
+button1.onclick = f1
+&lt;/pre&gt;
+
+&lt;p&gt;All the details of making the controls will be hidden in functions
+like &lt;code class=&quot;highlighter-rouge&quot;&gt;make_text&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;make_button&lt;/code&gt; and so ``wiring up’’ the controls will
+be done by hooking callback functions on the buttons.&lt;/p&gt;
+
+&lt;p&gt;To do this needs some trickery, so in the sections that follow I’ll
+first explain the techniques and then refactor the code in the Part 1
+into a form that fits my purpose.&lt;/p&gt;
+
+&lt;p&gt;Firt I’ll look at parameter passing in Swift.&lt;/p&gt;
+
+&lt;h1 id=&quot;a-nameparametersa-parameter-naming-gobbledygook&quot;&gt;&lt;a name=&quot;parameters&quot;&gt;&lt;/a&gt; Parameter naming gobbledygook&lt;/h1&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Swift parameter passing is totally unobvious.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;I had expected that the ``obvious’’ way to declare and call a function
+would be something like this:&lt;/p&gt;
+
+&lt;pre&gt;
+// funcs1.swift
+
+func add(x:Int, y:Int, z:Int) -&amp;gt; Int {
+    return x+y+z
+}
+
+print(&quot;add=&quot;, add(1,2,3))
+
+
+&lt;/pre&gt;
+
+&lt;p&gt;But oh dear:&lt;/p&gt;
+
+&lt;pre&gt;
+swift funcs1.swift
+funcs1.swift:5:18: error: missing argument labels &#39;y:z:&#39; in call
+print(&quot;add=&quot;, add(1,2,3))
+                 ^
+                    y:  z: 
+&lt;/pre&gt;
+
+&lt;p&gt;A little research revealed that the correct way to call
+&lt;code class=&quot;highlighter-rouge&quot;&gt;add&lt;/code&gt; was to use the totally unobvious syntax:&lt;/p&gt;
+
+&lt;pre&gt;
+// funcs2.swift
+
+func add(x:Int, y:Int, z:Int) -&amp;gt; Int {
+    return x+y+z
+}
+
+print(&quot;add =&quot;, add(1,y:2,z:3))
+
+
+&lt;/pre&gt;
+
+&lt;p&gt;Inconsistent &lt;em&gt;moi&lt;/em&gt;? - the first parameter name is omitted. All the other parameters
+must be present in the same order as the definition. Great shades of objective C!&lt;/p&gt;
+
+&lt;p&gt;This horrible syntax works:&lt;/p&gt;
+
+&lt;pre&gt;
+&amp;gt; swift funcs2.swift
+add = 6
+&lt;/pre&gt;
+
+&lt;p&gt;Better though again unobvious is to prefix each argument in the function definition with
+underscore &lt;code class=&quot;highlighter-rouge&quot;&gt;_&lt;/code&gt; like this:&lt;/p&gt;
+
+&lt;pre&gt;
+// funcs3.swift
+
+func add(x:Int, _ y:Int, _ z:Int) -&amp;gt; Int {
+    return x+y+z
+}
+
+print(&quot;add=&quot;, add(1,2,3))
+
+
+&lt;/pre&gt;
+
+&lt;p&gt;Now at least we can call the function in the same way as we’d do in
+just about every other programming language under the sun.&lt;/p&gt;
+
+&lt;h1 id=&quot;a-button-callback-function&quot;&gt;A button callback function&lt;/h1&gt;
+
+&lt;p&gt;To make a callback function for a button we have to step back and then understand how
+closures work, and then we can make  a callback function.&lt;/p&gt;
+
+&lt;p&gt;I’ll start by defining a simple class with an instance variable:&lt;/p&gt;
+
+&lt;pre&gt;
+class Demo {
+    var firstname: String  = &quot;fred&quot;
+}
+
+let x = Demo()
+print(x.firstname)
+x.firstname = &quot;joe&quot;
+print(x.firstname)
+
+&lt;/pre&gt;
+
+&lt;p&gt;This should look familiar to you if you’ve programmed in an OO language.&lt;/p&gt;
+
+&lt;p&gt;Running this we see the following:&lt;/p&gt;
+
+&lt;pre&gt;
+&amp;gt; swift classes1.swift
+fred
+joe
+&lt;/pre&gt;
+
+&lt;p&gt;Now I’ll do the same things with a functional argument:&lt;/p&gt;
+
+&lt;pre&gt;
+class Demo {
+    var call: () -&amp;gt; Bool = {() -&amp;gt; Bool in true}
+}
+
+let x = Demo()
+print(x.call())
+var i = 10
+var f = {() -&amp;gt; Bool in print(&quot;hello I&#39;m a callback and i =&quot;, i); return true}
+x.call = f
+print(x.call())
+i = 20
+print(x.call())
+
+&lt;/pre&gt;
+
+&lt;p&gt;Running this:&lt;/p&gt;
+
+&lt;pre&gt;
+true
+hello I&#39;m a callback and i = 10
+true
+hello I&#39;m a callback and i = 20
+true
+&lt;/pre&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Which to my mind is horrendous. The closure &lt;code class=&quot;highlighter-rouge&quot;&gt;f&lt;/code&gt; does not capture the value of
+&lt;code class=&quot;highlighter-rouge&quot;&gt;i&lt;/code&gt; at the time when &lt;code class=&quot;highlighter-rouge&quot;&gt;f&lt;/code&gt; is defined, changing &lt;code class=&quot;highlighter-rouge&quot;&gt;i&lt;/code&gt; &lt;em&gt;after&lt;/em&gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;f&lt;/code&gt; was defined
+make nonsense of the idea of a closure.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;If we are extremely careful we &lt;em&gt;can&lt;/em&gt; use this mechanism to add a callback facility to
+buttons. We’ll do this and make a custom class, by inheriting the properties
+of &lt;code class=&quot;highlighter-rouge&quot;&gt;NSButton&lt;/code&gt; and adding our own callback routine:&lt;/p&gt;
+
+&lt;pre&gt;
+class MyButton: NSButton {
+    var onclick: () -&amp;gt; Bool = {() -&amp;gt; Bool in true}
+
+    func myclick(sender: AnyObject) {
+        self.onclick()
+    }
+}
+&lt;/pre&gt;
+
+&lt;p&gt;and to make a button I call &lt;code class=&quot;highlighter-rouge&quot;&gt;make_button&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;
+func make_button(window: NSWindow,
+                 _ size:(x:Int, y:Int, width:Int, ht:Int),
+                 _ title:String
+) -&amp;gt; MyButton {
+    let button = MyButton()
+    button.frame = NSMakeRect(CGFloat(size.x),     CGFloat(size.y),
+                              CGFloat(size.width), CGFloat(size.ht))
+    
+    button.title = title
+    button.bezelStyle =  .ThickSquareBezelStyle
+    button.target = button
+    button.action = &quot;myclick:&quot;
+    window.contentView!.addSubview(button)
+    return button
+}
+&lt;/pre&gt;
+
+&lt;p&gt;Now we can make some objects and add an &lt;code class=&quot;highlighter-rouge&quot;&gt;onclick&lt;/code&gt; callback to the buttons (just like
+jquery) - the pseudo code to do this will look something like this:&lt;/p&gt;
+
+&lt;pre&gt;
+    ... create a window ...
+    text1  = make_text(window, Size, Text)
+    entry1 = make_entry(window, Size, Default)
+    button1 = make_button(window, Size, Text)
+    F = ... a function involving text1, entry1, ... etc.
+    button1.onclick = F
+&lt;/pre&gt;
+
+&lt;h1 id=&quot;a-namecombineda-putting-it-all-together&quot;&gt;&lt;a name=&quot;combined&quot;&gt;&lt;/a&gt; Putting it all together&lt;/h1&gt;
+
+&lt;p&gt;Now let’s put it all together:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/combined1.png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The code is rather long - but I was able to pull out most of
+the mess into simple reusable functionbs.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;The code to create the window and add controls was easy
+and Xcode was not used.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;
+// combined1.swift
+// run with:
+//  $ swift combined1.swift
+
+import Cocoa
+
+class MyButton: NSButton {
+    var onclick: () -&amp;gt; Bool = {() -&amp;gt; Bool in true}
+
+    func myclick(sender: AnyObject) {
+        self.onclick()
+    }
+}
+
+func make_button(window: NSWindow,
+                 _ size:(x:Int, y:Int, width:Int, ht:Int),
+                 _ title:String
+) -&amp;gt; MyButton {
+    let button = MyButton()
+    button.frame = NSMakeRect(CGFloat(size.x),     CGFloat(size.y),
+                              CGFloat(size.width), CGFloat(size.ht))
+    
+    button.title = title
+    button.bezelStyle =  .ThickSquareBezelStyle
+    button.target = button
+    button.action = &quot;myclick:&quot;
+    window.contentView!.addSubview(button)
+    return button
+}
+
+func make_entry(window:NSWindow,
+              _ size:(x:Int, y:Int, width:Int, ht:Int),
+              _ str: String
+     ) -&amp;gt; NSTextView {
+    let text = NSTextView(frame: NSMakeRect(10, 140, 40, 20))
+    text.frame = NSMakeRect(CGFloat(size.x),     CGFloat(size.y),
+                              CGFloat(size.width), CGFloat(size.ht))
+    
+    text.string = str
+    text.editable = true
+    text.selectable = true
+    window.contentView!.addSubview(text)
+    return text
+}
+
+func make_text(window:NSWindow,
+              _ size:(x:Int, y:Int, width:Int, ht:Int),
+              _ str: String
+     ) -&amp;gt; NSTextView {
+    let text = NSTextView(frame: NSMakeRect(10, 140, 40, 20))
+    text.frame = NSMakeRect(CGFloat(size.x),     CGFloat(size.y),
+                              CGFloat(size.width), CGFloat(size.ht))
+    
+    text.string = str
+    text.editable = false
+    text.backgroundColor = window.backgroundColor
+    text.selectable = false
+    window.contentView!.addSubview(text)
+    return text
+}
+
+func make_window(w: Int, _ h: Int, _ title: String) -&amp;gt; NSWindow {
+    let window = NSWindow()
+    window.setContentSize(NSSize(width:w, height:h))
+    window.styleMask = NSTitledWindowMask | NSClosableWindowMask |
+        NSMiniaturizableWindowMask | NSResizableWindowMask
+    
+    window.opaque = false
+    window.center();
+    window.title = title
+    return window
+}
+
+class AppDelegate: NSObject, NSApplicationDelegate
+{
+    let window = make_window(400, 200, &quot;My title&quot;)
+
+    func applicationDidFinishLaunching(aNotification: NSNotification)
+    {
+        let entry1  = make_entry(window, (200, 80, 180, 30), &quot;1&quot;)
+        let text1   = make_text(window, (20, 80, 180, 30), &quot;Hello from me&quot;)
+        let text2   = make_text(window, (20, 120, 180, 30), &quot;Another field&quot;)
+        let button1 = make_button(window, (120, 40, 80, 30), &quot;Click&quot;)
+        
+        // make a click function
+        let f1 = {() -&amp;gt; Bool in
+              text1.string = &quot;Callback worked&quot;
+              print(entry1.textStorage!.string)
+              text2.string = entry1.textStorage!.string
+              return true} //
+
+        button1.onclick = f1
+        
+        window.makeKeyAndOrderFront(window)
+        window.makeMainWindow()
+        window.level = 1
+    }
+}
+
+let app = NSApplication.sharedApplication()
+app.setActivationPolicy(.Regular)
+
+let controller = AppDelegate()
+
+app.delegate = controller
+app.run()
+
+&lt;/pre&gt;
+
+&lt;h1 id=&quot;a-hrefopena-open-problems&quot;&gt;&lt;a href=&quot;open&quot;&gt;&lt;/a&gt; Open Problems&lt;/h1&gt;
+
+&lt;p&gt;I had hoped to write:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  let window = make_window(400, 200, &quot;My Title&quot;)
+  let entry1 = make_text(window, ...)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;But for some reason this does not work, so I have to move the call to &lt;code class=&quot;highlighter-rouge&quot;&gt;make_window&lt;/code&gt;
+to the initialisation part of the class. I haven’t a clue why.&lt;/p&gt;
+
+&lt;h1 id=&quot;a-nameswiftfpla-swift-as-a-functional-language&quot;&gt;&lt;a name=&quot;swift_fpl&quot;&gt;&lt;/a&gt; Swift as a functional language&lt;/h1&gt;
+
+&lt;p&gt;The bad&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Verbose syntax - types are declared rather than inferred&lt;/li&gt;
+  &lt;li&gt;Mutable data types&lt;/li&gt;
+  &lt;li&gt;Weird mix of Classes, Structs and functions&lt;/li&gt;
+  &lt;li&gt;No concurrency model&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The good&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;It has a REPL&lt;/li&gt;
+  &lt;li&gt;I can write apps &lt;em&gt;outside&lt;/em&gt; XCode&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;I &lt;em&gt;like&lt;/em&gt; the syntax of exceptions if the function X can raise an exception
+then one must qualify call with ! ? or use an explicit try syntax&lt;/p&gt;
+
+&lt;p&gt;In Erlang term the use of ! and ? is easy to explain&lt;/p&gt;
+
+&lt;p&gt;Imagine an Erlang function f(X) that returns {ok, Val} when &lt;code class=&quot;highlighter-rouge&quot;&gt;Val = f(X)&lt;/code&gt; or
+otherwise &lt;code class=&quot;highlighter-rouge&quot;&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;eror,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;Why&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt; if the function could not compute a value for some argument &lt;code class=&quot;highlighter-rouge&quot;&gt;X&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;The Swift compiler convention if implemented in Erlang would require &lt;code class=&quot;highlighter-rouge&quot;&gt;f(X)&lt;/code&gt; to be
+evaluated within a &lt;code class=&quot;highlighter-rouge&quot;&gt;catch&lt;/code&gt; statement, like this:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; case (catch f(X)) of
+ 	  {ok, Val} -&amp;gt;
+      ...;
+  {error, Why} -&amp;gt;
+      ...
+ end
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;otherwise an error would be indicted.&lt;/p&gt;
+
+&lt;p&gt;If we were absolutely sure that &lt;code class=&quot;highlighter-rouge&quot;&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;ok,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;Val&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt; would be returned we’d write:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; Val = f!(X)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Which is equivalent to the Erlang&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;ok,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;Val&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;f(X)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The ? convention unwraps &lt;code class=&quot;highlighter-rouge&quot;&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;ok,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;Val&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt; into &lt;code class=&quot;highlighter-rouge&quot;&gt;Val&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;error,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;Why&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt; into &lt;code class=&quot;highlighter-rouge&quot;&gt;nil&lt;/code&gt; in Swift.&lt;/p&gt;
+
+&lt;h1 id=&quot;a-namecommentsa-comments-on-swift&quot;&gt;&lt;a name=&quot;comments&quot;&gt;&lt;/a&gt; Comments on Swift&lt;/h1&gt;
+
+&lt;p&gt;I’ve been programming Swift for a couple of weeks now. Do I like it?&lt;/p&gt;
+
+&lt;p&gt;Swift is widely marketed as a functional language - so it’s
+interesting to see how well it shapes up as a functional programming
+language - or at least to see how compares to other FPLs that I am
+familiar with.&lt;/p&gt;
+
+&lt;p&gt;Sequential FPLs gain a lot of power from the mechanisms they offer.
+The offer (in varying degrees) type systems that (claim to) prevent
+(some run-time) errors. Pattern matching syntaxes  make the
+programs very short. Immutable data structures simplifies
+reasoning about the programming and debugging. Higher order functions
+add to power of the language be treating functions as first
+class data.&lt;/p&gt;
+
+&lt;p&gt;Where Swift shines it is in the integratiion with the underlying Objective C
+frameworks on the Mac. To this extent Swift programming is a much
+more attractive proposition than programming in C or Objective-C but
+but this is not because Swift is a good language rather that C and
+objective-C are bad languages for writing user-space application in.&lt;/p&gt;
+
+&lt;p&gt;The C family of languages (C, C++, Objective-C) are fine for writing
+operating system but not for writing the majority of user-space
+applications - here things like Python or visual-basic are far better.&lt;/p&gt;
+
+&lt;p&gt;Swift is a good replacement for
+contexts in which Objective-C would be used.&lt;/p&gt;
+
+&lt;p&gt;If you’re coming form Erlang/Haskell world you’ll think &lt;code class=&quot;highlighter-rouge&quot;&gt;Swift is
+verbose and a bit of a mess&lt;/code&gt; but if you’re coming from Objective-C
+you’ll think ``Swift is concise and elegant’’&lt;/p&gt;
+
+&lt;p&gt;In Swift I really miss pattern matching and I dislike having to
+excessivly declare types.&lt;/p&gt;
+
+&lt;p&gt;The lack of a decent concurrency model in Cocoa and Objective-C is
+reflected in the Swift code - which although it works is pretty
+horrible.&lt;/p&gt;
+
+&lt;h1 id=&quot;a-namewhyiusetexta-textual-vs-interactive-interfaces&quot;&gt;&lt;a name=&quot;why_i_use_text&quot;&gt;&lt;/a&gt; Textual vs Interactive interfaces&lt;/h1&gt;
+
+&lt;p&gt;I’ve said that I don’t like Xcode so I’ve added some reasons why.&lt;/p&gt;
+
+&lt;p&gt;Two common ways to create programs are:&lt;/p&gt;
+
+&lt;p&gt;1) We create a text file using a text editor.&lt;/p&gt;
+
+&lt;p&gt;2) We create a program by clicking on buttons and dragging objects in
+an IDE (Integrated Development Environment) (for example, Xcode).&lt;/p&gt;
+
+&lt;p&gt;In the first method we don’t usually have to tell the user how to
+create a text file with given content. It suffices to give a listing
+of the file and assume that the user can create the file using an
+editor of their choice. It is totally irrelevant &lt;em&gt;how&lt;/em&gt; the file is
+created the only thing that matters is that the content of the file is
+correct.&lt;/p&gt;
+
+&lt;p&gt;In order to understand the program only the content of the file must
+be understood. We can examine it line by line, asking if we understand
+what the lines of code mean.&lt;/p&gt;
+
+&lt;p&gt;Using an IDE is horribly different - describing how to interact with a
+an IDE is very difficulty to do in text. Usually we have to &lt;em&gt;show&lt;/em&gt; how to
+do this typically with a YouTube video, or in a mixture of text and images.&lt;/p&gt;
+
+&lt;p&gt;An excellent example of the difficulty of describing how to do something
+is can be found in &lt;a href=&quot;http://swiftrien.blogspot.se/2015/11/swift-example-binding-nstableview-to.html&quot;&gt;Notes from a Swift Developer&lt;/a&gt; – in this example the author uses
+a mixture of text and screenshots to describe how to build an application.
+Text alone does not work.&lt;/p&gt;
+
+&lt;p&gt;The application described in the link above has a simple layout which could be &lt;em&gt;easily&lt;/em&gt;
+described in text (for example as an html table)&lt;/p&gt;
+
+&lt;p&gt;Unfortunately when we try to reproduce what we’ve seen in a video or
+follow a description that is a mixture of text and images, we find that
+the description almost invariably describes a different version of the
+IDE than the one we have available.&lt;/p&gt;
+
+&lt;p&gt;Textual descriptions of the form ``and now click on the doggle control
+icon’’ are pretty useless if you haven’t got a clue what the doggle
+control icon looks like.&lt;/p&gt;
+
+&lt;p&gt;Worse - when the design process in an interface builder is finished -
+all the correct buttons have been clicked the resulting ``state’’ of
+the system (ie the program) is not available in a textual format so we
+cannot ask, line-by-line what the individual statement in the
+description mean.&lt;/p&gt;
+
+&lt;p&gt;As you might gather - I hate IDEs like Xcode and Eclipse - I like to
+totally understand every line of code I wrote - my method of
+understanding code is always the same and independent of
+language. Find an example program that works then reduce lines until I
+can reduce no more making a minimal example that works - then
+understand every line.&lt;/p&gt;
+
+&lt;p&gt;This is a slow process - but in the long run faster than clicking at
+random in a IDE until your program works or Googling like crazy to see
+if somebody else has a canned solution to your problem.&lt;/p&gt;
+
+&lt;p&gt;I get the impression that developers think that developing in a IDE is
+somehow ``quicker’’ than developing with no such tools. As far as I can see this
+is false. Once I have a working program in a given directory structure
+I can make a clone of this in a single terminal command (&lt;code class=&quot;highlighter-rouge&quot;&gt;cp -R ...&lt;/code&gt;) and then
+I’m off in my trusty editor.&lt;/p&gt;
+
+&lt;p&gt;Following instructions like&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;enter this … into a file called …&lt;/li&gt;
+  &lt;li&gt;type the command … into the shell&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;are easy to obey and pass the &lt;code class=&quot;highlighter-rouge&quot;&gt;telephone test&#39;&#39; (ie can we describe exactly what to do
+over a telephone) - no images or videos are needed to&lt;/code&gt;show’’ the users what to do.&lt;/p&gt;
+
+&lt;p&gt;Once upon a time we could describe how to do something using text only.
+Then we used text and images. Now it needs videos.&lt;/p&gt;
+
+&lt;p&gt;Asking questions about text was easy - &lt;code class=&quot;highlighter-rouge&quot;&gt;what did you mean in paragraph 4&#39;&#39;
+now we&#39;d have to ask&lt;/code&gt;what did you do 41.6-41.8 seconds into your video’’
+watching somebody doing something in Xcode 200.7 in a video and preforming slow
+motion playbacks of selected sections is not my idea of programming.&lt;/p&gt;
+
+&lt;h1 id=&quot;references&quot;&gt;References&lt;/h1&gt;
+
+&lt;p&gt;I’ve found several documents which helped me - none of them solves the problem
+I’m try to solve but they have all provided clues to the solution:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;http://czak.pl/2015/09/23/single-file-cocoa-app-with-swift.html&lt;/li&gt;
+  &lt;li&gt;https://github.com/Eonil/CocoaProgrammaticHowtoCollection&lt;/li&gt;
+  &lt;li&gt;https://forums.developer.apple.com/thread/5137&lt;/li&gt;
+  &lt;li&gt;http://stackoverflow.com/questions/26609778/nsopenpanel-in-swift-how-to-open&lt;/li&gt;
+  &lt;li&gt;https://objectivec2swift.com/#/converter/code&lt;/li&gt;
+  &lt;li&gt;http://practicalswift.com/&lt;/li&gt;
+  &lt;li&gt;https://github.com/tylergaw/js-osx-app-examples&lt;/li&gt;
+  &lt;li&gt;http://www.raywenderlich.com/82046/introduction-to-os-x-tutorial-core-controls-and-swift-part-1&lt;/li&gt;
+  &lt;li&gt;http://commandlinefanatic.com/cgi-bin/showarticle.cgi?article=art024&lt;/li&gt;
+  &lt;li&gt;http://mediautopia.weebly.com/swift-1-intro.html&lt;/li&gt;
+  &lt;li&gt;http://dev.iachieved.it/iachievedit/using-swift-as-a-scripting-language/&lt;/li&gt;
+  &lt;li&gt;http://commandlinefanatic.com/cgi-bin/showarticle.cgi?article=art024&lt;/li&gt;
+  &lt;li&gt;http://www.knowstack.com/swift-programming-an-introduction/&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;help-and-tips-wanted&quot;&gt;Help and tips wanted&lt;/h1&gt;
+
+&lt;p&gt;Does anynody know:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;How can I create two or more windows? - I seem to only be able to create a single window&lt;/li&gt;
+  &lt;li&gt;How can I make a socket client?&lt;/li&gt;
+  &lt;li&gt;How can I make a socket server?&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Solutions should be single Swift files that can be run from the terminal.&lt;/p&gt;
+
+&lt;h1 id=&quot;the-future&quot;&gt;The future&lt;/h1&gt;
+
+&lt;p&gt;Articles like this are never finished only started …&lt;/p&gt;
+
+</description>
+				<pubDate>Mon, 04 Jan 2016 00:00:00 +0100</pubDate>
+				<link>http://joearms.github.com/2016/01/04/fun-with-swift.html</link>
+				<guid isPermaLink="true">http://joearms.github.com/2016/01/04/fun-with-swift.html</guid>
+			</item>
+		
+	</channel>
+</rss>

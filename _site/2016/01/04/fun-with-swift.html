@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="author" content="Joe Armstrong" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    
+    <title>Fun with Swift</title>
+    
+    <!-- Bootstrap -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet" media="screen" />
+    <link href="/css/bootstrap-responsive.min.css" rel="stylesheet" />
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css" type="text/css" />
+    <!-- RSS -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml" />
+    <link rel="stylesheet" href="/css/screen.css" type="text/css" 
+	  media="screen, projection" />
+  </head>
+
+  <body>
+    <div class="navbar">
+      <div class="navbar-inner">
+	<a class="brand" href="/index.html">Joe Armstrong - Erlang and other stuff</a>
+	<ul class="nav">
+	  <li><a href="/index.html">Home</a></li>
+	  <li><a href="/archive.html">Archive</a></li>
+	  <li><a href="/resources.html">Resources</a></li>
+	  <li><a href="/installing.html">Installing</a></li>
+	  <li><a href="/links.html">Links</a></li>
+	  <li><a href="https://github.com/joearms/joearms.github.com/">Source</a></li>
+	</ul>
+      </div>
+    </div>
+    
+    <div class="customize">
+      <div class="row-fluid">
+	<div class="span7 offset1">
+	  <div>
+  <div id="title">
+  
+    <h1>Fun with Swift</h1>
+    <span class="meta">04 Jan 2016</span>
+    <p></p>
+  </div>
+
+  <div id="content">
+    <p>I don’t know where to start this. It started off as my post turkey
+festive season relaxation and just gets longer and longer.</p>
+
+<p>I thought to myself <code class="highlighter-rouge">I'll try and make a GUI in Swift using only
+emacs and the Swift REPL'' - I Googled a bit (as one does these days)
+and found an amazing bit of code in [Swift from the command
+line](https://forums.developer.apple.com/thread/5137). 
+</code>Jens’’ gave the following code example:</p>
+
+<pre>
+#!/usr/bin/swift  
+
+import WebKit  
+let application = NSApplication.sharedApplication()  
+application.setActivationPolicy(NSApplicationActivationPolicy.Regular)  
+let window = NSWindow(contentRect: NSMakeRect(0, 0, 960, 720),
+                      styleMask: NSTitledWindowMask | NSClosableWindowMask |
+                                 NSMiniaturizableWindowMask,
+                      backing: .Buffered, `defer`: false)  
+window.center()  
+window.title = "Minimal Swift WebKit Browser"  
+window.makeKeyAndOrderFront(window)  
+class WindowDelegate: NSObject, NSWindowDelegate {  
+    func windowWillClose(notification: NSNotification) {  
+        NSApplication.sharedApplication().terminate(0)  
+    }  
+}  
+let windowDelegate = WindowDelegate()  
+window.delegate = windowDelegate  
+class ApplicationDelegate: NSObject, NSApplicationDelegate {  
+    var _window: NSWindow  
+    init(window: NSWindow) {  
+        self._window = window  
+    }  
+    func applicationDidFinishLaunching(notification: NSNotification) {  
+        let webView = WebView(frame: self._window.contentView!.frame)  
+        self._window.contentView!.addSubview(webView)  
+        webView.mainFrame.loadRequest(NSURLRequest(URL: NSURL(string: "https://forums.developer.apple.com/thread/5137")!))  
+    }  
+}  
+let applicationDelegate = ApplicationDelegate(window: window)  
+application.delegate = applicationDelegate  
+application.activateIgnoringOtherApps(true)  
+application.run()  
+
+</pre>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="cp">#!/usr/bin/swift  </span>
+
+<span class="kd">import</span> <span class="kt">WebKit</span>  
+<span class="k">let</span> <span class="nv">application</span> <span class="o">=</span> <span class="kt">NSApplication</span><span class="o">.</span><span class="nf">sharedApplication</span><span class="p">()</span>  
+<span class="n">application</span><span class="o">.</span><span class="nf">setActivationPolicy</span><span class="p">(</span><span class="kt">NSApplicationActivationPolicy</span><span class="o">.</span><span class="kt">Regular</span><span class="p">)</span>  
+<span class="k">let</span> <span class="nv">window</span> <span class="o">=</span> <span class="kt">NSWindow</span><span class="p">(</span><span class="nv">contentRect</span><span class="p">:</span> <span class="kt">NSMakeRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">960</span><span class="p">,</span> <span class="mi">720</span><span class="p">),</span>
+                      <span class="nv">styleMask</span><span class="p">:</span> <span class="kt">NSTitledWindowMask</span> <span class="o">|</span> <span class="kt">NSClosableWindowMask</span> <span class="o">|</span>
+                                 <span class="kt">NSMiniaturizableWindowMask</span><span class="p">,</span>
+                      <span class="nv">backing</span><span class="p">:</span> <span class="o">.</span><span class="kt">Buffered</span><span class="p">,</span> <span class="err">`</span><span class="k">defer</span><span class="err">`</span><span class="p">:</span> <span class="kc">false</span><span class="p">)</span>  
+<span class="n">window</span><span class="o">.</span><span class="nf">center</span><span class="p">()</span>  
+<span class="n">window</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="s">"Minimal Swift WebKit Browser"</span>  
+<span class="n">window</span><span class="o">.</span><span class="nf">makeKeyAndOrderFront</span><span class="p">(</span><span class="n">window</span><span class="p">)</span>  
+<span class="kd">class</span> <span class="kt">WindowDelegate</span><span class="p">:</span> <span class="kt">NSObject</span><span class="p">,</span> <span class="kt">NSWindowDelegate</span> <span class="p">{</span>  
+    <span class="kd">func</span> <span class="nf">windowWillClose</span><span class="p">(</span><span class="nv">notification</span><span class="p">:</span> <span class="kt">NSNotification</span><span class="p">)</span> <span class="p">{</span>  
+        <span class="kt">NSApplication</span><span class="o">.</span><span class="nf">sharedApplication</span><span class="p">()</span><span class="o">.</span><span class="nf">terminate</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  
+    <span class="p">}</span>  
+<span class="p">}</span>  
+<span class="k">let</span> <span class="nv">windowDelegate</span> <span class="o">=</span> <span class="kt">WindowDelegate</span><span class="p">()</span>  
+<span class="n">window</span><span class="o">.</span><span class="n">delegate</span> <span class="o">=</span> <span class="n">windowDelegate</span>  
+<span class="kd">class</span> <span class="kt">ApplicationDelegate</span><span class="p">:</span> <span class="kt">NSObject</span><span class="p">,</span> <span class="kt">NSApplicationDelegate</span> <span class="p">{</span>  
+    <span class="k">var</span> <span class="nv">_window</span><span class="p">:</span> <span class="kt">NSWindow</span>  
+    <span class="nf">init</span><span class="p">(</span><span class="nv">window</span><span class="p">:</span> <span class="kt">NSWindow</span><span class="p">)</span> <span class="p">{</span>  
+        <span class="k">self</span><span class="o">.</span><span class="n">_window</span> <span class="o">=</span> <span class="n">window</span>  
+    <span class="p">}</span>  
+    <span class="kd">func</span> <span class="nf">applicationDidFinishLaunching</span><span class="p">(</span><span class="nv">notification</span><span class="p">:</span> <span class="kt">NSNotification</span><span class="p">)</span> <span class="p">{</span>  
+        <span class="k">let</span> <span class="nv">webView</span> <span class="o">=</span> <span class="kt">WebView</span><span class="p">(</span><span class="nv">frame</span><span class="p">:</span> <span class="k">self</span><span class="o">.</span><span class="n">_window</span><span class="o">.</span><span class="n">contentView</span><span class="o">!.</span><span class="n">frame</span><span class="p">)</span>  
+        <span class="k">self</span><span class="o">.</span><span class="n">_window</span><span class="o">.</span><span class="n">contentView</span><span class="o">!.</span><span class="nf">addSubview</span><span class="p">(</span><span class="n">webView</span><span class="p">)</span>  
+        <span class="n">webView</span><span class="o">.</span><span class="n">mainFrame</span><span class="o">.</span><span class="nf">loadRequest</span><span class="p">(</span><span class="kt">NSURLRequest</span><span class="p">(</span><span class="kt">URL</span><span class="p">:</span> <span class="kt">NSURL</span><span class="p">(</span><span class="nv">string</span><span class="p">:</span> <span class="s">"https://forums.developer.apple.com/thread/5137"</span><span class="p">)</span><span class="o">!</span><span class="p">))</span>  
+    <span class="p">}</span>  
+<span class="p">}</span>  
+<span class="k">let</span> <span class="nv">applicationDelegate</span> <span class="o">=</span> <span class="kt">ApplicationDelegate</span><span class="p">(</span><span class="nv">window</span><span class="p">:</span> <span class="n">window</span><span class="p">)</span>  
+<span class="n">application</span><span class="o">.</span><span class="n">delegate</span> <span class="o">=</span> <span class="n">applicationDelegate</span>  
+<span class="n">application</span><span class="o">.</span><span class="nf">activateIgnoringOtherApps</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span>  
+<span class="n">application</span><span class="o">.</span><span class="nf">run</span><span class="p">()</span>  </code></pre></figure>
+
+<p>Which when I stuck in a file called <code class="highlighter-rouge">browser.swift</code> and gave the shell command
+`swift browser.swift’  up popped the following window:</p>
+
+<p><img src="/images/browser.png" /></p>
+
+<p>I later found very similar code with more explanation at
+http://practicalswift.com/.</p>
+
+<p>My immediate reaction was ``Golly – Swift might just be usable’’ and
+I was hooked.  I’d also read that Swift was a functional language
+which again piqued my interest.</p>
+
+<p>In the next week or so I found that Swift was certainly not a pure
+functional language but that it was whole lot better than
+Objective-C. Above all it had a REPL and I could program outside Xcode
+(which I hate). I can use my dear and very old friend emacs whose
+commands are located somewhere near the base of my spine.</p>
+
+<h1 id="how-we-programmed-guis-in-the-good-ol-days">How we programmed GUIs in the good ‘ol days</h1>
+
+<p>Once upon a time GUIs were windows containing a few buttons and some
+text. When you clicked the buttons the text changed. We were easily amused
+in the old days.</p>
+
+<p>Writing a program to create a GUI was really easy.  I’d write
+some code that looked something like this:</p>
+
+<pre>
+window = make_window(Width, Height, Title)
+b1 = make_button(window, X, Y, Width, Ht, Label)
+e1 = make_entry(window, X, Y, Width, Ht)
+l1 = make_label(window, X, Y, Width, Ht)
+b1.onclick = function
+                X = read(e1)
+                write(l1, X)
+             end
+</pre>
+
+<p>I’d use my favorite text editor, stick this in a file <code class="highlighter-rouge">my_gui.bas</code> and
+say the magic words:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&gt; basic my_gui.bas
+</code></pre>
+</div>
+
+<p>Then the wife, kids, cats, dogs and the entire neighborhood would
+rejoice a GUI would appear as if by magic.</p>
+
+<p>I’d hardly call this programming, all we had to do was figure out the
+positions and labels on the objects and type them into a computer.</p>
+
+<p>As time went on tools were built to ``assist’’ writing such programs
+as if it were too difficult to figure out the coordinates of where
+those pesky little buttons should go.  Figuring out the coordinates
+could be done in a drag and drop interface and we could offer the user
+a vast library of widgets that could be used - not just buttons and
+text entries, but sliders and date selection widgets and goodness-knows-what-they-do
+selectors.</p>
+
+<p>The languages to program GUIs became more complicated, and the number
+of functions available to manipulate the widgets became so large that
+nobody could ever remember them all.</p>
+
+<p>So we made integrated IDEs that hid thousands of commands from the
+users and which offered hundred of widgets and could be used to build
+amazing shiny things.</p>
+
+<p>But the tools became larger and larger to the point of unusability and
+the simple ways of making a GUI which a beginner programmer could
+knock up in a few minutes were lost.</p>
+
+<p>I’m an old-style programmer. I like to understand <em>every</em> line of code
+I write.  I like to write my code in files and study the results.</p>
+
+<blockquote>
+  <p>This is my attempt to make an old-style GUI in Swift.</p>
+</blockquote>
+
+<p>All the code for the GUI must be in a single Swift file which I’ll
+launch from the terminal. I’ll use only the Apple Swift compiler, Emacs
+and Make.</p>
+
+<p>I’m a beginner at Swift and Cocoa - I’ve asked a number of questions
+in the article and I hope that some of you who read this can provide
+answers to these questions. All the source is on-line and so you can
+send me pull requests or add comments at the end of the article.</p>
+
+<p>Another goal is to shorten and/or clarify the programs. So if you can
+remove a line of code which you feel is irrelevant, or improve the
+explanation please tell me.</p>
+
+<p>Brevity of expression is not a primary goal - since I’d favor slightly
+more verbose code if it is clearer than extremely terse code. The goal
+is clear obviously correct code and code patterns that are easy to
+scale and reproduce.</p>
+
+<p>To help you navigate you can jump straight to the code or read the
+entire article from start to finish:</p>
+
+<h1 id="part-1---primitive-functions">Part 1 - primitive functions</h1>
+
+<ul>
+  <li><a href="#experiment0">experiment 0 - Not really a window</a></li>
+  <li><a href="#experiment1">experiment 1 - A minimal window</a></li>
+  <li><a href="#experiment2">experiment 2 - A window with specific size and a title </a></li>
+  <li><a href="#experiment3">experiment 3 - A window with a button </a></li>
+  <li><a href="#experiment4">experiment 4 - A window with a text field</a></li>
+  <li><a href="#experiment5">experiment 5 - Connecting the button to a text field</a></li>
+  <li><a href="#experiment6">experiment 6 - A window with an image</a></li>
+</ul>
+
+<h1 id="part-2---abstractions">Part 2 - Abstractions</h1>
+
+<ul>
+  <li><a href="#parameters">Parameter naming gobbledygook</a></li>
+  <li><a href="#combined">Putting it all together</a></li>
+</ul>
+
+<h1 id="part-3---philosophy">Part 3 - Philosophy</h1>
+
+<ul>
+  <li><a href="#swift_fpl">Swift as a functional language</a></li>
+  <li><a href="#why_i_use_text">Why I use text and not XCode</a></li>
+  <li><a href="#references">References</a></li>
+</ul>
+
+<p>The programs have been tested on OS X Yosemite version 10.10.5 with
+Xcode version 7.2 and Swift version 2.1.</p>
+
+<p>Each program is in a single file
+called <code class="highlighter-rouge">experiment1.swift</code>, <code class="highlighter-rouge">experiment2.swift</code> and so on.</p>
+
+<p>The source can be found <a href="https://github.com/joearms/joearms.github.com/_posts/swift">here</a>.</p>
+
+<h1 id="running-and-compiling-the-examples">Running and compiling the examples</h1>
+
+<p>To run the an example in a terminal give the command</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>swift experiment&lt;K&gt;.swift
+</code></pre>
+</div>
+
+<p>To compile <code class="highlighter-rouge">example&lt;K&gt;</code> give the command:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>switftc -o experiment&lt;K&gt; experiment&lt;K&gt;.swift
+</code></pre>
+</div>
+
+<p>This will generate an executable called <code class="highlighter-rouge">experiment&lt;K&gt;</code></p>
+
+<h1 id="part-1---primitive-functions-1">Part 1 - Primitive Functions</h1>
+
+<h1 id="a-nameexperiment0a-experiment-0---how-not-to-make-a-window"><a name="experiment0"></a> Experiment 0 - How not to make a window</h1>
+
+<p>If we start Xcode, do <code class="highlighter-rouge">File-&gt;New-&gt;Project</code> and select <code class="highlighter-rouge">Cocoa Application</code>
+then set the language to <code class="highlighter-rouge">Swift</code> then Xcode will create a file called
+<code class="highlighter-rouge">ApplicationDelegate.swift</code> with the following content:</p>
+
+<pre>
+//
+//  AppDelegate.swift
+//  Project
+//
+//  Created by joseph armstrong on 28/12/15.
+//  Copyright © 2015 joseph armstrong. All rights reserved.
+//
+
+import Cocoa
+
+@NSApplicationMain
+class AppDelegate: NSObject, NSApplicationDelegate {
+
+    @IBOutlet weak var window: NSWindow!
+
+    func applicationDidFinishLaunching(aNotification: NSNotification) {
+        // Insert code here to initialize your application
+    }
+
+    func applicationWillTerminate(aNotification: NSNotification) {
+        // Insert code here to tear down your application
+    }
+}
+
+</pre>
+
+<p>This file cannot be run outside Xcode - here’s what happens if we try to
+run this directly in a terminal:</p>
+
+<p>```
+swift AppDelegate.swift
+AppDelegate.swift:11:1: error: ‘NSApplicationMain’ attribute cannot be used in a module that contains top-level code
+@NSApplicationMain</p>
+<p>AppDelegate.swift:1:1: note: top-level code defined in this source file
+//</p>
+<p>```</p>
+
+<p>So this doesn’t work - but after a little Googling and some small
+edits we can modify this so that we can create a window in the shell, this is show in the next
+section.</p>
+
+<h1 id="a-nameexperiment1a-experiment-1---a-simple-window"><a name="experiment1"></a> Experiment 1 - A simple window</h1>
+
+<p><img src="/images/experiment1.png" /></p>
+
+<p>This window is created with the following code - which is
+derived from <code class="highlighter-rouge">AppDelegate.swift</code>.</p>
+
+<pre>
+// experiment1.swift
+// run with:
+//  $ swift experiment1.swift
+
+import Cocoa
+
+class AppDelegate: NSObject, NSApplicationDelegate {
+
+    let window = NSWindow()
+
+    func applicationDidFinishLaunching(aNotification: NSNotification) {
+        window.makeKeyAndOrderFront(window)
+        window.level = 1
+    }
+}
+
+let app = NSApplication.sharedApplication()
+let controller = AppDelegate()
+
+app.delegate = controller
+app.run()
+
+</pre>
+
+<p>To run the program store the above in a file <code class="highlighter-rouge">experiment1.swift</code> and run
+the program in a terminal with the following command:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ swift experiment1.swift
+</code></pre>
+</div>
+
+<h1 id="a-nameexperiment2a-experiment-2---a-window-with-a-title-and-specific-size"><a name="experiment2"></a> Experiment 2 - A window with a title and specific size</h1>
+
+<p>Now I’ll make a larger window and add a title:</p>
+
+<p><img src="/images/experiment2.png" /></p>
+
+<p>Here I’ve make the window a specific size a title and some controls
+to the title bar:</p>
+
+<pre>
+// experiment2.swift
+// run with:
+//  $ swift experiment2.swift
+
+import Cocoa
+
+class AppDelegate: NSObject, NSApplicationDelegate
+{
+    let window = NSWindow()
+    
+    func applicationDidFinishLaunching(aNotification: NSNotification)
+    {
+        window.setContentSize(NSSize(width:600, height:200))
+        window.styleMask = NSTitledWindowMask | NSClosableWindowMask |
+                           NSMiniaturizableWindowMask |
+                           NSResizableWindowMask
+        
+        window.opaque = false
+        window.center();
+        window.title = "Experiment 2"
+        window.makeKeyAndOrderFront(window)
+        window.level = 1
+    }
+}
+
+let app = NSApplication.sharedApplication()
+let controller = AppDelegate()
+
+app.delegate = controller
+app.run()
+
+</pre>
+
+<h1 id="adding-controls">Adding controls</h1>
+
+<p>Now we can make a simple window. The next step is to add some controls.
+I’ve added one control in each experiment.</p>
+
+<h1 id="a-nameexperiment3a-experiment-3---a-window-with-a-button"><a name="experiment3"></a> Experiment 3 - A window with a button</h1>
+
+<p><img src="/images/experiment3.png" /></p>
+
+<p>Here’s a window with a button in it - note that nothing happens when
+we click the button - in experiment 5 I’ll add a click action to the
+button.</p>
+
+<p>The code is as follows:</p>
+
+<pre>
+// experiment3.swift
+// run with:
+//  $ swift experiment3.swift
+
+import Cocoa
+
+class AppDelegate: NSObject, NSApplicationDelegate
+{
+    let window = NSWindow()
+    
+    func applicationDidFinishLaunching(aNotification: NSNotification)
+    {
+        window.setContentSize(NSSize(width:600, height:200))
+        window.styleMask = NSTitledWindowMask | NSClosableWindowMask |
+                           NSMiniaturizableWindowMask |
+                           NSResizableWindowMask
+        
+        window.opaque = false
+        window.center();
+        window.title = "Experiment 3"
+
+        let button = NSButton(frame: NSMakeRect(20, 100, 180, 30))
+        button.bezelStyle =  .ThickSquareBezelStyle
+        button.title = "Click Me"
+        button.target = NSApp
+        window.contentView!.addSubview(button)
+
+        window.makeKeyAndOrderFront(window)
+        window.level = 1
+    }
+}
+
+let app = NSApplication.sharedApplication()
+let controller = AppDelegate()
+
+app.delegate = controller
+app.run()
+
+</pre>
+
+<p><em>Exercise:</em> Try Googling <code class="highlighter-rouge">ThickSquareBezelStyle</code> you should be able to
+find all the available button styles. Try making small edits to the
+program to see what happens.</p>
+
+<h1 id="a-nameexperiment4a-experiment-4---a-window-with-a-text-field"><a name="experiment4"></a> experiment 4 - A window with a text field</h1>
+
+<p><img src="/images/experiment4.png" /></p>
+
+<p>This is actually a <code class="highlighter-rouge">TextView</code> where I’ve set the background color to the window
+background color.</p>
+
+<p><em>Exercise:</em> Make a better or alternative version.</p>
+
+<pre>
+// experiment4.swift
+// run with:
+//  $ swift experiment4.swift
+
+import Cocoa
+
+class AppDelegate: NSObject, NSApplicationDelegate
+{
+    let window = NSWindow()
+    
+    func applicationDidFinishLaunching(aNotification: NSNotification)
+    {
+        window.setContentSize(NSSize(width:600, height:200))
+        window.styleMask = NSTitledWindowMask | NSClosableWindowMask |
+                           NSMiniaturizableWindowMask |
+                           NSResizableWindowMask
+        
+        window.opaque = false
+        window.center();
+        window.title = "Experiment 4"
+
+        let text = NSTextView(frame: NSMakeRect(20, 150, 180, 30))
+
+        text.string = "Some Text"
+        text.editable = false
+        text.backgroundColor = window.backgroundColor
+        text.selectable = false
+        window.contentView!.addSubview(text)
+        
+        window.makeKeyAndOrderFront(window)
+        window.level = 1
+    }
+}
+
+let app = NSApplication.sharedApplication()
+let controller = AppDelegate()
+
+app.delegate = controller
+app.run()
+
+</pre>
+
+<h1 id="a-nameexperiment5a-experiment-5---connecting-the-button-to-the-text-field"><a name="experiment5"></a> Experiment 5 - Connecting the button to the text field</h1>
+
+<p><img src="/images/experiment5.png" /></p>
+<pre>
+// experiment5.swift
+// run with:
+//  $ swift experiment5.swift
+
+import Cocoa
+
+class AppDelegate: NSObject, NSApplicationDelegate
+{
+    var text = NSTextView(frame: NSMakeRect(20, 150, 180, 30))
+    let window = NSWindow()
+
+    @IBAction func myAction(sender: AnyObject) {
+        text.string = "Wow I've been clicked"
+    }
+    
+    func applicationDidFinishLaunching(aNotification: NSNotification)
+    {
+        window.setContentSize(NSSize(width:600, height:200))
+        window.styleMask = NSTitledWindowMask | NSClosableWindowMask |
+                           NSMiniaturizableWindowMask |
+                           NSResizableWindowMask
+        
+        window.opaque = false
+        window.center();
+        window.title = "Experiment 5"
+
+        let button = NSButton(frame: NSMakeRect(20, 100, 280, 30))
+        button.bezelStyle =  .ThickSquareBezelStyle
+        button.title = "Click me and the text will change"
+        button.target = self;
+        button.action = "myAction:" // Note the colon 
+        window.contentView!.addSubview(button)
+
+        text.string = "Some Text"
+        text.editable = false
+        text.backgroundColor = window.backgroundColor
+        text.selectable = false
+        window.contentView!.addSubview(text)
+        
+        window.makeKeyAndOrderFront(window)
+        window.level = 1
+    }
+}
+
+let app = NSApplication.sharedApplication()
+let controller = AppDelegate()
+
+app.delegate = controller
+app.run()
+
+</pre>
+
+<p>This code is a bit of a mess, it had to be carefully constructed so
+that the variable <code class="highlighter-rouge">text</code> was defined <em>before</em> the button callback
+function <code class="highlighter-rouge">myAction</code> (since <code class="highlighter-rouge">text</code> is referred to in the body of the
+<code class="highlighter-rouge">myAction</code> function).</p>
+
+<p>This is a tad tricky and would indeed be impossible if the relationships
+between the controls could not be ordered (for example, it would be
+impossible to create two buttons <code class="highlighter-rouge">b1</code> and <code class="highlighter-rouge">b2</code> which when clicked
+change the labels of the ``other’’ button) - I’ll solve this problem
+later by allowing the click action on a button to be defined <em>after</em>
+the all the controls have been created.</p>
+
+<h1 id="a-nameexperiment6aexperiment-6---a-window-with-an-image"><a name="experiment6"></a>Experiment 6 - A window with an image</h1>
+
+<p><img src="/images/experiment6.png" /></p>
+
+<p>The image is from Sydney Padua’s most
+excellent book <a href="http://sydneypadua.com/2dgoggles/">The Thrilling Adventures of Lovelace and Babbage</a></p>
+
+<pre>
+// experiment6.swift
+// run with:
+//  $ swift experiment6.swift
+
+import Cocoa
+
+class AppDelegate: NSObject, NSApplicationDelegate
+{
+    let window = NSWindow()
+    
+    func applicationDidFinishLaunching(aNotification: NSNotification)
+    {
+        window.setContentSize(NSSize(width:500, height:260))
+        window.styleMask = NSTitledWindowMask | NSClosableWindowMask |
+                           NSMiniaturizableWindowMask |
+                           NSResizableWindowMask
+        
+        window.opaque = false
+        window.center();
+        window.title = "Experiment 6"
+
+        // load and display an image
+        let path = "../images/ada.png"
+        let img = NSImage(contentsOfFile: path)!
+        let imgView = NSImageView(frame: NSMakeRect(10, 10, 480, 240))
+        imgView.image = img
+        window.contentView!.addSubview(imgView)
+        
+        window.makeKeyAndOrderFront(window)
+        window.level = 1
+    }
+}
+
+let app = NSApplication.sharedApplication()
+let controller = AppDelegate()
+
+app.delegate = controller
+app.run()
+
+</pre>
+
+<h1 id="part-2---abstractions-1">Part 2 - Abstractions</h1>
+
+<p>The goal of this part is to make a simple set of functions that hides
+most of the detail of making windows and adding controls to them.</p>
+
+<p>The end result is going to be a  program fragment that looks like this:</p>
+
+<pre>
+let entry1  = make_entry(window, (200, 80, 180, 30), "1")
+let text1   = make_text(window, (20, 80, 180, 30), "Hello from me")
+let text2   = make_text(window, (20, 120, 180, 30), "Another field")
+let button1 = make_button(window, (120, 40, 80, 30), "Click")
+     
+// make a click function
+let f1 = {() -&gt; Bool in
+            text1.string = "Callback worked"
+            print(entry1.textStorage!.string)
+            text2.string = entry1.textStorage!.string
+            return true} //
+
+button1.onclick = f1
+</pre>
+
+<p>All the details of making the controls will be hidden in functions
+like <code class="highlighter-rouge">make_text</code>, <code class="highlighter-rouge">make_button</code> and so ``wiring up’’ the controls will
+be done by hooking callback functions on the buttons.</p>
+
+<p>To do this needs some trickery, so in the sections that follow I’ll
+first explain the techniques and then refactor the code in the Part 1
+into a form that fits my purpose.</p>
+
+<p>Firt I’ll look at parameter passing in Swift.</p>
+
+<h1 id="a-nameparametersa-parameter-naming-gobbledygook"><a name="parameters"></a> Parameter naming gobbledygook</h1>
+
+<blockquote>
+  <p>Swift parameter passing is totally unobvious.</p>
+</blockquote>
+
+<p>I had expected that the ``obvious’’ way to declare and call a function
+would be something like this:</p>
+
+<pre>
+// funcs1.swift
+
+func add(x:Int, y:Int, z:Int) -&gt; Int {
+    return x+y+z
+}
+
+print("add=", add(1,2,3))
+
+
+</pre>
+
+<p>But oh dear:</p>
+
+<pre>
+swift funcs1.swift
+funcs1.swift:5:18: error: missing argument labels 'y:z:' in call
+print("add=", add(1,2,3))
+                 ^
+                    y:  z: 
+</pre>
+
+<p>A little research revealed that the correct way to call
+<code class="highlighter-rouge">add</code> was to use the totally unobvious syntax:</p>
+
+<pre>
+// funcs2.swift
+
+func add(x:Int, y:Int, z:Int) -&gt; Int {
+    return x+y+z
+}
+
+print("add =", add(1,y:2,z:3))
+
+
+</pre>
+
+<p>Inconsistent <em>moi</em>? - the first parameter name is omitted. All the other parameters
+must be present in the same order as the definition. Great shades of objective C!</p>
+
+<p>This horrible syntax works:</p>
+
+<pre>
+&gt; swift funcs2.swift
+add = 6
+</pre>
+
+<p>Better though again unobvious is to prefix each argument in the function definition with
+underscore <code class="highlighter-rouge">_</code> like this:</p>
+
+<pre>
+// funcs3.swift
+
+func add(x:Int, _ y:Int, _ z:Int) -&gt; Int {
+    return x+y+z
+}
+
+print("add=", add(1,2,3))
+
+
+</pre>
+
+<p>Now at least we can call the function in the same way as we’d do in
+just about every other programming language under the sun.</p>
+
+<h1 id="a-button-callback-function">A button callback function</h1>
+
+<p>To make a callback function for a button we have to step back and then understand how
+closures work, and then we can make  a callback function.</p>
+
+<p>I’ll start by defining a simple class with an instance variable:</p>
+
+<pre>
+class Demo {
+    var firstname: String  = "fred"
+}
+
+let x = Demo()
+print(x.firstname)
+x.firstname = "joe"
+print(x.firstname)
+
+</pre>
+
+<p>This should look familiar to you if you’ve programmed in an OO language.</p>
+
+<p>Running this we see the following:</p>
+
+<pre>
+&gt; swift classes1.swift
+fred
+joe
+</pre>
+
+<p>Now I’ll do the same things with a functional argument:</p>
+
+<pre>
+class Demo {
+    var call: () -&gt; Bool = {() -&gt; Bool in true}
+}
+
+let x = Demo()
+print(x.call())
+var i = 10
+var f = {() -&gt; Bool in print("hello I'm a callback and i =", i); return true}
+x.call = f
+print(x.call())
+i = 20
+print(x.call())
+
+</pre>
+
+<p>Running this:</p>
+
+<pre>
+true
+hello I'm a callback and i = 10
+true
+hello I'm a callback and i = 20
+true
+</pre>
+
+<blockquote>
+  <p>Which to my mind is horrendous. The closure <code class="highlighter-rouge">f</code> does not capture the value of
+<code class="highlighter-rouge">i</code> at the time when <code class="highlighter-rouge">f</code> is defined, changing <code class="highlighter-rouge">i</code> <em>after</em> <code class="highlighter-rouge">f</code> was defined
+make nonsense of the idea of a closure.</p>
+</blockquote>
+
+<p>If we are extremely careful we <em>can</em> use this mechanism to add a callback facility to
+buttons. We’ll do this and make a custom class, by inheriting the properties
+of <code class="highlighter-rouge">NSButton</code> and adding our own callback routine:</p>
+
+<pre>
+class MyButton: NSButton {
+    var onclick: () -&gt; Bool = {() -&gt; Bool in true}
+
+    func myclick(sender: AnyObject) {
+        self.onclick()
+    }
+}
+</pre>
+
+<p>and to make a button I call <code class="highlighter-rouge">make_button</code></p>
+
+<pre>
+func make_button(window: NSWindow,
+                 _ size:(x:Int, y:Int, width:Int, ht:Int),
+                 _ title:String
+) -&gt; MyButton {
+    let button = MyButton()
+    button.frame = NSMakeRect(CGFloat(size.x),     CGFloat(size.y),
+                              CGFloat(size.width), CGFloat(size.ht))
+    
+    button.title = title
+    button.bezelStyle =  .ThickSquareBezelStyle
+    button.target = button
+    button.action = "myclick:"
+    window.contentView!.addSubview(button)
+    return button
+}
+</pre>
+
+<p>Now we can make some objects and add an <code class="highlighter-rouge">onclick</code> callback to the buttons (just like
+jquery) - the pseudo code to do this will look something like this:</p>
+
+<pre>
+    ... create a window ...
+    text1  = make_text(window, Size, Text)
+    entry1 = make_entry(window, Size, Default)
+    button1 = make_button(window, Size, Text)
+    F = ... a function involving text1, entry1, ... etc.
+    button1.onclick = F
+</pre>
+
+<h1 id="a-namecombineda-putting-it-all-together"><a name="combined"></a> Putting it all together</h1>
+
+<p>Now let’s put it all together:</p>
+
+<p><img src="/images/combined1.png" /></p>
+
+<p>The code is rather long - but I was able to pull out most of
+the mess into simple reusable functionbs.</p>
+
+<blockquote>
+  <p>The code to create the window and add controls was easy
+and Xcode was not used.</p>
+</blockquote>
+
+<pre>
+// combined1.swift
+// run with:
+//  $ swift combined1.swift
+
+import Cocoa
+
+class MyButton: NSButton {
+    var onclick: () -&gt; Bool = {() -&gt; Bool in true}
+
+    func myclick(sender: AnyObject) {
+        self.onclick()
+    }
+}
+
+func make_button(window: NSWindow,
+                 _ size:(x:Int, y:Int, width:Int, ht:Int),
+                 _ title:String
+) -&gt; MyButton {
+    let button = MyButton()
+    button.frame = NSMakeRect(CGFloat(size.x),     CGFloat(size.y),
+                              CGFloat(size.width), CGFloat(size.ht))
+    
+    button.title = title
+    button.bezelStyle =  .ThickSquareBezelStyle
+    button.target = button
+    button.action = "myclick:"
+    window.contentView!.addSubview(button)
+    return button
+}
+
+func make_entry(window:NSWindow,
+              _ size:(x:Int, y:Int, width:Int, ht:Int),
+              _ str: String
+     ) -&gt; NSTextView {
+    let text = NSTextView(frame: NSMakeRect(10, 140, 40, 20))
+    text.frame = NSMakeRect(CGFloat(size.x),     CGFloat(size.y),
+                              CGFloat(size.width), CGFloat(size.ht))
+    
+    text.string = str
+    text.editable = true
+    text.selectable = true
+    window.contentView!.addSubview(text)
+    return text
+}
+
+func make_text(window:NSWindow,
+              _ size:(x:Int, y:Int, width:Int, ht:Int),
+              _ str: String
+     ) -&gt; NSTextView {
+    let text = NSTextView(frame: NSMakeRect(10, 140, 40, 20))
+    text.frame = NSMakeRect(CGFloat(size.x),     CGFloat(size.y),
+                              CGFloat(size.width), CGFloat(size.ht))
+    
+    text.string = str
+    text.editable = false
+    text.backgroundColor = window.backgroundColor
+    text.selectable = false
+    window.contentView!.addSubview(text)
+    return text
+}
+
+func make_window(w: Int, _ h: Int, _ title: String) -&gt; NSWindow {
+    let window = NSWindow()
+    window.setContentSize(NSSize(width:w, height:h))
+    window.styleMask = NSTitledWindowMask | NSClosableWindowMask |
+        NSMiniaturizableWindowMask | NSResizableWindowMask
+    
+    window.opaque = false
+    window.center();
+    window.title = title
+    return window
+}
+
+class AppDelegate: NSObject, NSApplicationDelegate
+{
+    let window = make_window(400, 200, "My title")
+
+    func applicationDidFinishLaunching(aNotification: NSNotification)
+    {
+        let entry1  = make_entry(window, (200, 80, 180, 30), "1")
+        let text1   = make_text(window, (20, 80, 180, 30), "Hello from me")
+        let text2   = make_text(window, (20, 120, 180, 30), "Another field")
+        let button1 = make_button(window, (120, 40, 80, 30), "Click")
+        
+        // make a click function
+        let f1 = {() -&gt; Bool in
+              text1.string = "Callback worked"
+              print(entry1.textStorage!.string)
+              text2.string = entry1.textStorage!.string
+              return true} //
+
+        button1.onclick = f1
+        
+        window.makeKeyAndOrderFront(window)
+        window.makeMainWindow()
+        window.level = 1
+    }
+}
+
+let app = NSApplication.sharedApplication()
+app.setActivationPolicy(.Regular)
+
+let controller = AppDelegate()
+
+app.delegate = controller
+app.run()
+
+</pre>
+
+<h1 id="a-hrefopena-open-problems"><a href="open"></a> Open Problems</h1>
+
+<p>I had hoped to write:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>  let window = make_window(400, 200, "My Title")
+  let entry1 = make_text(window, ...)
+</code></pre>
+</div>
+
+<p>But for some reason this does not work, so I have to move the call to <code class="highlighter-rouge">make_window</code>
+to the initialisation part of the class. I haven’t a clue why.</p>
+
+<h1 id="a-nameswiftfpla-swift-as-a-functional-language"><a name="swift_fpl"></a> Swift as a functional language</h1>
+
+<p>The bad</p>
+
+<ul>
+  <li>Verbose syntax - types are declared rather than inferred</li>
+  <li>Mutable data types</li>
+  <li>Weird mix of Classes, Structs and functions</li>
+  <li>No concurrency model</li>
+</ul>
+
+<p>The good</p>
+
+<ul>
+  <li>It has a REPL</li>
+  <li>I can write apps <em>outside</em> XCode</li>
+</ul>
+
+<p>I <em>like</em> the syntax of exceptions if the function X can raise an exception
+then one must qualify call with ! ? or use an explicit try syntax</p>
+
+<p>In Erlang term the use of ! and ? is easy to explain</p>
+
+<p>Imagine an Erlang function f(X) that returns {ok, Val} when <code class="highlighter-rouge">Val = f(X)</code> or
+otherwise <code class="highlighter-rouge"><span class="p">{</span><span class="err">eror,</span><span class="w"> </span><span class="err">Why</span><span class="p">}</span></code> if the function could not compute a value for some argument <code class="highlighter-rouge">X</code></p>
+
+<p>The Swift compiler convention if implemented in Erlang would require <code class="highlighter-rouge">f(X)</code> to be
+evaluated within a <code class="highlighter-rouge">catch</code> statement, like this:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code> case (catch f(X)) of
+ 	  {ok, Val} -&gt;
+      ...;
+  {error, Why} -&gt;
+      ...
+ end
+</code></pre>
+</div>
+
+<p>otherwise an error would be indicted.</p>
+
+<p>If we were absolutely sure that <code class="highlighter-rouge"><span class="p">{</span><span class="err">ok,</span><span class="w"> </span><span class="err">Val</span><span class="p">}</span></code> would be returned we’d write:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code> Val = f!(X)
+</code></pre>
+</div>
+
+<p>Which is equivalent to the Erlang</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="w"> </span><span class="p">{</span><span class="err">ok,</span><span class="w"> </span><span class="err">Val</span><span class="p">}</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="err">f(X)</span><span class="w">
+</span></code></pre>
+</div>
+
+<p>The ? convention unwraps <code class="highlighter-rouge"><span class="p">{</span><span class="err">ok,</span><span class="w"> </span><span class="err">Val</span><span class="p">}</span></code> into <code class="highlighter-rouge">Val</code> or <code class="highlighter-rouge"><span class="p">{</span><span class="err">error,</span><span class="w"> </span><span class="err">Why</span><span class="p">}</span></code> into <code class="highlighter-rouge">nil</code> in Swift.</p>
+
+<h1 id="a-namecommentsa-comments-on-swift"><a name="comments"></a> Comments on Swift</h1>
+
+<p>I’ve been programming Swift for a couple of weeks now. Do I like it?</p>
+
+<p>Swift is widely marketed as a functional language - so it’s
+interesting to see how well it shapes up as a functional programming
+language - or at least to see how compares to other FPLs that I am
+familiar with.</p>
+
+<p>Sequential FPLs gain a lot of power from the mechanisms they offer.
+The offer (in varying degrees) type systems that (claim to) prevent
+(some run-time) errors. Pattern matching syntaxes  make the
+programs very short. Immutable data structures simplifies
+reasoning about the programming and debugging. Higher order functions
+add to power of the language be treating functions as first
+class data.</p>
+
+<p>Where Swift shines it is in the integratiion with the underlying Objective C
+frameworks on the Mac. To this extent Swift programming is a much
+more attractive proposition than programming in C or Objective-C but
+but this is not because Swift is a good language rather that C and
+objective-C are bad languages for writing user-space application in.</p>
+
+<p>The C family of languages (C, C++, Objective-C) are fine for writing
+operating system but not for writing the majority of user-space
+applications - here things like Python or visual-basic are far better.</p>
+
+<p>Swift is a good replacement for
+contexts in which Objective-C would be used.</p>
+
+<p>If you’re coming form Erlang/Haskell world you’ll think <code class="highlighter-rouge">Swift is
+verbose and a bit of a mess</code> but if you’re coming from Objective-C
+you’ll think ``Swift is concise and elegant’’</p>
+
+<p>In Swift I really miss pattern matching and I dislike having to
+excessivly declare types.</p>
+
+<p>The lack of a decent concurrency model in Cocoa and Objective-C is
+reflected in the Swift code - which although it works is pretty
+horrible.</p>
+
+<h1 id="a-namewhyiusetexta-textual-vs-interactive-interfaces"><a name="why_i_use_text"></a> Textual vs Interactive interfaces</h1>
+
+<p>I’ve said that I don’t like Xcode so I’ve added some reasons why.</p>
+
+<p>Two common ways to create programs are:</p>
+
+<p>1) We create a text file using a text editor.</p>
+
+<p>2) We create a program by clicking on buttons and dragging objects in
+an IDE (Integrated Development Environment) (for example, Xcode).</p>
+
+<p>In the first method we don’t usually have to tell the user how to
+create a text file with given content. It suffices to give a listing
+of the file and assume that the user can create the file using an
+editor of their choice. It is totally irrelevant <em>how</em> the file is
+created the only thing that matters is that the content of the file is
+correct.</p>
+
+<p>In order to understand the program only the content of the file must
+be understood. We can examine it line by line, asking if we understand
+what the lines of code mean.</p>
+
+<p>Using an IDE is horribly different - describing how to interact with a
+an IDE is very difficulty to do in text. Usually we have to <em>show</em> how to
+do this typically with a YouTube video, or in a mixture of text and images.</p>
+
+<p>An excellent example of the difficulty of describing how to do something
+is can be found in <a href="http://swiftrien.blogspot.se/2015/11/swift-example-binding-nstableview-to.html">Notes from a Swift Developer</a> – in this example the author uses
+a mixture of text and screenshots to describe how to build an application.
+Text alone does not work.</p>
+
+<p>The application described in the link above has a simple layout which could be <em>easily</em>
+described in text (for example as an html table)</p>
+
+<p>Unfortunately when we try to reproduce what we’ve seen in a video or
+follow a description that is a mixture of text and images, we find that
+the description almost invariably describes a different version of the
+IDE than the one we have available.</p>
+
+<p>Textual descriptions of the form ``and now click on the doggle control
+icon’’ are pretty useless if you haven’t got a clue what the doggle
+control icon looks like.</p>
+
+<p>Worse - when the design process in an interface builder is finished -
+all the correct buttons have been clicked the resulting ``state’’ of
+the system (ie the program) is not available in a textual format so we
+cannot ask, line-by-line what the individual statement in the
+description mean.</p>
+
+<p>As you might gather - I hate IDEs like Xcode and Eclipse - I like to
+totally understand every line of code I wrote - my method of
+understanding code is always the same and independent of
+language. Find an example program that works then reduce lines until I
+can reduce no more making a minimal example that works - then
+understand every line.</p>
+
+<p>This is a slow process - but in the long run faster than clicking at
+random in a IDE until your program works or Googling like crazy to see
+if somebody else has a canned solution to your problem.</p>
+
+<p>I get the impression that developers think that developing in a IDE is
+somehow ``quicker’’ than developing with no such tools. As far as I can see this
+is false. Once I have a working program in a given directory structure
+I can make a clone of this in a single terminal command (<code class="highlighter-rouge">cp -R ...</code>) and then
+I’m off in my trusty editor.</p>
+
+<p>Following instructions like</p>
+
+<ul>
+  <li>enter this … into a file called …</li>
+  <li>type the command … into the shell</li>
+</ul>
+
+<p>are easy to obey and pass the <code class="highlighter-rouge">telephone test'' (ie can we describe exactly what to do
+over a telephone) - no images or videos are needed to</code>show’’ the users what to do.</p>
+
+<p>Once upon a time we could describe how to do something using text only.
+Then we used text and images. Now it needs videos.</p>
+
+<p>Asking questions about text was easy - <code class="highlighter-rouge">what did you mean in paragraph 4''
+now we'd have to ask</code>what did you do 41.6-41.8 seconds into your video’’
+watching somebody doing something in Xcode 200.7 in a video and preforming slow
+motion playbacks of selected sections is not my idea of programming.</p>
+
+<h1 id="references">References</h1>
+
+<p>I’ve found several documents which helped me - none of them solves the problem
+I’m try to solve but they have all provided clues to the solution:</p>
+
+<ul>
+  <li>http://czak.pl/2015/09/23/single-file-cocoa-app-with-swift.html</li>
+  <li>https://github.com/Eonil/CocoaProgrammaticHowtoCollection</li>
+  <li>https://forums.developer.apple.com/thread/5137</li>
+  <li>http://stackoverflow.com/questions/26609778/nsopenpanel-in-swift-how-to-open</li>
+  <li>https://objectivec2swift.com/#/converter/code</li>
+  <li>http://practicalswift.com/</li>
+  <li>https://github.com/tylergaw/js-osx-app-examples</li>
+  <li>http://www.raywenderlich.com/82046/introduction-to-os-x-tutorial-core-controls-and-swift-part-1</li>
+  <li>http://commandlinefanatic.com/cgi-bin/showarticle.cgi?article=art024</li>
+  <li>http://mediautopia.weebly.com/swift-1-intro.html</li>
+  <li>http://dev.iachieved.it/iachievedit/using-swift-as-a-scripting-language/</li>
+  <li>http://commandlinefanatic.com/cgi-bin/showarticle.cgi?article=art024</li>
+  <li>http://www.knowstack.com/swift-programming-an-introduction/</li>
+</ul>
+
+<h1 id="help-and-tips-wanted">Help and tips wanted</h1>
+
+<p>Does anynody know:</p>
+
+<ul>
+  <li>How can I create two or more windows? - I seem to only be able to create a single window</li>
+  <li>How can I make a socket client?</li>
+  <li>How can I make a socket server?</li>
+</ul>
+
+<p>Solutions should be single Swift files that can be run from the terminal.</p>
+
+<h1 id="the-future">The future</h1>
+
+<p>Articles like this are never finished only started …</p>
+
+
+  </div>
+
+  <div id="tags">
+    Tagged:
+    
+    <a href="/blog/tag/swift">swift</a> &nbsp;
+    
+    <a href="/blog/tag/gui">gui</a> &nbsp;
+    
+    <a href="/blog/tag/cocoa">cocoa</a> &nbsp;
+    
+  </div>
+  <p></p>
+
+  <hr />
+  
+  <!-- the tweet button -->
+  <p>
+    <a href="https://twitter.com/share"  class="twitter-share-button" 
+       data-url="http://joearms.github.com/2016/01/04/fun-with-swift.html">Tweet</a>
+  </p>
+  
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+  <!-- end of tweet button -->
+
+  <p>Comments:</p>
+  
+  <div id="disqus">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      // var disqus_developer = 1;
+      var disqus_shortname = 'joearmstrongsblog';
+      var disqus_identifier = '/2016/01/04/fun-with-swift';
+      var disqus_url = 'http://joearms.github.com/2016/01/04/fun-with-swift.html';
+      (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+  </div>
+  
+  <noscript>
+    Please enable JavaScript to view the <a
+    href="http://disqus.com/?ref_noscript">comments powered by
+    Disqus.</a>
+  </noscript>
+</div>
+
+	</div>
+	<div class="span3">
+	  
+	</div>
+      </div>
+    </div>
+    
+    <!-- Footer  ==================================== -->
+    <footer class="footer">
+      <div class="container">
+	<p>&copy; 2013 Joe Armstrong</p>
+	  Theme and code from <a href="https://github.com/mojombo">Tom
+	  Preston-Werner</a>.<br /> Hosted by <a
+	  href="https://github.com/networc/networc.github.com/">GitHub</a>
+	  and powered by <a
+	  href="https://github.com/mojombo/jekyll">Jekyll</a>.
+	  Source code <a href="https://github.com/joearms/joearms.github.com">here</a>.
+	</p>
+	<p>
+	  joearms@gmail.com <a href="http://github.com/joearms/">github.com/joearms</a>
+	  <a href="http://twitter.com/joeerl/">twitter.com/joeerl</a>
+	</p>
+      </div>
+    </footer>
+
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+
+    <!-- Google Analytics -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      
+      ga('create', 'UA-39670657-1', 'github.com');
+      ga('send', 'pageview');
+    </script>
+    <!-- Google Analytics end -->
+    
+  </body>
+</html>

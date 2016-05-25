@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="author" content="Joe Armstrong" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    
+    <title>Why did I wake up just before my alarm clock went off?</title>
+    
+    <!-- Bootstrap -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet" media="screen" />
+    <link href="/css/bootstrap-responsive.min.css" rel="stylesheet" />
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css" type="text/css" />
+    <!-- RSS -->
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml" />
+    <link rel="stylesheet" href="/css/screen.css" type="text/css" 
+	  media="screen, projection" />
+  </head>
+
+  <body>
+    <div class="navbar">
+      <div class="navbar-inner">
+	<a class="brand" href="/index.html">Joe Armstrong - Erlang and other stuff</a>
+	<ul class="nav">
+	  <li><a href="/index.html">Home</a></li>
+	  <li><a href="/archive.html">Archive</a></li>
+	  <li><a href="/resources.html">Resources</a></li>
+	  <li><a href="/installing.html">Installing</a></li>
+	  <li><a href="/links.html">Links</a></li>
+	  <li><a href="https://github.com/joearms/joearms.github.com/">Source</a></li>
+	</ul>
+      </div>
+    </div>
+    
+    <div class="customize">
+      <div class="row-fluid">
+	<div class="span7 offset1">
+	  <div>
+  <div id="title">
+  
+    <h1>Why did I wake up just before my alarm clock went off?</h1>
+    <span class="meta">02 Mar 2015</span>
+    <p></p>
+  </div>
+
+  <div id="content">
+    <p>I often think that I wake up just before my alarm goes off.</p>
+
+<p>A couple of days ago I lay in bed thinking <code class="highlighter-rouge">the
+alarm is just about to go off'' and then a second later it did go off and I
+thought</code>how come I woke up just before the alarm went off?’’
+In the past I’d thought to myself ``I’ve got a super-accurate
+timer in my head that wakes me up …’’ but then a new thought hit me:</p>
+
+<blockquote>
+  <p>My brain is a distributed computer. When the alarm goes off
+various parts of my brain which are in deep-sleep mode need waking
+up - what I’m observing is a timing error in my brain.</p>
+</blockquote>
+
+<p>Hopefully a neurophysiologist who is reading this article will add a
+comment to tell me that I’m totally wrong and point me to some
+literature that explains what happens when I wake up.</p>
+
+<h1 id="i-wake-up-just-before-the-alarm-went-off">I wake up just before the alarm went off</h1>
+
+<blockquote>
+  <p>I didn’t wake up before the alarm went off - I woke up <strong>because</strong>
+the alarm went off.</p>
+</blockquote>
+
+<p>So How come I thought I woke up before the alarm went off?</p>
+
+<h1 id="so-who-actually-woke-up-first">So who actually woke up first?</h1>
+
+<blockquote>
+  <p>Who is the <code class="highlighter-rouge">I'' in the phrase</code>I woke up’’.</p>
+</blockquote>
+
+<p>The I in question is my conscious brain, I guess this is the
+cerebral cortex.  The bit of my brain that first registers the
+alarm is something more primitive - possible the amygdala.</p>
+
+<p>I’m speculating that what happens is something like this:</p>
+
+<ul>
+  <li>The alarm goes off</li>
+  <li>The amygdala registers this fact and sends emergency wake-up signals to other parts of the brain</li>
+  <li>The cerebral cortex is in deep sleep mode and needs to be re-booted</li>
+  <li>different parts of my brain are booting at different speeds and sending status reports to the cerebral cortex.</li>
+  <li>The  cerebral cortex has finished its boot sequence - I’m now awake (conscious) - so I can think a bit (and here’s the kicker) the cerebral cortex has not  yet received a sound alarm signal, so although I’m awake and thinking my brain does not yet know why it has woken up.</li>
+  <li>The amygdala sends the ring signal to the auditory cortex for processing</li>
+  <li>The auditory cortex processes the sound signal and figures out that in means the alarm clock is ringing and sends a message to the cerebral cortex</li>
+</ul>
+
+<p>We can illustrate this in a message sequence diagram (this is
+something computer scientists like to draw in order to understand
+what’s going on):</p>
+
+<p><img src="/images/wake1.png" /></p>
+
+<p>Time flows down the diagram and the different activities are show in different colors.
+I’m assuming the brain is like a computer. Parts of the brain are sleeping (blue) booting 
+(pink) processing (red) or available to perform computations (green).</p>
+
+<p>The conscious ``me’’’ thinks (in time order):</p>
+
+<ul>
+  <li>1) I’m awake.</li>
+  <li>2) The alarm has just gone off.</li>
+  <li>3) That’s funny how come I woke up before the alarm went off?</li>
+  <li>4) Perhaps I’ve got a super accurate clock in my head that wakes me up before the alarm goes off.</li>
+</ul>
+
+<p>In <a href="http://www.theguardian.com/notesandqueries/query/0,5753,-22281,00.html">I regularly wake up moments before my alarm clock rings, no matter
+what time I set it for. Does this mean I have supernatural
+powers?</a>
+this phenomena was discussed in some detail. Interestingly none of the
+explanations was anywhere near what I’m suggesting.</p>
+
+<p>Occam’s razor would imply that the simplest answer to why you woke up
+before the alarm went is ``you didn’t, you woke up because the alarm
+went, and your brain got it wrong.’’</p>
+
+<h1 id="a-simpler-model">A simpler model</h1>
+
+<p>The brain behaves like a distributed computer. It has several
+processing units, different parts of the brain take different times to
+process signals. The part of the brain where conscious thoughts are
+processed (like <code class="highlighter-rouge">I'm awake'' and</code>the alarm went off’’) interprets
+information coming from other parts of the brain, but this part of the
+brain takes longer to work out what is happening than the parts of the
+brain that supply it with information.  Sometimes we get things wrong
+and have to adjust our view of reality.</p>
+
+<blockquote>
+  <p>Suppose now that:</p>
+</blockquote>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>time to wake up &lt; time to recognized the alarm signal
+</code></pre>
+</div>
+
+<p>Then we get something like the following:</p>
+
+<p><img src="/images/wake2.png" /></p>
+
+<p>Now we don’t need to assume that parts of the brain are asleep and
+need rebooting.  If the time to process the audio signal (the red box
+marked B above) into a semantic signal (the alarm went off) is longer
+than the time taken for the brain to wake up (red box A) then we will
+think that we woke up <strong>before</strong> hearing the sound.</p>
+
+<p>Since this the idea that we wake up <strong>before</strong> we hear the signal is
+crazy we misinterpret what is going on and invent fancyfull and
+incorrect explanations as to what has actually happened (like that we
+after a super accurate clock in our brain that wakes us up just before
+the alarm goes off).</p>
+
+<h1 id="so-how-come-i-know-the-alarm-is-going-to-go-off">So how come I “know” the alarm is going to go off?</h1>
+
+<p>The argument so far is that the alarm sends a signal that wakes my
+conscious brain <strong>before</strong> the sound signal has been processed and sent
+to the conscious brain. So how come I <code class="highlighter-rouge">know'' that the alarm is going
+to go off? I suspect this is just the result of intelligent
+guesswork. I</code>know’’ that the thing that wakes me up most mornings
+<strong>is</strong> the alarm. So If I suddenly wake up it’s most likely because
+the alarm just went off - the fact I haven’t yet ``heard’’ the alarm is
+a result of a timing delay in the brain.</p>
+
+<p>So the higher conscious part of the brain works like a Lamport clock
+trying to order the events in a sequence that makes sense.</p>
+
+<h1 id="disclaimer">Disclaimer</h1>
+
+<p>I’m not really sure which parts of the brain do what. Do the parts of
+the brain go to sleep?  Do they need rebooting? - How long does it
+take to turn a sound waveform into a semantic ``alarm’’ signal. How
+long does it take to reboot parts of the brain?</p>
+
+
+  </div>
+
+  <div id="tags">
+    Tagged:
+    
+    <a href="/blog/tag/sleep">sleep</a> &nbsp;
+    
+    <a href="/blog/tag/brain">brain</a> &nbsp;
+    
+  </div>
+  <p></p>
+
+  <hr />
+  
+  <!-- the tweet button -->
+  <p>
+    <a href="https://twitter.com/share"  class="twitter-share-button" 
+       data-url="http://joearms.github.com/2015/03/02/Waking-Up.html">Tweet</a>
+  </p>
+  
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+  <!-- end of tweet button -->
+
+  <p>Comments:</p>
+  
+  <div id="disqus">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      // var disqus_developer = 1;
+      var disqus_shortname = 'joearmstrongsblog';
+      var disqus_identifier = '/2015/03/02/Waking-Up';
+      var disqus_url = 'http://joearms.github.com/2015/03/02/Waking-Up.html';
+      (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+  </div>
+  
+  <noscript>
+    Please enable JavaScript to view the <a
+    href="http://disqus.com/?ref_noscript">comments powered by
+    Disqus.</a>
+  </noscript>
+</div>
+
+	</div>
+	<div class="span3">
+	  
+	</div>
+      </div>
+    </div>
+    
+    <!-- Footer  ==================================== -->
+    <footer class="footer">
+      <div class="container">
+	<p>&copy; 2013 Joe Armstrong</p>
+	  Theme and code from <a href="https://github.com/mojombo">Tom
+	  Preston-Werner</a>.<br /> Hosted by <a
+	  href="https://github.com/networc/networc.github.com/">GitHub</a>
+	  and powered by <a
+	  href="https://github.com/mojombo/jekyll">Jekyll</a>.
+	  Source code <a href="https://github.com/joearms/joearms.github.com">here</a>.
+	</p>
+	<p>
+	  joearms@gmail.com <a href="http://github.com/joearms/">github.com/joearms</a>
+	  <a href="http://twitter.com/joeerl/">twitter.com/joeerl</a>
+	</p>
+      </div>
+    </footer>
+
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+
+    <!-- Google Analytics -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      
+      ga('create', 'UA-39670657-1', 'github.com');
+      ga('send', 'pageview');
+    </script>
+    <!-- Google Analytics end -->
+    
+  </body>
+</html>
