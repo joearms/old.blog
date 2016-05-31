@@ -1,0 +1,125 @@
+title: New Blogging Software
+@md:content
+
+I finally did it and rewrote all my blogging software.
+
+In an earlier post I claimed that [[http://joearms.github.io/2013/03/28/jekyll-is-great.html][Jekyll is great]] well it was great
+until somebody at GitHub decide to improve Jekyll and **change** the
+backend rendering engine.
+
+I was **very annoyed about this** - my old blogs have semi-permanent
+URLs addresses. So or example the ``Jekyll is great'' posting has a
+URL `http://joearms.github.io/2013/03/28/jekyll-is-great.html`.
+
+The sudden change that GitHub made without warning destroyed some of
+the formatting of previous existing pages.
+
+I posted a brief article [[http://joearms.github.io/2016/03/21/Why-Markdown-Sucks.html][Why Markdown Sucks]] and hoped the problem would go away.
+
+A few helpful people mailed me and said I could edit my `_yaml` file
+and and some weird crap to it that would make the problem go away, but
+I didn't like the idea of this.
+
+> By my way of thinking, once OI have published an article and got all
+  the typos out, then that article should stay the same **forever**
+  or at least until the sun turns into a red giant, whichever is the
+  sooner.
+
+If the GitHub people cannot be trusted not to mess up my site without
+my permission, then the system becomes rapidly unusable.
+
+* We're really destroying history
+
+In the longer term, changing the content of something once published
+is falsifying history.
+
+Suppose I was to drop dead tomorrow, people might visit old pages that
+I've created, find typographic errors and think ``this is a sloppy
+mess, I won't read it.''
+
+The Jekyll publish process had an implicit promise. ``If you create a
+markdown file with the right magic commands in it, I'll turn this into
+nicely formatted HTML.''
+
+Well they broke that promise - so Jekyll became unusable for me.
+
+What were the alternatives - I could have used ``somebody elses
+formatting program'' - something like [[https://gohugo.io][Hugo]] but then I's have to make
+sure that Hugo still worked in the future, so I'd need all the source
+code for Hugo.
+
+I could run Jekyll locally and upload the generated HTML to GitHub,
+but I've noticed that even my local Jekyll tends to get bit-rot with
+time and has on several precious occasions just stopped working.
+
+> I decided to take the easy way out. Write my own static site
+ generator. Moreover I would use no external dependencies.
+
+That way I could make the inputs and outputs **exactly what I wanted**.
+
+* How do I generate web pages?
+
+The input to my blogging software as an org-mode file. I use the
+[[http://orgmode.org][emacs orgmode]] for editing my blog entries.
+
+The individual entries are written in ``markdown'ish'' style.
+
+Since I want some kind of macro/template expansion mechanism I allow
+``embedded Erlang'' in the input. Erlang expressions are written
+`&lt;? ... ?>` and the code generator evaluates the expressions inside
+the decorated parentheses and pastes them into the document.
+
+The template expander  is thus a fully-fledged programming language
+and not some ad-hock tempting language with dubious semantics.
+
+Since I wanted to view my web pages, I added a little web server, so I
+can see the results of my efforts.
+
+* Fixes to GitHub
+
+Migrating away from Jekyll was easier than I expected, though not what
+I expected. I Googled a bit and found that I had to make a file called
+`.nojekll` and I had to checkout a branch called `gh-pages`.
+
+I did this and things didn't work as I'd expected. A bit more Googling
+suggest that I wait a bit and after half an hour or so things started
+working again.
+
+Exactly how and where Jekyll puts things is still a mystery to me.
+
+The only problem I had was retaining the old URLs - I wanted
+identical URLs to the last version of the blog. This is so that the
+Disque comments that people had added to the blog entries were
+retained.
+
+The code for all of this is in
+https://github.com/joearms/joearms.github.com/tree/master/_src.
+
+If you peep at the code be warned - it is undocumented and not of
+publication quality.
+
+* Are you crazy - no dependencies at all?
+
+Perhaps I am crazy, but every time I've included somebody elses code
+it has turned round and hit me in the face a few years later.
+
+Code gets changed in non-backwards compatible ways - I  like
+to always take the latest version of a dependency (since I guess the
+author is uninterested in maintaining older versions).
+
+The problem with this is that future releases of a dependency might
+break my code and I don't want to be bothered with fixing it.
+
+I guess I could take a static copy of the entire dependency and just
+dump it into my directory structure - but then I'd be responsible for
+fixing it if it were to break and also I don't; really like including
+dozens and dozens of modules that I don't understand, in place of two
+of three modules that I've written myself and do understand.
+
+This is why I wrote my own little web server and template engine - the
+web sever is only a could of small modules and easy to understand.
+
+Better to have something small that does the job and which you
+completely understand than something large which looks on the surface
+to be far better but which you do not completely understand.
+

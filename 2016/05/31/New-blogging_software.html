@@ -1,0 +1,188 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+      <title>Joe Armstrong - Erlang and other things</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1"/>
+      <link rel="stylesheet" media="screen" href="/leftFluid.css"/>
+      <link rel="stylesheet" media="screen" href="/my.css"/>
+    </head>
+
+    <body>
+      <div class="wrap">
+	<h1>Joe Armstrong - Erlang and other stuff</h1>
+	<header>
+	  <nav>
+	    <ul class="nav inline-items">
+	      <li><a href="/index.html">Index</a></li>
+	      <li><a href="/lectures.html">Lectures</a></li>
+	      <li><a href="/resources.html">Resources</a></li>
+	    </ul>
+	  </nav>
+	</header>
+	
+	<div class="columnsContainer">
+	  
+	  <div class="leftColumn">
+	    <h1> New Blogging Software </h1>
+	      <p>I finally did it and rewrote all my blogging software.
+</p>
+<p>In an earlier post I claimed that <a href='http://joearms.github.io/2013/03/28/jekyll-is-great.html'>Jekyll is great</a> well it was great
+until somebody at GitHub decide to improve Jekyll and <b>change</b> the
+backend rendering engine.
+</p>
+<p>I was <b>very annoyed about this</b> - my old blogs have semi-permanent
+URLs addresses. So or example the &ldquo;Jekyll is great&rdquo; posting has a
+URL <span class='code'>http://joearms.github.io/2013/03/28/jekyll-is-great.html</span>.
+</p>
+<p>The sudden change that GitHub made without warning destroyed some of
+the formatting of previous existing pages.
+</p>
+<p>I posted a brief article <a href='http://joearms.github.io/2016/03/21/Why-Markdown-Sucks.html'>Why Markdown Sucks</a> and hoped the problem would go away.
+</p>
+<p>A few helpful people mailed me and said I could edit my <span class='code'>_yaml</span> file
+and and some weird crap to it that would make the problem go away, but
+I didn't like the idea of this.
+</p>
+<blockquote>By my way of thinking, once OI have published an article and got all
+  the typos out, then that article should stay the same <b>forever</b>
+  or at least until the sun turns into a red giant, whichever is the
+  sooner.
+</blockquote>
+<p>If the GitHub people cannot be trusted not to mess up my site without
+my permission, then the system becomes rapidly unusable.
+</p>
+<a name='head_1'></a><h1>We're really destroying history</h1>
+<p>In the longer term, changing the content of something once published
+is falsifying history.
+</p>
+<p>Suppose I was to drop dead tomorrow, people might visit old pages that
+I've created, find typographic errors and think &ldquo;this is a sloppy
+mess, I won't read it.&rdquo;
+</p>
+<p>The Jekyll publish process had an implicit promise. &ldquo;If you create a
+markdown file with the right magic commands in it, I'll turn this into
+nicely formatted HTML.&rdquo;
+</p>
+<p>Well they broke that promise - so Jekyll became unusable for me.
+</p>
+<p>What were the alternatives - I could have used &ldquo;somebody elses
+formatting program&rdquo; - something like <a href='https://gohugo.io'>Hugo</a> but then I's have to make
+sure that Hugo still worked in the future, so I'd need all the source
+code for Hugo.
+</p>
+<p>I could run Jekyll locally and upload the generated HTML to GitHub,
+but I've noticed that even my local Jekyll tends to get bit-rot with
+time and has on several precious occasions just stopped working.
+</p>
+<blockquote>I decided to take the easy way out. Write my own static site
+ generator. Moreover I would use no external dependencies.
+</blockquote>
+<p>That way I could make the inputs and outputs <b>exactly what I wanted</b>.
+</p>
+<a name='head_2'></a><h1>How do I generate web pages?</h1>
+<p>The input to my blogging software as an org-mode file. I use the
+<a href='http://orgmode.org'>emacs orgmode</a> for editing my blog entries.
+</p>
+<p>The individual entries are written in &ldquo;markdown'ish&rdquo; style.
+</p>
+<p>Since I want some kind of macro/template expansion mechanism I allow
+&ldquo;embedded Erlang&rdquo; in the input. Erlang expressions are written
+<span class='code'>&lt;? ... ?></span> and the code generator evaluates the expressions inside
+the decorated parentheses and pastes them into the document.
+</p>
+<p>The template expander  is thus a fully-fledged programming language
+and not some ad-hock tempting language with dubious semantics.
+</p>
+<p>Since I wanted to view my web pages, I added a little web server, so I
+can see the results of my efforts.
+</p>
+<a name='head_3'></a><h1>Fixes to GitHub</h1>
+<p>Migrating away from Jekyll was easier than I expected, though not what
+I expected. I Googled a bit and found that I had to make a file called
+<span class='code'>.nojekll</span> and I had to checkout a branch called <span class='code'>gh-pages</span>.
+</p>
+<p>I did this and things didn't work as I'd expected. A bit more Googling
+suggest that I wait a bit and after half an hour or so things started
+working again.
+</p>
+<p>Exactly how and where Jekyll puts things is still a mystery to me.
+</p>
+<p>The only problem I had was retaining the old URLs - I wanted
+identical URLs to the last version of the blog. This is so that the
+Disque comments that people had added to the blog entries were
+retained.
+</p>
+<p>The code for all of this is in
+https://github.com/joearms/joearms.github.com/tree/master/_src.
+</p>
+<p>If you peep at the code be warned - it is undocumented and not of
+publication quality.
+</p>
+<a name='head_4'></a><h1>Are you crazy - no dependencies at all?</h1>
+<p>Perhaps I am crazy, but every time I've included somebody elses code
+it has turned round and hit me in the face a few years later.
+</p>
+<p>Code gets changed in non-backwards compatible ways - I  like
+to always take the latest version of a dependency (since I guess the
+author is uninterested in maintaining older versions).
+</p>
+<p>The problem with this is that future releases of a dependency might
+break my code and I don't want to be bothered with fixing it.
+</p>
+<p>I guess I could take a static copy of the entire dependency and just
+dump it into my directory structure - but then I'd be responsible for
+fixing it if it were to break and also I don't; really like including
+dozens and dozens of modules that I don't understand, in place of two
+of three modules that I've written myself and do understand.
+</p>
+<p>This is why I wrote my own little web server and template engine - the
+web sever is only a could of small modules and easy to understand.
+</p>
+<p>Better to have something small that does the job and which you
+completely understand than something large which looks on the surface
+to be far better but which you do not completely understand.
+</p>
+
+	  </div>
+	  
+	  <div class="rightColumn">
+	    <h1>Index</h1>
+ <a href='#head_1'>We're really destroying history</a><br><a href='#head_2'>How do I generate web pages?</a><br><a href='#head_3'>Fixes to GitHub</a><br><a href='#head_4'>Are you crazy - no dependencies at all?</a><br>
+	  </div>
+	  
+	  <footer>
+
+	   
+  <!-- the tweet button -->
+  <p>	    
+    <a href=	"https://twitter.com/share"  class="twitter-share-button" 
+       data-url= "http://joearms.github.com/2016/05/31/New-blogging_software">Tweet</a>
+  </p>
+  
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+  <!-- end of tweet button -->
+
+  <p>Comments:</p>
+  
+  <div id="disqus">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      // var disqus_developer = 1;
+      var disqus_shortname = 'joearmstrongsblog';
+      var disqus_identifier = '/2016/05/31/New-blogging_software';
+      var disqus_url = 'http://joearms.github.com/2016/05/31/New-blogging_software.html';
+      (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+  </div>
+
+	   
+           <p>&copy; 2014-2016 Joe Armstrong - All Rights Reserved.</p>  </footer>
+	</div>
+      </div>
+    </body>
+</html>
