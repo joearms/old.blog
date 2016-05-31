@@ -1,0 +1,166 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+      <title>Joe Armstrong - Erlang and other things</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1"/>
+      <link rel="stylesheet" media="screen" href="/leftFluid.css"/>
+      <link rel="stylesheet" media="screen" href="/my.css"/>
+    </head>
+
+    <body>
+      <div class="wrap">
+	<h1>Joe Armstrong - Erlang and other stuff</h1>
+	<header>
+	  <nav>
+	    <ul class="nav inline-items">
+	      <li><a href="/index.html">Index</a></li>
+	      <li><a href="/lectures.html">Lectures</a></li>
+	      <li><a href="/resources.html">Resources</a></li>
+	    </ul>
+	  </nav>
+	</header>
+	
+	<div class="columnsContainer">
+	  
+	  <div class="leftColumn">
+	    <h1> My favorite Erlang Program </h1>
+	      <p>The other day I got a mail from Dean Galvin from Rowan University.
+Dean was doing an Erlang project so he asked &ldquo;What example program
+would best exemplify Erlang&rdquo;.
+</p>
+<p>He wanted a small program, that would be suitable for a ten minute
+talk that would best show off the language.  I thought for a while
+... and quickly wrote my favorite program, it's the &ldquo;Universal
+server&rdquo;.
+</p>
+<a name='head_1'></a><h1>The Universal Server</h1>
+<p>Normally servers do something. An HTTP server responds to HTTP
+requests and FTP server responds to FTP request and so on. But what
+about a <span class='emph'>Universal Server</span>? surely we can generalize the idea of a
+server and make a universal server that which we can later tell to
+become a specific sever.
+</p>
+<p>Here's my universal server:
+</p>
+<div class='erlang'><span class='atom'>universal_server</span><span class='punc'>(</span><span class='punc'>)</span><span class='ws'> </span><span class='punc'>-></span><span class='ws'>
+</span><span class='ws'>    </span><span class='keyword'>receive</span><span class='ws'>
+</span><span class='ws'>       </span><span class='punc'>{</span><span class='atom'>become</span><span class='punc'>,</span><span class='ws'> </span><span class='var'>F</span><span class='punc'>}</span><span class='ws'> </span><span class='punc'>-></span><span class='ws'>
+</span><span class='ws'>           </span><span class='var'>F</span><span class='punc'>(</span><span class='punc'>)</span><span class='ws'>
+</span><span class='ws'>    </span><span class='keyword'>end</span><span class='punc'>.</span><span class='ws'>
+</span></div>
+<p>That was pretty easy. Once I have created a universal serve it just sits and
+waits for a <span class='code'>{become, F}</span> message and then it becomes an <span class='code'>F</span> server.
+</p>
+<a name='head_2'></a><h1>The Factorial Server</h1>
+<p>A factorial server is a server which waits for an integer and sends back the
+factorial of an integer. This is mind-bogglingly simple:
+</p>
+<div class='erlang'><span class='atom'>factorial_server</span><span class='punc'>(</span><span class='punc'>)</span><span class='ws'> </span><span class='punc'>-></span><span class='ws'>
+</span><span class='ws'>    </span><span class='keyword'>receive</span><span class='ws'>
+</span><span class='ws'>       </span><span class='punc'>{</span><span class='var'>From</span><span class='punc'>,</span><span class='ws'> </span><span class='var'>N</span><span class='punc'>}</span><span class='ws'> </span><span class='punc'>-></span><span class='ws'>
+</span><span class='ws'>           </span><span class='var'>From</span><span class='ws'> </span><span class='punc'>!</span><span class='ws'> </span><span class='atom'>factorial</span><span class='punc'>(</span><span class='var'>N</span><span class='punc'>)</span><span class='punc'>,</span><span class='ws'>
+</span><span class='ws'>           </span><span class='atom'>factorial_server</span><span class='punc'>(</span><span class='punc'>)</span><span class='ws'>
+</span><span class='ws'>    </span><span class='keyword'>end</span><span class='punc'>.</span><span class='ws'>
+</span><span class='ws'>
+</span><span class='atom'>factorial</span><span class='punc'>(</span><span class='integer'>0</span><span class='punc'>)</span><span class='ws'> </span><span class='punc'>-></span><span class='ws'> </span><span class='integer'>1</span><span class='punc'>;</span><span class='ws'>
+</span><span class='atom'>factorial</span><span class='punc'>(</span><span class='var'>N</span><span class='punc'>)</span><span class='ws'> </span><span class='punc'>-></span><span class='ws'> </span><span class='var'>N</span><span class='ws'> </span><span class='punc'>*</span><span class='ws'> </span><span class='atom'>factorial</span><span class='punc'>(</span><span class='var'>N</span><span class='punc'>-</span><span class='integer'>1</span><span class='punc'>)</span><span class='punc'>.</span><span class='ws'>
+</span></div>
+<p>Now we're ready to rock and roll ...
+</p>
+<a name='head_3'></a><h1>Putting it all together</h1>
+<p>I'll write a little function that creates a universal server
+sends it a &ldquo;become a factorial server&rdquo; message, then I'll sent 
+it an integer, wait for the response and print the response:
+</p>
+<div class='erlang'><span class='atom'>test</span><span class='punc'>(</span><span class='punc'>)</span><span class='ws'> </span><span class='punc'>-></span><span class='ws'>
+</span><span class='ws'>    </span><span class='var'>Pid</span><span class='ws'> </span><span class='punc'>=</span><span class='ws'> </span><span class='atom'>spawn</span><span class='punc'>(</span><span class='punc'>fun</span><span class='ws'> </span><span class='atom'>universal_server</span><span class='punc'>/</span><span class='integer'>0</span><span class='punc'>)</span><span class='punc'>,</span><span class='ws'>
+</span><span class='ws'>    </span><span class='var'>Pid</span><span class='ws'> </span><span class='punc'>!</span><span class='ws'> </span><span class='punc'>{</span><span class='atom'>become</span><span class='punc'>,</span><span class='ws'> </span><span class='punc'>fun</span><span class='ws'> </span><span class='atom'>factorial_server</span><span class='punc'>/</span><span class='integer'>0</span><span class='punc'>}</span><span class='punc'>,</span><span class='ws'>
+</span><span class='ws'>    </span><span class='var'>Pid</span><span class='ws'> </span><span class='punc'>!</span><span class='ws'> </span><span class='punc'>{</span><span class='atom'>self</span><span class='punc'>(</span><span class='punc'>)</span><span class='punc'>,</span><span class='ws'> </span><span class='integer'>50</span><span class='punc'>}</span><span class='punc'>,</span><span class='ws'>
+</span><span class='ws'>    </span><span class='keyword'>receive</span><span class='ws'>
+</span><span class='ws'>        </span><span class='var'>X</span><span class='ws'> </span><span class='punc'>-></span><span class='ws'> </span><span class='var'>X</span><span class='ws'>
+</span><span class='ws'>    </span><span class='keyword'>end</span><span class='punc'>.</span><span class='ws'>
+</span></div>
+<p>All these functions belong to the module <a href='/code/fav1.erl'>/code/fav1.erl</a>.
+</p>
+<p>Now all we have to do is fire up an Erlang shell and run the test program
+</p>
+<div class='erlang'><span class='char'>$ </span><span class='atom'>erl</span><span class='ws'>
+</span><span class='integer'>1</span><span class='ws'> </span><span class='punc'>></span><span class='ws'> </span><span class='atom'>c</span><span class='punc'>(</span><span class='atom'>fav1</span><span class='punc'>)</span><span class='punc'>.</span><span class='ws'>
+</span><span class='punc'>{</span><span class='atom'>ok</span><span class='punc'>,</span><span class='ws'> </span><span class='atom'>fav1</span><span class='punc'>}</span><span class='ws'>
+</span><span class='integer'>2</span><span class='ws'> </span><span class='punc'>></span><span class='ws'> </span><span class='atom'>fav1</span><span class='punc'>:</span><span class='atom'>test</span><span class='punc'>(</span><span class='punc'>)</span><span class='punc'>.</span><span class='ws'>
+</span><span class='integer'>30414093201713378043612608166064768844377641568960512000000000000</span><span class='ws'>
+</span></div>
+<a name='head_4'></a><h1>Aside</h1>
+<p>A few years ago when I was at SICS I had access to <a href='http://www.planet-lab.org'>Planet Lab</a>.  Planet
+Lab is a research network of 9000 computers. Joining Planet Lab is
+easy, all you have to do is buy a standard PC, connect it to the
+network and donate it's use to the Planet Lab organization. Having
+donated you machine to the network, in return you can use all the
+other machines in planet lab.
+</p>
+<p>Planet lab is a real-world test-bed for distributed applications, it
+currently has 1171 nodes at 562 sites.
+</p>
+<p>What was I going to do with planet lab? I didn't have a clue.  What I
+ended up doing was making some scripts to install empty universal
+Erlang servers on all the Planet lab machines (pretty much like the
+code in this article) - then I set up a gossip algorithm to flood the
+network with <b>become</b> messages. Then I had an empty network that in a
+few seconds would become anything I wanted it to do.
+</p>
+<p>About a year later I had to write a paper. One of the disadvantages of
+being a researcher is that in order to get money you have to write a
+paper about something or other, the paper is never about what
+currently interests you at the moment, but must be about what the
+project that financed your research expects to read about.
+</p>
+<p>Well I had my gossip network setup on planet lab and I could tell it
+to become anything, so I told it to become a content distribution
+networks and used a gossip algorithm to make copies of the same file
+on all machine on the network and wrote a paper about it and everybody
+was happy.
+</p>
+
+	  </div>
+	  
+	  <div class="rightColumn">
+	    <h1>Index</h1>
+ <a href='#head_1'>The Universal Server</a><br><a href='#head_2'>The Factorial Server</a><br><a href='#head_3'>Putting it all together</a><br><a href='#head_4'>Aside</a><br>
+	  </div>
+	  
+	  <footer>
+
+	   
+  <!-- the tweet button -->
+  <p>	    
+    <a href=	"https://twitter.com/share"  class="twitter-share-button" 
+       data-url= "http://joearms.github.com/2013/11/21/My-favorite-erlang-program">Tweet</a>
+  </p>
+  
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+  <!-- end of tweet button -->
+
+  <p>Comments:</p>
+  
+  <div id="disqus">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      // var disqus_developer = 1;
+      var disqus_shortname = 'joearmstrongsblog';
+      var disqus_identifier = '/2013/11/21/My-favorite-erlang-program';
+      var disqus_url = 'http://joearms.github.com/2013/11/21/My-favorite-erlang-program.html';
+      (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+  </div>
+
+	   
+           <p>&copy; 2014-2016 Joe Armstrong - All Rights Reserved.</p>  </footer>
+	</div>
+      </div>
+    </body>
+</html>

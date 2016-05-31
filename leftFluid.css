@@ -1,0 +1,57 @@
+
+/* http://codepen.io/anon/pen/RaMpJj */
+
+*, *:before, *:after {
+  -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
+}
+
+body { margin: 0; }
+
+.columnsContainer, footer, header { position: relative; margin: .5em; }
+
+.leftColumn, .rightColumn, footer, header {  padding: 1.25em; }
+
+.leftColumn { margin-bottom: .5em; }
+
+.nav {
+  list-style: none;
+  margin-left: 0;
+  margin-bottom: 0;
+  padding-left: 0;
+}
+
+.nav > li,
+.nav > li > a {
+  display: inline-block;
+  *display: inline;
+  zoom: 1;
+}
+
+.inline-items {
+  margin-top: 0;
+}
+
+.inline-items li {
+  margin-left: 0;
+  border-left: 1px solid black;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.inline-items li:first-child {
+  margin-left: 0;
+  border: none;
+  padding-left: 0;
+  padding-right: 10px;
+}
+
+.inline-items li:last-child {
+  padding-right: 0;
+}
+
+/* MEDIA QUERIES */
+@media screen and (min-width: 47.5em ) {
+  .leftColumn { margin-right: 19.5em; }
+
+	.rightColumn { position: absolute; top: 0; right: 0; width: 18.75em; }   
+}

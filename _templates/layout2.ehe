@@ -1,0 +1,20 @@
+layout: $final
+@content
+
+<h1> Env </h1>
+
+<? io_lib:format("~p~n",[Env]) ?>
+
+<h1>Title</h1>
+
+<? mymd:getvar(title, Env) ?>
+
+<h1>Right</h1>
+
+<? mymd:getvar(right, Env) ?>
+
+<h1>Content</h1>
+
+
+<? mymd:getvar(right, Env) ?>
+

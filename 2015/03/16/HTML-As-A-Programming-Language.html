@@ -1,0 +1,175 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+      <title>Joe Armstrong - Erlang and other things</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1"/>
+      <link rel="stylesheet" media="screen" href="/leftFluid.css"/>
+      <link rel="stylesheet" media="screen" href="/my.css"/>
+    </head>
+
+    <body>
+      <div class="wrap">
+	<h1>Joe Armstrong - Erlang and other stuff</h1>
+	<header>
+	  <nav>
+	    <ul class="nav inline-items">
+	      <li><a href="/index.html">Index</a></li>
+	      <li><a href="/lectures.html">Lectures</a></li>
+	      <li><a href="/resources.html">Resources</a></li>
+	    </ul>
+	  </nav>
+	</header>
+	
+	<div class="columnsContainer">
+	  
+	  <div class="leftColumn">
+	    <h1> HTML as a programming language </h1>
+	      <p>Subtitle: Unifying HTML with Erlang.
+</p>
+<p>HTML is a <span class='emph'>layout</span> language not a <span class='emph'>programming language.</span> 
+With a few simple additions we can restructure HTML to make it into a
+programming language.
+</p>
+<a name='head_1'></a><h1>Step 1 - Adding structure to HTML</h1>
+<p>HTML has a flat structure. In order to turn HTML into a programming
+language we have break the HTML file into named sections.
+</p>
+<p>This is easy. The first figure shows some HTML before and after 
+the addition of a sectioning statement.
+</p>
+<p><img src='/images/html1.png'/>
+</p>
+<p>The statements <span class='code'>@function{lorem}</span> and <span class='code'>@function{grumpy}</span> break the HTML 
+file into named sections. We'll see later how each named section 
+is compiled into a single Erlang function.
+</p>
+<a name='head_2'></a><h1>Step 2 - Calling HTML</h1>
+<p>Now that we have split the original HTML file into sections we can
+&ldquo;call&rdquo; the sections from other sections of HTML. Here's an example
+where we call code in <span class='code'>one.html</span> from <span class='code'>two.html</span>.
+</p>
+<p><img src='/images/html2.png'/>
+</p>
+<p>The syntax <span class='code'>&lt;? one:lorem(In) ?></span> means replace the <span class='code'>&lt;?...?></span> construct
+with the contents of the section <span class='code'>lorem</span> in <span class='code'>one.html</span>.
+</p>
+<p>When we _evaluate_ <span class='code'>two:main(Env)</span> we get:
+</p>
+<p><img src='/images/html2a.png'/>
+</p>
+<a name='head_3'></a><h1>What's inside the funny brackets?</h1>
+<p>  What's inside the <span class='code'>&lt? ... ?></span> brackets -- Well since I like Erlang,
+I'll let you into a secret, it's just plain Erlang code. No need to
+invent yet another templating language when Erlang is at hand.
+</p>
+<p>So to include 10 paragraphs of filler text I'd write:
+</p>
+<p><img src='/images/html3.png'/>
+</p>
+<a name='head_4'></a><h1>Everything is just a function</h1>
+<p>The nice thing about the transformation to Erlang is that
+all HTML fragments become Erlang functions after transformation.
+</p>
+<p>The transformation of HTML into Erlang is as follows:
+</p>
+<p><img src='/images/html4.png'/>
+</p>
+<p>The input file <span class='code'>one.html</span> is transformed into an Erlang module <span class='code'>one.erl</span>.
+Each HTML fragment is transformed into a single Erlang function with the
+same name as the fragment name.
+</p>
+<p>HTML code is transformed into an Erlang map of the form <span class='code'>#{html =>
+"..."}</span> Erlang code is transformed into a sequence of forms each of
+which returns a map.
+</p>
+<p>Finally all the maps are combined
+and a module is created with the same name as the HTML page.
+</p>
+<a name='head_5'></a><h1>Adding JS/CSS/Erlang</h1>
+<p>The next step is to extend this so we can deal with Erlang, Javascript
+and CSS in a uniform manner:
+</p>
+<p>Here's an example:
+</p>
+<p><img src='/images/html5.png'/>
+</p>
+<p>We don't need to do anything special with Javascript and CSS. The
+parameter passing mechanism works as expected so we can pass parameters
+into CSS. So for example the parameter <span class='code'>"red"</span> gets bound to the variable
+<span class='code'>In</span> and expanded in the body of the CSS definition. The added function
+<span class='code'>to_string(X)</span> converts its argument to a map.
+</p>
+<p>Erlang functions are written following a <span class='code'>@erlang</span> annotation, as in
+the example. All we have to remember is that functions that are called
+from HTML functions must return an object of type <span class='code'>#{html => ...}</span>
+</p>
+<a name='head_6'></a><h1>Efficiency</h1>
+<p>I haven't mention efficiency. My plan is to <span class='emph'>make if right then make
+it fast</span>. Right now this is just a proof of concept. On the other
+hand I expect this to be efficient. Once transformed and loaded HTML
+functions become compiled Erlang code which is pretty fast. So I
+expect this to be blindingly efficient - the file system never gets
+touched, everything is compiled and efficient management of concurrent
+session is built into the virtual machine.
+</p>
+<a name='head_7'></a><h1>About</h1>
+<p>As I said this is a proof of concept- I wrote this article to
+accompany <a href='http://www.meetup.com/ErlangSF/events/220955245/'>a talk I'm giving</a> in a couple of weeks time.
+</p>
+<p>The code has not yet been published - I have a prototype that works and
+I'll publish it when it's sufficiently mature.
+</p>
+<a name='head_8'></a><h1>What else is in the map?</h1>
+<p>So far the examples show a return value of <span class='code'>#{html => "..."}</span>. Two more keys
+are planned.
+</p>
+<p><span class='code'>#{headers => [{Key,Value}]}</span> adds some headers to the map. <span class='code'>#{once => [Name]}</span>
+adds a fragment <span class='code'>Name</span> to the map (this is equivalent to calling
+<span class='code'>&lt? Name(In) ?></span> but it's only done once. This is so we include
+CSS and JS code once only. If several fragments use the same CSS styles
+we only want the styles to be included once.  
+</p>
+
+	  </div>
+	  
+	  <div class="rightColumn">
+	    <h1>Index</h1>
+ <a href='#head_1'>Step 1 - Adding structure to HTML</a><br><a href='#head_2'>Step 2 - Calling HTML</a><br><a href='#head_3'>What's inside the funny brackets?</a><br><a href='#head_4'>Everything is just a function</a><br><a href='#head_5'>Adding JS/CSS/Erlang</a><br><a href='#head_6'>Efficiency</a><br><a href='#head_7'>About</a><br><a href='#head_8'>What else is in the map?</a><br>
+	  </div>
+	  
+	  <footer>
+
+	   
+  <!-- the tweet button -->
+  <p>	    
+    <a href=	"https://twitter.com/share"  class="twitter-share-button" 
+       data-url= "http://joearms.github.com/2015/03/16/HTML-As-A-Programming-Language">Tweet</a>
+  </p>
+  
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+  <!-- end of tweet button -->
+
+  <p>Comments:</p>
+  
+  <div id="disqus">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      // var disqus_developer = 1;
+      var disqus_shortname = 'joearmstrongsblog';
+      var disqus_identifier = '/2015/03/16/HTML-As-A-Programming-Language';
+      var disqus_url = 'http://joearms.github.com/2015/03/16/HTML-As-A-Programming-Language.html';
+      (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+  </div>
+
+	   
+           <p>&copy; 2014-2016 Joe Armstrong - All Rights Reserved.</p>  </footer>
+	</div>
+      </div>
+    </body>
+</html>

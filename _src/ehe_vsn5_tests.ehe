@@ -1,0 +1,57 @@
+<h1>Interface</h1>
+
+<p><c>ehe_vsn5:expand(Bin, B0) -> {Bout, B1}</c>
+
+The binary <c>Bin</c> contining ehe is expand with bindings
+B0. The result is a new binary Bin1 and new set of bindings B1.
+
+<h1>ehe tests</h1>
+
+<? B = true, N=3, A=abc, S="string",  "" ?>
+
+<li> <? B ?> = true
+<li> <? N ?> = 3
+<li> <? A ?> = abc
+<li> <? S ?> = string
+<li> <? for I in lists:seq(1,5) ?> <? I ?> <? endfor ?> = 1 2 3 4 5
+<li> <? if B ?> true <?endif?> = true
+<li> <? if N ?> true <?else?> else <?endif?> = else
+
+<li> <? if N == 1?>
+       1
+     <?elseif N == 2 ?>
+       2      
+     <? elseif N == 3 ?>
+       3
+     <?else?>
+       other
+     <?endif?> = 3
+
+<li> <? if N == 1?>
+       1
+     <?else?>
+       3
+     <?endif?> = 3
+
+<h1>For Loops</h1>
+
+<? for I in ["this is a ","that was a"] ?>
+  <li> <? I ?>
+<? endfor ?>
+
+<h1>Blocks</h1>
+
+<p>here
+<? set K ?>
+line1<br>
+line2
+<? endSet ?>
+123
+
+
+<p>K is <? K ?>
+
+<p>Rendering took ...
+
+
+

@@ -1,0 +1,167 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+      <title>Joe Armstrong - Erlang and other things</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1"/>
+      <link rel="stylesheet" media="screen" href="/leftFluid.css"/>
+      <link rel="stylesheet" media="screen" href="/my.css"/>
+    </head>
+
+    <body>
+      <div class="wrap">
+	<h1>Joe Armstrong - Erlang and other stuff</h1>
+	<header>
+	  <nav>
+	    <ul class="nav inline-items">
+	      <li><a href="/index.html">Index</a></li>
+	      <li><a href="/lectures.html">Lectures</a></li>
+	      <li><a href="/resources.html">Resources</a></li>
+	    </ul>
+	  </nav>
+	</header>
+	
+	<div class="columnsContainer">
+	  
+	  <div class="leftColumn">
+	    <h1> Jekyll is great </h1>
+	      <p>It's now two days since my new blog first appeared. Actually I hadn't
+even tweeted or announced it in any way. I just wanted to setup things
+<b>before</b> I went public.
+</p>
+<p>To my amazement the twitterati noticed and my blog was being read
+before I'd even figured out how the templates work and how to even
+write a blog.
+</p>
+<p>This is the first blogging system that I've ever used where an
+overwhelming desire to rewrite the entire blogging engine did not come
+over me as soon as I got started.
+</p>
+<a name='head_1'></a><h1>My life as a failed blogger ...</h1>
+<li>Start blogging ...</li>
+<li>Writing the blog is fun, but, ...</li>
+<li>Entering the blog in the content management system is painful, so, ...</li>
+<li>I think &ldquo;I'll implement my own blogging engine&rdquo;, and, ...</li>
+<li>I start concentrating on how to implement a blogging engine, and, ...</li>
+<li>I Forget to write any content, so, ...</li>
+<li>Blog dries up - no content.</li>
+<p>My experiences with Google's blog engine were not very encouraging.
+My blog at <a href='http://armstrongonsoftware.blogspot.com/'>http://armstrongonsoftware.blogspot.com/</a> was done with a
+content management system. A complete pain-in-the-arse to use. I don't
+want a dashboard, and above all I don't want a WYSIWYG editor that can
+nip backwards and forwards between WYSIWYG mode and editing the raw
+underlying HTML.  This sucks big time.
+</p>
+<a name='head_2'></a><h1>The String Problem</h1>
+<p>All Programming languages I know of suffer from &ldquo;the string problem&rdquo;.
+String literals in Erlang are written like this:
+</p>
+<div class='erlang'><span class='atom'>start</span><span class='punc'>(</span><span class='punc'>)</span><span class='ws'> </span><span class='punc'>-></span><span class='ws'>
+</span><span class='ws'>    </span><span class='string'>"Hello world"</span><span class='punc'>.</span><span class='ws'>
+</span></div>
+<p>Which is crazy. The start and stop symbol is the same (ie a single quote mark)
+It would be far far better to use different symbols for the start and stop symbols.
+</p>
+<p>We should write <b>&ldquo;Hello world&rdquo;</b> using different symbols for the start and stop quotes.
+</p>
+<p>This would give us far more precise error messages. Sometimes if you
+miss out a closing quote the rest of the program up to the next
+quote gets swallowed up as a string literal and seeing exactly where
+this happened can be painful. The same bug is in all programming
+language that I am aware of, so we are not alone.
+</p>
+<p>English uses &ldquo;curly quotes&rdquo; for string literals, and the glyphs themselves for
+the open and close quotes are rather beautiful. Magnify the glyphs in a nice typeface,
+(say Garamond) and you'll see what I mean.
+</p>
+<p>This is not my first rant about quotes, I told Google off about this in
+http://armstrongonsoftware.blogspot.com/2012/06/what-happened-to-my-quotes.html
+but they still haven't fixed the bug. Gmail still gets typographic
+quotes wrong, so I feel ill every time I have to type quotes into
+gmail.
+</p>
+<p><span class='emph'>If anybody who reads this blog works at Google please fix this.</span>
+</p>
+<p>I've downloaded dozens of Javascript editors, and they all get typographic quotes wrong.
+</p>
+<p>&ldquo;getting your quotes right,&rdquo; Said George, &ldquo;is important.&rdquo;
+</p>
+<p>&ldquo;Why,&rdquo; asked Margery.
+</p>
+<p>&ldquo;When a man is tired of correctly quoting his strings, he is tired of life,&rdquo; said George.
+</p>
+<p>&ldquo;I thought it was London,&rdquo; said Margery.
+</p>
+<p>I can't use a blogging system that gets the simplest form of
+typography wrong.  If Gutenberg could get quotes right, and he had to
+invent printing to do so then we should be able to do so.
+</p>
+<p>We have our bright shiny computers with their GHz clocks, and they
+can't even get quotes right.
+</p>
+<p>Jekyll (or at least the markdown thing) uses LaTeX style quotes
+which makes an unsad happy bunny.
+</p>
+<a name='head_3'></a><h1>I'm an emacs man </h1>
+<p>Type in the text in Emacs, run the result through the
+compiler/formatter/whatever.  Stare at the results. Wash and repeat,
+tumble dry, iron the crumply bits and you're done.
+</p>
+<p>OK now thanks the Jekyll I can type my text in emacs, run the text
+through a spell checker (and If I have time through a speech
+synthesizer, this finds many extra errors, since I tend to read what I
+think I've written and not what I've actually written) type Make and
+stare at the result and if it's OK, a quick <b>git push</b> and Bob's
+your auntie.
+</p>
+<a name='head_4'></a><h1>And then an amazing thing happened...</h1>
+<p>I got pull requests.   
+</p>
+<p>Sylvain Benner has sent me two pull requests to fix my spelling
+errors. Thank you Sylvain. I'm not the world's best speller. So I'm
+pathetically gratefully for all the help I can get. So thank you once
+again.
+</p>
+
+	  </div>
+	  
+	  <div class="rightColumn">
+	    <h1>Index</h1>
+ <a href='#head_1'>My life as a failed blogger ...</a><br><a href='#head_2'>The String Problem</a><br><a href='#head_3'>I'm an emacs man </a><br><a href='#head_4'>And then an amazing thing happened...</a><br>
+	  </div>
+	  
+	  <footer>
+
+	   
+  <!-- the tweet button -->
+  <p>	    
+    <a href=	"https://twitter.com/share"  class="twitter-share-button" 
+       data-url= "http://joearms.github.com/2013/03/28/jekyll-is-great">Tweet</a>
+  </p>
+  
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+  <!-- end of tweet button -->
+
+  <p>Comments:</p>
+  
+  <div id="disqus">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      // var disqus_developer = 1;
+      var disqus_shortname = 'joearmstrongsblog';
+      var disqus_identifier = '/2013/03/28/jekyll-is-great';
+      var disqus_url = 'http://joearms.github.com/2013/03/28/jekyll-is-great.html';
+      (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+  </div>
+
+	   
+           <p>&copy; 2014-2016 Joe Armstrong - All Rights Reserved.</p>  </footer>
+	</div>
+      </div>
+    </body>
+</html>

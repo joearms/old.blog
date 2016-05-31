@@ -1,0 +1,183 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+      <title>Joe Armstrong - Erlang and other things</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1"/>
+      <link rel="stylesheet" media="screen" href="/leftFluid.css"/>
+      <link rel="stylesheet" media="screen" href="/my.css"/>
+    </head>
+
+    <body>
+      <div class="wrap">
+	<h1>Joe Armstrong - Erlang and other stuff</h1>
+	<header>
+	  <nav>
+	    <ul class="nav inline-items">
+	      <li><a href="/index.html">Index</a></li>
+	      <li><a href="/lectures.html">Lectures</a></li>
+	      <li><a href="/resources.html">Resources</a></li>
+	    </ul>
+	  </nav>
+	</header>
+	
+	<div class="columnsContainer">
+	  
+	  <div class="leftColumn">
+	    <h1> Why did I wake up before my alarm clock went off? </h1>
+	      <p>I often think that I wake up just before my alarm goes off.
+</p>
+<p>A couple of days ago I lay in bed thinking &ldquo;the
+alarm is just about to go off&rdquo; and then a second later it did go off and I
+thought &ldquo;how come I woke up just before the alarm went off?&rdquo;
+In the past I'd thought to myself &ldquo;I've got a super-accurate
+timer in my head that wakes me up ...&rdquo; but then a new thought hit me:
+</p>
+<blockquote>My brain is a distributed computer. When the alarm goes off
+various parts of my brain which are in deep-sleep mode need waking
+up - what I'm observing is a timing error in my brain.
+</blockquote>
+<p>Hopefully a neurophysiologist who is reading this article will add a
+comment to tell me that I'm totally wrong and point me to some
+literature that explains what happens when I wake up.
+</p>
+<a name='head_1'></a><h1>I wake up just before the alarm went off</h1>
+<blockquote>I didn't wake up before the alarm went off - I woke up <b>because</b>
+the alarm went off.
+</blockquote>
+<p>So How come I thought I woke up before the alarm went off?
+</p>
+<a name='head_2'></a><h1>So who actually woke up first?</h1>
+<blockquote>Who is the &ldquo;I&rdquo; in the phrase &ldquo;I woke up&rdquo;.
+</blockquote>
+<p>The I in question is my conscious brain, I guess this is the
+cerebral cortex.  The bit of my brain that first registers the
+alarm is something more primitive - possible the amygdala.
+</p>
+<p>I'm speculating that what happens is something like this:
+</p>
+<p>- The alarm goes off
+- The amygdala registers this fact and sends emergency wake-up signals to other parts of the brain
+- The cerebral cortex is in deep sleep mode and needs to be re-booted
+- different parts of my brain are booting at different speeds and sending status reports to the cerebral cortex.
+- The  cerebral cortex has finished its boot sequence - I'm now awake (conscious) - so I can think a bit (and here's the kicker) the cerebral cortex has not  yet received a sound alarm signal, so although I'm awake and thinking my brain does not yet know why it has woken up.
+- The amygdala sends the ring signal to the auditory cortex for processing
+- The auditory cortex processes the sound signal and figures out that in means the alarm clock is ringing and sends a message to the cerebral cortex
+</p>
+<p>We can illustrate this in a message sequence diagram (this is
+something computer scientists like to draw in order to understand
+what's going on):
+</p>
+<p><img src='/images/wake1.png'/>
+</p>
+<p>Time flows down the diagram and the different activities are show in different colors.
+I'm assuming the brain is like a computer. Parts of the brain are sleeping (blue) booting 
+(pink) processing (red) or available to perform computations (green).
+</p>
+<p>The conscious &ldquo;me&rdquo;' thinks (in time order):
+</p>
+<li>1) I'm awake.</li>
+<li>2) The alarm has just gone off.</li>
+<li>3) That's funny how come I woke up before the alarm went off?</li>
+<li>4) Perhaps I've got a super accurate clock in my head that wakes me up before the alarm goes off.</li>
+<p>In <a href='http://www.theguardian.com/notesandqueries/query/0,5753,-22281,00.html'>I regularly wake up moments before my alarm clock rings, no matter
+what time I set it for. Does this mean I have supernatural powers?</a>
+this phenomena was discussed in some detail. Interestingly none of the
+explanations was anywhere near what I'm suggesting.
+</p>
+<p>Occam's razor would imply that the simplest answer to why you woke up
+before the alarm went is &ldquo;you didn't, you woke up because the alarm
+went, and your brain got it wrong.&rdquo;
+</p>
+<a name='head_3'></a><h1>A simpler model</h1>
+<p>The brain behaves like a distributed computer. It has several
+processing units, different parts of the brain take different times to
+process signals. The part of the brain where conscious thoughts are
+processed (like &ldquo;I'm awake&rdquo; and &ldquo;the alarm went off&rdquo;) interprets
+information coming from other parts of the brain, but this part of the
+brain takes longer to work out what is happening than the parts of the
+brain that supply it with information.  Sometimes we get things wrong
+and have to adjust our view of reality.
+</p>
+<p>>Suppose now that:
+</p>
+<div class='pre'>time to wake up < time to recognized the alarm signal
+</div>
+<p>Then we get something like the following:
+</p>
+<p><img src='/images/wake2.png'/>
+</p>
+<p>Now we don't need to assume that parts of the brain are asleep and
+need rebooting.  If the time to process the audio signal (the red box
+marked B above) into a semantic signal (the alarm went off) is longer
+than the time taken for the brain to wake up (red box A) then we will
+think that we woke up <span class='emph'>before</span> hearing the sound.
+</p>
+<p>Since this the idea that we wake up <span class='emph'>before</span> we hear the signal is
+crazy we misinterpret what is going on and invent fancyfull and
+incorrect explanations as to what has actually happened (like that we
+after a super accurate clock in our brain that wakes us up just before
+the alarm goes off).
+</p>
+<a name='head_4'></a><h1>So how come I "know" the alarm is going to go off?</h1>
+<p>The argument so far is that the alarm sends a signal that wakes my
+conscious brain <span class='emph'>before</span> the sound signal has been processed and sent
+to the conscious brain. So how come I &ldquo;know&rdquo; that the alarm is going
+to go off? I suspect this is just the result of intelligent
+guesswork. I &ldquo;know&rdquo; that the thing that wakes me up most mornings
+<b>is</b> the alarm. So If I suddenly wake up it's most likely because
+the alarm just went off - the fact I haven't yet &ldquo;heard&rdquo; the alarm is
+a result of a timing delay in the brain.
+</p>
+<p>So the higher conscious part of the brain works like a Lamport clock
+trying to order the events in a sequence that makes sense.
+</p>
+<a name='head_5'></a><h1>Disclaimer</h1>
+<p>I'm not really sure which parts of the brain do what. Do the parts of
+the brain go to sleep?  Do they need rebooting? - How long does it
+take to turn a sound waveform into a semantic &ldquo;alarm&rdquo; signal. How
+long does it take to reboot parts of the brain?
+</p>
+
+	  </div>
+	  
+	  <div class="rightColumn">
+	    <h1>Index</h1>
+ <a href='#head_1'>I wake up just before the alarm went off</a><br><a href='#head_2'>So who actually woke up first?</a><br><a href='#head_3'>A simpler model</a><br><a href='#head_4'>So how come I "know" the alarm is going to go off?</a><br><a href='#head_5'>Disclaimer</a><br>
+	  </div>
+	  
+	  <footer>
+
+	   
+  <!-- the tweet button -->
+  <p>	    
+    <a href=	"https://twitter.com/share"  class="twitter-share-button" 
+       data-url= "http://joearms.github.com/2015/03/02/Waking-Up">Tweet</a>
+  </p>
+  
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+  <!-- end of tweet button -->
+
+  <p>Comments:</p>
+  
+  <div id="disqus">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      // var disqus_developer = 1;
+      var disqus_shortname = 'joearmstrongsblog';
+      var disqus_identifier = '/2015/03/02/Waking-Up';
+      var disqus_url = 'http://joearms.github.com/2015/03/02/Waking-Up.html';
+      (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+  </div>
+
+	   
+           <p>&copy; 2014-2016 Joe Armstrong - All Rights Reserved.</p>  </footer>
+	</div>
+      </div>
+    </body>
+</html>

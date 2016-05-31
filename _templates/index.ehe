@@ -1,0 +1,36 @@
+layout: layout1.ehe
+title: Index
+tags: index
+@content
+
+<? mymd:getvar(content, Env) ?>
+
+@right
+
+<h2>Books</h2>
+<p>
+  <img src="/images/jaerlang2_small.jpg" alt="Programming Erlang book"/>
+  <br/>
+  <a href="http://pragprog.com/book/jaerlang2/programming-erlang">
+    Programming Erlang</a>
+</p>
+
+<p>
+  <img src="/images/joe_thesis.jpg" alt="joe thesis"/><br/>
+  <b>Making Reliable Distributed Systems in the Presence of software errors</b>
+  <a href="http://erlang.org/download/armstrong_thesis_2003.pdf">download</a>
+</p>
+</div>
+
+@footer
+
+  <!-- the tweet button -->
+  <p>	    
+    <a href=	"https://twitter.com/share"  class="twitter-share-button" 
+       data-url= "http://joearms.github.com/index.html">Tweet</a>
+  </p>
+  
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+  <!-- end of tweet button -->
+
+

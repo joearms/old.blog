@@ -1,0 +1,355 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+      <title>Joe Armstrong - Erlang and other things</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1"/>
+      <link rel="stylesheet" media="screen" href="/leftFluid.css"/>
+      <link rel="stylesheet" media="screen" href="/my.css"/>
+    </head>
+
+    <body>
+      <div class="wrap">
+	<h1>Joe Armstrong - Erlang and other stuff</h1>
+	<header>
+	  <nav>
+	    <ul class="nav inline-items">
+	      <li><a href="/index.html">Index</a></li>
+	      <li><a href="/lectures.html">Lectures</a></li>
+	      <li><a href="/resources.html">Resources</a></li>
+	    </ul>
+	  </nav>
+	</header>
+	
+	<div class="columnsContainer">
+	  
+	  <div class="leftColumn">
+	    <h1> Some performance measurements on maps </h1>
+	      <p>On Jan 8 Harit Hamnshu asked <a href='http://erlang.org/pipermail/erlang-questions/2015-January/082455.html'>this question</a> on the erlang mailing list.
+</p>
+<p>To quote from the mail:
+</p>
+<div class='pre'>    Write a function map_search_pred(Map, Pred) that returns the first element
+    {Key,Value} in the map for which Pred(Key, Value) is true.
+</div>
+<div class='pre'>
+</div>
+<p>My attempt, looks like:
+</p>
+<div class='erlang'><span class='ws'>    </span><span class='atom'>map_search_pred</span><span class='punc'>(</span><span class='var'>Map</span><span class='punc'>,</span><span class='ws'> </span><span class='var'>Pred</span><span class='punc'>)</span><span class='ws'>  </span><span class='punc'>-></span><span class='ws'>
+</span><span class='ws'>      </span><span class='var'>M</span><span class='ws'> </span><span class='punc'>=</span><span class='ws'> </span><span class='punc'>[</span><span class='punc'>{</span><span class='var'>Key</span><span class='punc'>,</span><span class='ws'> </span><span class='var'>Value</span><span class='punc'>}</span><span class='ws'> </span><span class='punc'>||</span><span class='ws'> </span><span class='punc'>{</span><span class='var'>Key</span><span class='punc'>,</span><span class='ws'> </span><span class='var'>Value</span><span class='punc'>}</span><span class='ws'> </span><span class='punc'><-</span><span class='ws'> </span><span class='atom'>maps</span><span class='punc'>:</span><span class='atom'>to_list</span><span class='punc'>(</span><span class='var'>Map</span><span class='punc'>)</span><span class='punc'>,</span><span class='ws'>
+</span><span class='ws'>                                           </span><span class='var'>Pred</span><span class='punc'>(</span><span class='var'>Key</span><span class='punc'>,</span><span class='ws'> </span><span class='var'>Value</span><span class='punc'>)</span><span class='ws'> </span><span class='punc'>=:=</span><span class='ws'> </span><span class='atom'>true</span><span class='punc'>]</span><span class='punc'>,</span><span class='ws'>
+</span><span class='ws'>      </span><span class='keyword'>case</span><span class='ws'> </span><span class='atom'>length</span><span class='punc'>(</span><span class='var'>M</span><span class='punc'>)</span><span class='ws'> </span><span class='punc'>of</span><span class='ws'>
+</span><span class='ws'>        </span><span class='integer'>0</span><span class='ws'> </span><span class='punc'>-></span><span class='ws'> </span><span class='punc'>{</span><span class='punc'>}</span><span class='punc'>;</span><span class='ws'>
+</span><span class='ws'>        </span><span class='var'>_</span><span class='ws'> </span><span class='punc'>-></span><span class='ws'> </span><span class='atom'>lists</span><span class='punc'>:</span><span class='atom'>nth</span><span class='punc'>(</span><span class='integer'>1</span><span class='punc'>,</span><span class='ws'> </span><span class='var'>M</span><span class='punc'>)</span><span class='ws'>
+</span><span class='ws'>      </span><span class='keyword'>end</span><span class='punc'>.</span><span class='ws'>
+</span></div>
+<p>I thought _That's an interesting question_ and secondly _the answer
+is obvious, just iterate over the map and terminate when the predicate
+is satisfied_. But it turns out that this is impossible.
+</p>
+<blockquote>I thought I'd write a little program to test if my intuition was
+correct. Here's what happened:
+</blockquote>
+<a name='head_1'></a><h1>Thought 1: It's easy</h1>
+<p>This was my first thought. This is *always* my first thought _I'm an optimist_.
+I also wonder why the heck does anybody worry about performance.
+</p>
+<blockquote>I was
+brought up in the days of MHz clocks so back in the day I did worry about this
+but when GHz clocks came I stopped worrying.
+</blockquote>
+<p># Thought 2: I have to *measure* this.
+</p>
+<p>I know my intuition about performance is always wrong - so it's
+_measure, measure, measure_.
+</p>
+<p>At this stage I wrote some code to make a large map:
+</p>
+<div class='erlang'><span class='ws'>    </span><span class='atom'>make</span><span class='punc'>(</span><span class='integer'>0</span><span class='punc'>,</span><span class='ws'> </span><span class='var'>M</span><span class='punc'>,</span><span class='ws'> </span><span class='var'>_</span><span class='punc'>)</span><span class='ws'> </span><span class='punc'>-></span><span class='ws'> </span><span class='var'>M</span><span class='punc'>;</span><span class='ws'>
+</span><span class='ws'>    </span><span class='atom'>make</span><span class='punc'>(</span><span class='var'>K</span><span class='punc'>,</span><span class='ws'> </span><span class='var'>M</span><span class='punc'>,</span><span class='ws'> </span><span class='var'>I</span><span class='punc'>)</span><span class='ws'> </span><span class='punc'>-></span><span class='ws'> </span><span class='atom'>make</span><span class='punc'>(</span><span class='var'>K</span><span class='punc'>-</span><span class='integer'>1</span><span class='punc'>,</span><span class='atom'>maps</span><span class='punc'>:</span><span class='atom'>put</span><span class='punc'>(</span><span class='var'>I</span><span class='punc'>,</span><span class='var'>I</span><span class='punc'>+</span><span class='integer'>1</span><span class='punc'>,</span><span class='var'>M</span><span class='punc'>)</span><span class='punc'>,</span><span class='var'>I</span><span class='punc'>+</span><span class='integer'>2</span><span class='punc'>)</span><span class='punc'>.</span><span class='ws'>
+</span></div>
+<p>Call this with <span class='code'>make(1000,#{},1)</span> and I get a map with 1000 elements.
+</p>
+<p>Then I added an element at the &ldquo;beginning&rdquo; and &ldquo;end&rdquo; of then map
+and made a few measurements.
+</p>
+<blockquote>and yes I know that there is no much thing as the <b>begining</b>
+> and <b>end</b> of a map. So &ldquo;beginning&rdquo; means  _at that position
+> in the map that I expect to be visted first when I traverse the map._
+</blockquote>
+<p>Then I wrote some code to generate a list and measure
+the times to locate an element when it was at the beginning and end of
+the map. Something like this:
+</p>
+<div class='erlang'><span class='atom'>test</span><span class='punc'>(</span><span class='var'>K</span><span class='punc'>)</span><span class='ws'> </span><span class='punc'>-></span><span class='ws'>
+</span><span class='ws'>    </span><span class='var'>Map</span><span class='ws'> </span><span class='punc'>=</span><span class='ws'> </span><span class='atom'>make</span><span class='punc'>(</span><span class='var'>K</span><span class='punc'>,</span><span class='ws'> </span><span class='punc'>#</span><span class='punc'>{</span><span class='punc'>}</span><span class='punc'>,</span><span class='ws'> </span><span class='integer'>1</span><span class='punc'>)</span><span class='punc'>,</span><span class='ws'>
+</span><span class='ws'>    </span><span class='var'>Map1</span><span class='ws'> </span><span class='punc'>=</span><span class='ws'> </span><span class='var'>Map</span><span class='punc'>#</span><span class='punc'>{</span><span class='integer'>0</span><span class='ws'> </span><span class='punc'>=</span><span class='punc'>></span><span class='ws'> </span><span class='integer'>0</span><span class='punc'>}</span><span class='punc'>,</span><span class='ws'>
+</span><span class='ws'>    </span><span class='var'>Map2</span><span class='ws'> </span><span class='punc'>=</span><span class='ws'> </span><span class='var'>Map</span><span class='punc'>#</span><span class='punc'>{</span><span class='integer'>123456789</span><span class='ws'> </span><span class='punc'>=</span><span class='punc'>></span><span class='ws'> </span><span class='integer'>123456789</span><span class='punc'>}</span><span class='punc'>,</span><span class='ws'>
+</span><span class='ws'>    </span><span class='var'>List1</span><span class='ws'> </span><span class='punc'>=</span><span class='ws'> </span><span class='atom'>maps</span><span class='punc'>:</span><span class='atom'>to_list</span><span class='punc'>(</span><span class='var'>Map1</span><span class='punc'>)</span><span class='punc'>,</span><span class='ws'>
+</span><span class='ws'>    </span><span class='var'>List2</span><span class='ws'> </span><span class='punc'>=</span><span class='ws'> </span><span class='atom'>maps</span><span class='punc'>:</span><span class='atom'>to_list</span><span class='punc'>(</span><span class='var'>Map2</span><span class='punc'>)</span><span class='punc'>,</span><span class='ws'>
+</span><span class='ws'>    </span><span class='var'>J1</span><span class='ws'> </span><span class='punc'>=</span><span class='ws'> </span><span class='atom'>timer</span><span class='punc'>:</span><span class='atom'>tc</span><span class='punc'>(</span><span class='punc'>?</span><span class='var'>MODULE</span><span class='punc'>,</span><span class='ws'> </span><span class='atom'>map_search_pred</span><span class='punc'>,</span><span class='punc'>[</span><span class='var'>Map1</span><span class='punc'>,</span><span class='punc'>fun</span><span class='punc'>(</span><span class='var'>X</span><span class='punc'>,</span><span class='var'>Y</span><span class='punc'>)</span><span class='ws'> </span><span class='punc'>-></span><span class='ws'> </span><span class='var'>X</span><span class='ws'> </span><span class='punc'>=:=</span><span class='ws'> </span><span class='var'>Y</span><span class='ws'> </span><span class='keyword'>end</span><span class='punc'>]</span><span class='punc'>)</span><span class='punc'>,</span><span class='ws'>
+</span><span class='ws'>    </span><span class='var'>J2</span><span class='ws'> </span><span class='punc'>=</span><span class='ws'> </span><span class='atom'>timer</span><span class='punc'>:</span><span class='atom'>tc</span><span class='punc'>(</span><span class='punc'>?</span><span class='var'>MODULE</span><span class='punc'>,</span><span class='ws'> </span><span class='atom'>map_search_pred</span><span class='punc'>,</span><span class='punc'>[</span><span class='var'>Map2</span><span class='punc'>,</span><span class='punc'>fun</span><span class='punc'>(</span><span class='var'>X</span><span class='punc'>,</span><span class='var'>Y</span><span class='punc'>)</span><span class='ws'> </span><span class='punc'>-></span><span class='ws'> </span><span class='var'>X</span><span class='ws'> </span><span class='punc'>=:=</span><span class='ws'> </span><span class='var'>Y</span><span class='ws'> </span><span class='keyword'>end</span><span class='punc'>]</span><span class='punc'>)</span><span class='punc'>,</span><span class='ws'>
+</span><span class='ws'>    </span><span class='punc'>.</span><span class='punc'>.</span><span class='punc'>.</span><span class='ws'>
+</span></div>
+<p>  I'd expected the timer results <span class='code'>J1</span> and <span class='code'>J2</span> to be the same but
+there weren't. Since the entire list gets traversed in both cases, the
+times should be roughly the same. But they weren't.
+</p>
+<p><b>I've append the entire program at the end of this posting.</b>
+</p>
+<div class='pre'>> The results of this first test puzzled me at first. But hang on, I
+>  know that a)
+> **performance measurement is difficult** b) **My intuition
+>  about performance is always wrong**.
+</div>
+<p>My use of <span class='code'>timer:tc</span> just gives me a &ldquo;quick first idea&rdquo; as to what's going on.
+</p>
+<p>What's really going on is complicated by the garbage collection and
+  &ldquo;warming&rdquo; the cache.
+</p>
+<p>For fun I just swapped the order of the statements <span class='code'>J1 = ...</span> and <span class='code'>J2
+= ...</span> in the program and re-ran it. This shouldn't change
+anything. The *semantics* of the program are unchanged by this
+reordering - *but* the timings change a lot.
+</p>
+<p>As I said - &ldquo;<b>performance measurement is difficult</b>&rdquo;
+</p>
+<a name='head_2'></a><h1>Thought 3:</h1>
+<p>The &ldquo;obvious&rdquo; way to terminate abruptly from a loop
+  is to use <span class='code'>catch/throw</span> (_that's why we have <span class='code'>catch/throw</span>_).
+</p>
+<p>I defined:
+</p>
+<div class='erlang'><span class='ws'> </span><span class='ws'>
+</span><span class='ws'>    </span><span class='var'>J3</span><span class='ws'> </span><span class='punc'>=</span><span class='ws'> </span><span class='atom'>timer</span><span class='punc'>:</span><span class='atom'>tc</span><span class='punc'>(</span><span class='punc'>?</span><span class='var'>MODULE</span><span class='punc'>,</span><span class='ws'> </span><span class='atom'>map_search_pred1</span><span class='punc'>,</span><span class='ws'>
+</span><span class='ws'>                  </span><span class='punc'>[</span><span class='var'>Map2</span><span class='punc'>,</span><span class='ws'> </span><span class='ws'>
+</span><span class='ws'>           	   </span><span class='punc'>fun</span><span class='punc'>(</span><span class='var'>X</span><span class='punc'>,</span><span class='ws'> </span><span class='var'>Y</span><span class='punc'>)</span><span class='ws'> </span><span class='punc'>when</span><span class='ws'> </span><span class='var'>X</span><span class='ws'> </span><span class='punc'>=:=</span><span class='ws'> </span><span class='var'>Y</span><span class='ws'> </span><span class='punc'>-></span><span class='ws'> </span><span class='atom'>throw</span><span class='punc'>(</span><span class='punc'>{</span><span class='var'>X</span><span class='punc'>,</span><span class='var'>Y</span><span class='punc'>}</span><span class='punc'>)</span><span class='punc'>;</span><span class='ws'>
+</span><span class='ws'>		      </span><span class='punc'>(</span><span class='var'>_</span><span class='punc'>,</span><span class='var'>_</span><span class='punc'>)</span><span class='ws'> </span><span class='punc'>-></span><span class='ws'> </span><span class='atom'>false</span><span class='ws'>
+</span><span class='ws'>		   </span><span class='keyword'>end</span><span class='punc'>]</span><span class='punc'>)</span><span class='punc'>,</span><span class='ws'>
+</span></div>
+<p>And:
+</p>
+<div class='erlang'><span class='ws'>    </span><span class='atom'>map_search_pred1</span><span class='punc'>(</span><span class='var'>A</span><span class='punc'>,</span><span class='ws'> </span><span class='var'>B</span><span class='punc'>)</span><span class='ws'> </span><span class='punc'>-></span><span class='ws'>
+</span><span class='ws'>      </span><span class='punc'>(</span><span class='keyword'>catch</span><span class='ws'> </span><span class='atom'>map_search_pred</span><span class='punc'>(</span><span class='var'>A</span><span class='punc'>,</span><span class='var'>B</span><span class='punc'>)</span><span class='punc'>)</span><span class='punc'>.</span><span class='ws'>
+</span></div>
+<p>This still converts the entire map to a list, but exits early from the
+list comprehension.
+</p>
+<p>And yes it was faster &ldquo;most of the time&rdquo; - ie in several runs it *was*
+   faster but sometimes it was slower:
+</p>
+<p>Here's a typical run with a 20,000 element map:
+</p>
+<div class='pre'> {length,20000},
+ {maps_at_start,{6479,{0,0}}},
+ {maps_at_end,{2327,{123456789,123456789}}},   <- 1) should be the same maps_at_start
+ {maps_thrown,{1814,{123456789,123456789}}},   <- 2) it is faster
+ {maps_foldl,{2486,{123456789,123456789}}},
+ {lists_start,{2,{0,0}}},
+ {lists_end,{1221,{123456789,123456789}}}}
+</div>
+<p>This shows the name of the test and the result of calling <span class='code'>timer:tc</span> on the test case.
+</p>
+<p>So now I have a program that works and I can make measurements with.
+</p>
+<a name='head_3'></a><h1>Thought 4:</h1>
+<div class='pre'>> The notion of ``order'' in a map is unclear. I know that maps are
+> printed in lexical order, but I don't know if they are stored
+> internally in the same order as which they are printed.  
+> And they might perform differently if the maps have
+> a small or large number of elements.
+</div>
+<a name='head_4'></a><h1>Thought 5:</h1>
+<p>The notion of iterating over the elements of a map seems strange to
+me. I always think of lists as being &ldquo;things that you iterate over&rdquo;
+especially when there are large numbers of things.
+</p>
+<p>Probably I'm being old-fashioned here. I guess I should think of
+iterating over collections, but to me a collection is just a fancy
+name for a list.
+</p>
+<div class='pre'>> and lists in Erlang aren't even `lists`. They are really  `stacks` -
+> but that's another story, and changing the name would not be a good
+> idea.
+</div>
+<a name='head_5'></a><h1>Thought 6:</h1>
+<p>For short maps measuring the time is pointless - access times will be
+very fast and it will be difficult to measure the differences in time
+for different implementations. And for large collections I should be
+using lists anyway.
+</p>
+<a name='head_6'></a><h1>Thought 7:</h1>
+<blockquote>There <b>should be</b> a maps iterator.
+</blockquote>
+<p>Why don't I just walk over the map element at a
+time until I get what I want. I need a <span class='code'>first</span>, and <span class='code'>next</span> operator
+defined over a map.
+</p>
+<p>I consult the manual page for <span class='code'>maps.erl</span>, looking for <span class='code'>first</span> and <span class='code'>next</span>.
+</p>
+<a name='head_7'></a><h1>Thought 8:</h1>
+<p>The only maps iterator I can find is <span class='code'>maps:fold</span>.
+</p>
+<p>I should be able to &ldquo;throw my way out&rdquo; of <span class='code'>maps:fold</span>.
+</p>
+<p>Then I read the code:
+</p>
+<p><span class='code'>maps:fold</span> is defined like this:
+</p>
+<div class='erlang'><span class='ws'>     </span><span class='atom'>fold</span><span class='punc'>(</span><span class='var'>Fun</span><span class='punc'>,</span><span class='ws'> </span><span class='var'>In</span><span class='ws'> </span><span class='atom'>it</span><span class='punc'>,</span><span class='ws'> </span><span class='var'>Map</span><span class='punc'>)</span><span class='ws'> </span><span class='punc'>when</span><span class='ws'> </span><span class='atom'>is_function</span><span class='punc'>(</span><span class='var'>Fun</span><span class='punc'>,</span><span class='integer'>3</span><span class='punc'>)</span><span class='punc'>,</span><span class='ws'> </span><span class='atom'>is_map</span><span class='punc'>(</span><span class='var'>Map</span><span class='punc'>)</span><span class='ws'> </span><span class='punc'>-></span><span class='ws'>
+</span><span class='ws'>        </span><span class='atom'>lists</span><span class='punc'>:</span><span class='atom'>fold</span><span class='punc'>(</span><span class='punc'>fun</span><span class='punc'>(</span><span class='punc'>{</span><span class='var'>K</span><span class='punc'>,</span><span class='var'>V</span><span class='punc'>}</span><span class='punc'>,</span><span class='var'>A</span><span class='punc'>)</span><span class='ws'> </span><span class='punc'>-></span><span class='ws'> </span><span class='var'>Fun</span><span class='punc'>(</span><span class='var'>K</span><span class='punc'>,</span><span class='var'>V</span><span class='punc'>,</span><span class='var'>A</span><span class='punc'>)</span><span class='ws'> </span><span class='keyword'>end</span><span class='punc'>,</span><span class='var'>In</span><span class='ws'> </span><span class='atom'>it</span><span class='punc'>,</span><span class='atom'>maps</span><span class='punc'>:</span><span class='atom'>to_list</span><span class='punc'>(</span><span class='var'>Map</span><span class='punc'>)</span><span class='punc'>)</span><span class='punc'>.</span><span class='ws'>
+</span></div>
+<p>So the map is converted to a list anyway, <b>this is horrific</b>.
+</p>
+<blockquote>All of which means there is no alternative to converting the
+map to list first and then walking down the list to get what you want.
+</blockquote>
+<p>Finding the first element in a list that satisfies a predicate is
+really easy:
+</p>
+<div class='erlang'><span class='atom'>find_first</span><span class='punc'>(</span><span class='punc'>[</span><span class='var'>H</span><span class='punc'>|</span><span class='var'>T</span><span class='punc'>]</span><span class='punc'>,</span><span class='ws'> </span><span class='var'>Pred</span><span class='punc'>)</span><span class='ws'> </span><span class='punc'>-></span><span class='ws'>
+</span><span class='ws'>   </span><span class='keyword'>case</span><span class='ws'> </span><span class='var'>Pred</span><span class='punc'>(</span><span class='var'>H</span><span class='punc'>)</span><span class='ws'> </span><span class='punc'>of</span><span class='ws'>
+</span><span class='ws'>      </span><span class='atom'>true</span><span class='ws'>  </span><span class='punc'>-></span><span class='ws'> </span><span class='var'>H</span><span class='punc'>;</span><span class='ws'>
+</span><span class='ws'>      </span><span class='atom'>false</span><span class='ws'> </span><span class='punc'>-></span><span class='ws'> </span><span class='atom'>find_first</span><span class='punc'>(</span><span class='var'>T</span><span class='punc'>,</span><span class='ws'> </span><span class='var'>Pred</span><span class='punc'>)</span><span class='ws'>
+</span><span class='ws'>   </span><span class='keyword'>end</span><span class='punc'>;</span><span class='ws'>
+</span><span class='atom'>find_first</span><span class='punc'>(</span><span class='punc'>[</span><span class='punc'>]</span><span class='punc'>,</span><span class='ws'> </span><span class='var'>_</span><span class='punc'>)</span><span class='ws'> </span><span class='punc'>-></span><span class='ws'>
+</span><span class='ws'>   </span><span class='punc'>{</span><span class='punc'>}</span><span class='punc'>.</span><span class='ws'>
+</span></div>
+<p>My intuition says this will be fastest:
+</p>
+<p>I measure:
+</p>
+<div class='pre'>> p1:test(20000).
+ {length,20000},
+ {maps_at_start,{6215,{0,0}}},
+ {maps_at_end,{2253,{123456789,123456789}}},
+ {maps_thrown,{1827,{123456789,123456789}}},
+ {maps_fold,{2698,{123456789,123456789}}},
+ {lists_start,{3,{0,0}}},
+ {lists_end,{1229,{123456789,123456789}}}}
+</div>
+<p> <b> This time I was right</b>. When the element is at the start of the
+list it's very quick. When the element is at the end of the list it's
+faster than all the implementations using maps.  Also it makes sence
+to talk about an element being &ldquo;at the start of a list' or &ldquo;at the
+end.&rdquo;
+</p>
+<p>I've appended my test program. As I said earlier, swapping the lines <span class='code'>J1=...</span>
+and <span class='code'>J2=...</span> and running the program will convince you that performance
+estimation is tricky.
+</p>
+<blockquote>actually micro benchmarks (like this) are pretty difficult to interpret.
+at the end of the day you have to ask &ldquo;is my application fast enough.&rdquo;
+Most projects fail before the applications are complete so this question
+never gets answered]
+</blockquote>
+<p># Here's the test program
+</p>
+<div class='erlang'><span class='punc'>-</span><span class='atom'>module</span><span class='punc'>(</span><span class='atom'>maps_timings</span><span class='punc'>)</span><span class='punc'>.</span><span class='ws'>
+</span><span class='punc'>-</span><span class='atom'>compile</span><span class='punc'>(</span><span class='atom'>export_all</span><span class='punc'>)</span><span class='punc'>.</span><span class='ws'>
+</span><span class='ws'>
+</span><span class='atom'>map_search_pred</span><span class='punc'>(</span><span class='var'>Map</span><span class='punc'>,</span><span class='ws'> </span><span class='var'>Pred</span><span class='punc'>)</span><span class='ws'>  </span><span class='punc'>-></span><span class='ws'>
+</span><span class='ws'>    </span><span class='var'>M</span><span class='ws'> </span><span class='punc'>=</span><span class='ws'> </span><span class='punc'>[</span><span class='punc'>{</span><span class='var'>Key</span><span class='punc'>,</span><span class='ws'> </span><span class='var'>Value</span><span class='punc'>}</span><span class='ws'> </span><span class='punc'>||</span><span class='ws'> </span><span class='punc'>{</span><span class='var'>Key</span><span class='punc'>,</span><span class='ws'> </span><span class='var'>Value</span><span class='punc'>}</span><span class='ws'> </span><span class='punc'><-</span><span class='ws'> </span><span class='atom'>maps</span><span class='punc'>:</span><span class='atom'>to_list</span><span class='punc'>(</span><span class='var'>Map</span><span class='punc'>)</span><span class='punc'>,</span><span class='ws'> </span><span class='var'>Pred</span><span class='punc'>(</span><span class='var'>Key</span><span class='punc'>,</span><span class='ws'> </span><span class='var'>Value</span><span class='punc'>)</span><span class='ws'> </span><span class='punc'>=:=</span><span class='ws'> </span><span class='atom'>true</span><span class='punc'>]</span><span class='punc'>,</span><span class='ws'>
+</span><span class='ws'>    </span><span class='keyword'>case</span><span class='ws'> </span><span class='atom'>length</span><span class='punc'>(</span><span class='var'>M</span><span class='punc'>)</span><span class='ws'> </span><span class='punc'>of</span><span class='ws'>
+</span><span class='ws'>	</span><span class='integer'>0</span><span class='ws'> </span><span class='punc'>-></span><span class='ws'> </span><span class='punc'>{</span><span class='punc'>}</span><span class='punc'>;</span><span class='ws'>
+</span><span class='ws'>	</span><span class='var'>_</span><span class='ws'> </span><span class='punc'>-></span><span class='ws'> </span><span class='atom'>lists</span><span class='punc'>:</span><span class='atom'>nth</span><span class='punc'>(</span><span class='integer'>1</span><span class='punc'>,</span><span class='ws'> </span><span class='var'>M</span><span class='punc'>)</span><span class='ws'>
+</span><span class='ws'>    </span><span class='keyword'>end</span><span class='punc'>.</span><span class='ws'>
+</span><span class='ws'>
+</span><span class='atom'>map_search_pred1</span><span class='punc'>(</span><span class='var'>A</span><span class='punc'>,</span><span class='ws'> </span><span class='var'>B</span><span class='punc'>)</span><span class='ws'> </span><span class='punc'>-></span><span class='ws'>
+</span><span class='ws'>    </span><span class='punc'>(</span><span class='keyword'>catch</span><span class='ws'> </span><span class='atom'>map_search_pred</span><span class='punc'>(</span><span class='var'>A</span><span class='punc'>,</span><span class='var'>B</span><span class='punc'>)</span><span class='punc'>)</span><span class='punc'>.</span><span class='ws'>
+</span><span class='ws'>
+</span><span class='atom'>test</span><span class='punc'>(</span><span class='var'>K</span><span class='punc'>)</span><span class='ws'> </span><span class='punc'>-></span><span class='ws'>
+</span><span class='ws'>    </span><span class='var'>Map</span><span class='ws'> </span><span class='punc'>=</span><span class='ws'> </span><span class='atom'>make</span><span class='punc'>(</span><span class='var'>K</span><span class='punc'>,</span><span class='ws'> </span><span class='punc'>#</span><span class='punc'>{</span><span class='punc'>}</span><span class='punc'>,</span><span class='ws'> </span><span class='integer'>1</span><span class='punc'>)</span><span class='punc'>,</span><span class='ws'>
+</span><span class='ws'>    </span><span class='var'>Map1</span><span class='ws'> </span><span class='punc'>=</span><span class='ws'> </span><span class='var'>Map</span><span class='punc'>#</span><span class='punc'>{</span><span class='integer'>0</span><span class='ws'> </span><span class='punc'>=</span><span class='punc'>></span><span class='ws'> </span><span class='integer'>0</span><span class='punc'>}</span><span class='punc'>,</span><span class='ws'>
+</span><span class='ws'>    </span><span class='var'>Map2</span><span class='ws'> </span><span class='punc'>=</span><span class='ws'> </span><span class='var'>Map</span><span class='punc'>#</span><span class='punc'>{</span><span class='integer'>123456789</span><span class='ws'> </span><span class='punc'>=</span><span class='punc'>></span><span class='ws'> </span><span class='integer'>123456789</span><span class='punc'>}</span><span class='punc'>,</span><span class='ws'>
+</span><span class='ws'>    </span><span class='var'>List1</span><span class='ws'> </span><span class='punc'>=</span><span class='ws'> </span><span class='atom'>maps</span><span class='punc'>:</span><span class='atom'>to_list</span><span class='punc'>(</span><span class='var'>Map1</span><span class='punc'>)</span><span class='punc'>,</span><span class='ws'>
+</span><span class='ws'>    </span><span class='var'>List2</span><span class='ws'> </span><span class='punc'>=</span><span class='ws'> </span><span class='atom'>maps</span><span class='punc'>:</span><span class='atom'>to_list</span><span class='punc'>(</span><span class='var'>Map2</span><span class='punc'>)</span><span class='punc'>,</span><span class='ws'>
+</span><span class='ws'>    </span><span class='var'>J1</span><span class='ws'> </span><span class='punc'>=</span><span class='ws'> </span><span class='atom'>timer</span><span class='punc'>:</span><span class='atom'>tc</span><span class='punc'>(</span><span class='punc'>?</span><span class='var'>MODULE</span><span class='punc'>,</span><span class='ws'> </span><span class='atom'>map_search_pred</span><span class='punc'>,</span><span class='punc'>[</span><span class='var'>Map1</span><span class='punc'>,</span><span class='punc'>fun</span><span class='punc'>(</span><span class='var'>X</span><span class='punc'>,</span><span class='var'>Y</span><span class='punc'>)</span><span class='ws'> </span><span class='punc'>-></span><span class='ws'> </span><span class='var'>X</span><span class='ws'> </span><span class='punc'>=:=</span><span class='ws'> </span><span class='var'>Y</span><span class='ws'> </span><span class='keyword'>end</span><span class='punc'>]</span><span class='punc'>)</span><span class='punc'>,</span><span class='ws'>
+</span><span class='ws'>    </span><span class='var'>J2</span><span class='ws'> </span><span class='punc'>=</span><span class='ws'> </span><span class='atom'>timer</span><span class='punc'>:</span><span class='atom'>tc</span><span class='punc'>(</span><span class='punc'>?</span><span class='var'>MODULE</span><span class='punc'>,</span><span class='ws'> </span><span class='atom'>map_search_pred</span><span class='punc'>,</span><span class='punc'>[</span><span class='var'>Map2</span><span class='punc'>,</span><span class='punc'>fun</span><span class='punc'>(</span><span class='var'>X</span><span class='punc'>,</span><span class='var'>Y</span><span class='punc'>)</span><span class='ws'> </span><span class='punc'>-></span><span class='ws'> </span><span class='var'>X</span><span class='ws'> </span><span class='punc'>=:=</span><span class='ws'> </span><span class='var'>Y</span><span class='ws'> </span><span class='keyword'>end</span><span class='punc'>]</span><span class='punc'>)</span><span class='punc'>,</span><span class='ws'>
+</span><span class='ws'>    </span><span class='var'>J3</span><span class='ws'> </span><span class='punc'>=</span><span class='ws'> </span><span class='atom'>timer</span><span class='punc'>:</span><span class='atom'>tc</span><span class='punc'>(</span><span class='punc'>?</span><span class='var'>MODULE</span><span class='punc'>,</span><span class='ws'> </span><span class='atom'>map_search_pred1</span><span class='punc'>,</span><span class='ws'> </span><span class='punc'>[</span><span class='var'>Map2</span><span class='punc'>,</span><span class='ws'> </span><span class='ws'>
+</span><span class='ws'>					      </span><span class='punc'>fun</span><span class='punc'>(</span><span class='var'>X</span><span class='punc'>,</span><span class='ws'> </span><span class='var'>Y</span><span class='punc'>)</span><span class='ws'> </span><span class='punc'>when</span><span class='ws'> </span><span class='var'>X</span><span class='ws'> </span><span class='punc'>=:=</span><span class='ws'> </span><span class='var'>Y</span><span class='ws'> </span><span class='punc'>-></span><span class='ws'> </span><span class='atom'>throw</span><span class='punc'>(</span><span class='punc'>{</span><span class='var'>X</span><span class='punc'>,</span><span class='var'>Y</span><span class='punc'>}</span><span class='punc'>)</span><span class='punc'>;</span><span class='ws'>
+</span><span class='ws'>						 </span><span class='punc'>(</span><span class='var'>_</span><span class='punc'>,</span><span class='var'>_</span><span class='punc'>)</span><span class='ws'> </span><span class='punc'>-></span><span class='ws'> </span><span class='atom'>false</span><span class='ws'>
+</span><span class='ws'>					      </span><span class='keyword'>end</span><span class='punc'>]</span><span class='punc'>)</span><span class='punc'>,</span><span class='ws'>
+</span><span class='ws'>    </span><span class='var'>J4</span><span class='ws'> </span><span class='punc'>=</span><span class='ws'> </span><span class='atom'>timer</span><span class='punc'>:</span><span class='atom'>tc</span><span class='punc'>(</span><span class='punc'>?</span><span class='var'>MODULE</span><span class='punc'>,</span><span class='ws'> </span><span class='atom'>faster</span><span class='punc'>,</span><span class='ws'> </span><span class='punc'>[</span><span class='var'>Map2</span><span class='punc'>,</span><span class='ws'> </span><span class='ws'>
+</span><span class='ws'>				    </span><span class='punc'>fun</span><span class='punc'>(</span><span class='var'>X</span><span class='punc'>,</span><span class='ws'> </span><span class='var'>Y</span><span class='punc'>,</span><span class='ws'> </span><span class='var'>_</span><span class='punc'>)</span><span class='ws'> </span><span class='punc'>when</span><span class='ws'> </span><span class='var'>X</span><span class='ws'> </span><span class='punc'>=:=</span><span class='ws'> </span><span class='var'>Y</span><span class='ws'> </span><span class='punc'>-></span><span class='ws'> </span><span class='atom'>throw</span><span class='punc'>(</span><span class='punc'>{</span><span class='var'>X</span><span class='punc'>,</span><span class='var'>Y</span><span class='punc'>}</span><span class='punc'>)</span><span class='punc'>;</span><span class='ws'>
+</span><span class='ws'>				       </span><span class='punc'>(</span><span class='var'>_</span><span class='punc'>,</span><span class='var'>_</span><span class='punc'>,</span><span class='ws'> </span><span class='var'>A</span><span class='punc'>)</span><span class='ws'> </span><span class='punc'>-></span><span class='ws'> </span><span class='var'>A</span><span class='ws'>
+</span><span class='ws'>				    </span><span class='keyword'>end</span><span class='punc'>]</span><span class='punc'>)</span><span class='punc'>,</span><span class='ws'>
+</span><span class='ws'>    </span><span class='var'>J5</span><span class='ws'> </span><span class='punc'>=</span><span class='ws'> </span><span class='atom'>timer</span><span class='punc'>:</span><span class='atom'>tc</span><span class='punc'>(</span><span class='punc'>?</span><span class='var'>MODULE</span><span class='punc'>,</span><span class='ws'> </span><span class='atom'>find_first</span><span class='punc'>,</span><span class='ws'> </span><span class='punc'>[</span><span class='var'>List1</span><span class='punc'>,</span><span class='ws'> </span><span class='punc'>fun</span><span class='punc'>(</span><span class='punc'>{</span><span class='var'>X</span><span class='punc'>,</span><span class='ws'> </span><span class='var'>Y</span><span class='punc'>}</span><span class='punc'>)</span><span class='ws'> </span><span class='punc'>-></span><span class='ws'> </span><span class='var'>X</span><span class='ws'> </span><span class='punc'>=:=</span><span class='ws'> </span><span class='var'>Y</span><span class='ws'> </span><span class='keyword'>end</span><span class='punc'>]</span><span class='punc'>)</span><span class='punc'>,</span><span class='ws'>
+</span><span class='ws'>    </span><span class='var'>J6</span><span class='ws'> </span><span class='punc'>=</span><span class='ws'> </span><span class='atom'>timer</span><span class='punc'>:</span><span class='atom'>tc</span><span class='punc'>(</span><span class='punc'>?</span><span class='var'>MODULE</span><span class='punc'>,</span><span class='ws'> </span><span class='atom'>find_first</span><span class='punc'>,</span><span class='ws'> </span><span class='punc'>[</span><span class='var'>List2</span><span class='punc'>,</span><span class='ws'> </span><span class='punc'>fun</span><span class='punc'>(</span><span class='punc'>{</span><span class='var'>X</span><span class='punc'>,</span><span class='ws'> </span><span class='var'>Y</span><span class='punc'>}</span><span class='punc'>)</span><span class='ws'> </span><span class='punc'>-></span><span class='ws'> </span><span class='var'>X</span><span class='ws'> </span><span class='punc'>=:=</span><span class='ws'> </span><span class='var'>Y</span><span class='ws'> </span><span class='keyword'>end</span><span class='punc'>]</span><span class='punc'>)</span><span class='punc'>,</span><span class='ws'>
+</span><span class='ws'>    </span><span class='ws'>
+</span><span class='ws'>    </span><span class='punc'>{</span><span class='ws'>
+</span><span class='ws'>     </span><span class='punc'>{</span><span class='atom'>length</span><span class='punc'>,</span><span class='var'>K</span><span class='punc'>}</span><span class='punc'>,</span><span class='ws'>
+</span><span class='ws'>     </span><span class='punc'>{</span><span class='atom'>maps_at_start</span><span class='punc'>,</span><span class='var'>J1</span><span class='punc'>}</span><span class='punc'>,</span><span class='ws'> </span><span class='ws'>
+</span><span class='ws'>     </span><span class='punc'>{</span><span class='atom'>maps_at_end</span><span class='punc'>,</span><span class='var'>J2</span><span class='punc'>}</span><span class='punc'>,</span><span class='ws'> </span><span class='punc'>{</span><span class='atom'>maps_thrown</span><span class='punc'>,</span><span class='var'>J3</span><span class='punc'>}</span><span class='punc'>,</span><span class='ws'> </span><span class='punc'>{</span><span class='atom'>maps_foldl</span><span class='punc'>,</span><span class='var'>J4</span><span class='punc'>}</span><span class='punc'>,</span><span class='ws'> </span><span class='ws'>
+</span><span class='ws'>     </span><span class='punc'>{</span><span class='atom'>lists_start</span><span class='punc'>,</span><span class='var'>J5</span><span class='punc'>}</span><span class='punc'>,</span><span class='ws'>
+</span><span class='ws'>     </span><span class='punc'>{</span><span class='atom'>lists_end</span><span class='punc'>,</span><span class='var'>J6</span><span class='punc'>}</span><span class='punc'>}</span><span class='punc'>.</span><span class='ws'>
+</span><span class='ws'>     </span><span class='ws'>
+</span><span class='atom'>make</span><span class='punc'>(</span><span class='integer'>0</span><span class='punc'>,</span><span class='ws'> </span><span class='var'>M</span><span class='punc'>,</span><span class='ws'> </span><span class='var'>_</span><span class='punc'>)</span><span class='ws'> </span><span class='punc'>-></span><span class='ws'> </span><span class='var'>M</span><span class='punc'>;</span><span class='ws'>
+</span><span class='atom'>make</span><span class='punc'>(</span><span class='var'>K</span><span class='punc'>,</span><span class='ws'> </span><span class='var'>M</span><span class='punc'>,</span><span class='ws'> </span><span class='var'>I</span><span class='punc'>)</span><span class='ws'> </span><span class='punc'>-></span><span class='ws'> </span><span class='atom'>make</span><span class='punc'>(</span><span class='var'>K</span><span class='punc'>-</span><span class='integer'>1</span><span class='punc'>,</span><span class='atom'>maps</span><span class='punc'>:</span><span class='atom'>put</span><span class='punc'>(</span><span class='var'>I</span><span class='punc'>,</span><span class='var'>I</span><span class='punc'>+</span><span class='integer'>1</span><span class='punc'>,</span><span class='var'>M</span><span class='punc'>)</span><span class='punc'>,</span><span class='var'>I</span><span class='punc'>+</span><span class='integer'>2</span><span class='punc'>)</span><span class='punc'>.</span><span class='ws'>
+</span><span class='ws'>
+</span><span class='atom'>faster</span><span class='punc'>(</span><span class='var'>Map</span><span class='punc'>,</span><span class='ws'> </span><span class='var'>Fun</span><span class='punc'>)</span><span class='ws'> </span><span class='punc'>-></span><span class='ws'> </span><span class='ws'>
+</span><span class='ws'>    </span><span class='keyword'>case</span><span class='ws'> </span><span class='keyword'>catch</span><span class='ws'> </span><span class='punc'>(</span><span class='atom'>maps</span><span class='punc'>:</span><span class='atom'>fold</span><span class='punc'>(</span><span class='var'>Fun</span><span class='punc'>,</span><span class='ws'> </span><span class='punc'>[</span><span class='punc'>]</span><span class='punc'>,</span><span class='ws'> </span><span class='var'>Map</span><span class='punc'>)</span><span class='punc'>)</span><span class='ws'> </span><span class='punc'>of</span><span class='ws'>
+</span><span class='ws'>	</span><span class='punc'>[</span><span class='punc'>]</span><span class='ws'> </span><span class='punc'>-></span><span class='ws'> </span><span class='punc'>{</span><span class='punc'>}</span><span class='punc'>;</span><span class='ws'>
+</span><span class='ws'>	</span><span class='var'>Other</span><span class='ws'> </span><span class='punc'>-></span><span class='ws'> </span><span class='var'>Other</span><span class='ws'>
+</span><span class='ws'>    </span><span class='keyword'>end</span><span class='punc'>.</span><span class='ws'>
+</span><span class='ws'>
+</span><span class='atom'>find_first</span><span class='punc'>(</span><span class='punc'>[</span><span class='var'>H</span><span class='punc'>|</span><span class='var'>T</span><span class='punc'>]</span><span class='punc'>,</span><span class='ws'> </span><span class='var'>Pred</span><span class='punc'>)</span><span class='ws'> </span><span class='punc'>-></span><span class='ws'>
+</span><span class='ws'>    </span><span class='keyword'>case</span><span class='ws'> </span><span class='var'>Pred</span><span class='punc'>(</span><span class='var'>H</span><span class='punc'>)</span><span class='ws'> </span><span class='punc'>of</span><span class='ws'>
+</span><span class='ws'>	</span><span class='atom'>true</span><span class='ws'>  </span><span class='punc'>-></span><span class='ws'> </span><span class='var'>H</span><span class='punc'>;</span><span class='ws'>
+</span><span class='ws'>	</span><span class='atom'>false</span><span class='ws'> </span><span class='punc'>-></span><span class='ws'> </span><span class='atom'>find_first</span><span class='punc'>(</span><span class='var'>T</span><span class='punc'>,</span><span class='ws'> </span><span class='var'>Pred</span><span class='punc'>)</span><span class='ws'>
+</span><span class='ws'>    </span><span class='keyword'>end</span><span class='punc'>;</span><span class='ws'>
+</span><span class='atom'>find_first</span><span class='punc'>(</span><span class='punc'>[</span><span class='punc'>]</span><span class='punc'>,</span><span class='ws'> </span><span class='var'>_</span><span class='punc'>)</span><span class='ws'> </span><span class='punc'>-></span><span class='ws'>
+</span><span class='ws'>    </span><span class='punc'>{</span><span class='punc'>}</span><span class='punc'>.</span><span class='ws'>
+</span></div>
+<p>	    
+					    
+</p>
+<div class='pre'>
+
+</div>
+<div class='pre'>
+</div>
+
+	  </div>
+	  
+	  <div class="rightColumn">
+	    <h1>Index</h1>
+ <a href='#head_1'>Thought 1: It's easy</a><br><a href='#head_2'>Thought 3:</a><br><a href='#head_3'>Thought 4:</a><br><a href='#head_4'>Thought 5:</a><br><a href='#head_5'>Thought 6:</a><br><a href='#head_6'>Thought 7:</a><br><a href='#head_7'>Thought 8:</a><br>
+	  </div>
+	  
+	  <footer>
+
+	   
+  <!-- the tweet button -->
+  <p>	    
+    <a href=	"https://twitter.com/share"  class="twitter-share-button" 
+       data-url= "http://joearms.github.com/2015/01/08/Some_Performance-Measurements-On-Maps">Tweet</a>
+  </p>
+  
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+  <!-- end of tweet button -->
+
+  <p>Comments:</p>
+  
+  <div id="disqus">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      // var disqus_developer = 1;
+      var disqus_shortname = 'joearmstrongsblog';
+      var disqus_identifier = '/2015/01/08/Some_Performance-Measurements-On-Maps';
+      var disqus_url = 'http://joearms.github.com/2015/01/08/Some_Performance-Measurements-On-Maps.html';
+      (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+  </div>
+
+	   
+           <p>&copy; 2014-2016 Joe Armstrong - All Rights Reserved.</p>  </footer>
+	</div>
+      </div>
+    </body>
+</html>

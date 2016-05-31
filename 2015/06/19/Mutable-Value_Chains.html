@@ -1,0 +1,233 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+      <title>Joe Armstrong - Erlang and other things</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1"/>
+      <link rel="stylesheet" media="screen" href="/leftFluid.css"/>
+      <link rel="stylesheet" media="screen" href="/my.css"/>
+    </head>
+
+    <body>
+      <div class="wrap">
+	<h1>Joe Armstrong - Erlang and other stuff</h1>
+	<header>
+	  <nav>
+	    <ul class="nav inline-items">
+	      <li><a href="/index.html">Index</a></li>
+	      <li><a href="/lectures.html">Lectures</a></li>
+	      <li><a href="/resources.html">Resources</a></li>
+	    </ul>
+	  </nav>
+	</header>
+	
+	<div class="columnsContainer">
+	  
+	  <div class="leftColumn">
+	    <h1> Mutable Value Chains </h1>
+	      <p>Mutable value chains are sequences of immutable values which can be stored
+in a Key-Value store (KVS) or Distributed hash table (DHT).
+</p>
+<p>Mutable value chains solve the &ldquo;variable update problem&rdquo; using
+sequences of values to represent changes to a variable. Each new value
+assigned to a variable is represented by adding a new value to the
+sequence.
+</p>
+<p>I'll assume you know a little about DHTs and Key-Value stores and
+show how a number of services can be deployed on top of Key-Value
+stores or DHTs
+</p>
+<p>I'll also assume that the values stored in the KVS or DHT are
+*immutable* - and look at the central problem of &ldquo;updating&rdquo; an
+immutable value.
+</p>
+<p>This might sound complicated, but really it's very easy and involves the idea
+of an iterated sequence of SHA keys.
+</p>
+<p>Iterated SHA keys offer a surprisingly simple way to store mutable
+sequences of data in a Distributed Hash Table (DHT) like <a href='https://en.wikipedia.org/wiki/Kademlia'>Kademlia</a> or
+massive Key-Value store (like <a href='http://basho.com/products/riak-kv/'>Riak</a>).
+</p>
+<a name='head_1'></a><h1>Mutable Value Chains</h1>
+<p>How can we modify immutable data?
+</p>
+<p>The short answer is we can't. Suppose we have some data base variable
+<span class='code'>X</span> whose value changes with time. We might say that:
+</p>
+<div class='pre'>X0 = 10
+</div>
+<p>and some time later:
+</p>
+<div class='pre'>X1 = 16
+</div>
+<p>and so on. Instead of having a single variable <span class='code'>X</span> whose value changes
+in time we can think of having a sequence of values <span class='code'>X0</span>, <span class='code'>X1</span>, <span class='code'>X2</span>,
+... and so on where the values of <span class='code'>X0</span>, <span class='code'>X1</span> and so on are immutable (ie
+never change).
+</p>
+<p>The advantages of having immutable data are many. Firstly the values
+are <b>cacheable</b> forever. Since we know the values cannot change we
+can store them forever in an efficient manner. We can compress the
+values and build indexes over them knowing that that data won't
+change. We also don't have any problems with update consistency, since
+they cannot be updated.
+</p>
+<p>Cacheing works because of immutable data. GIT works because of
+immutable data, Functional programming works because of immutable
+data. Functional programs create new values from old values without
+changing the old values which make it easy to argue about the
+properties of the program. Things like debugging become easy because
+old values are not overwritten.
+</p>
+<p>So how can we make mutable sequences of values? If I say <span class='code'>x = 10</span>, how can I
+later on say x = <span class='code'>20</span>, I can't change the *value* of <span class='code'>10</span> so I can't say &ldquo;and now
+there's a new value.&rdquo;
+</p>
+<p>I've been wondering how to do this for years, and suddenly it occurred
+to me how to do this. One way that doesn't work is to view the
+sequence of values as some kind of linked list, where each value has
+an invisible write-once-only pointer to the next value. The
+write-once-pointer gets updated when the value is updated,
+unfortunately this is difficult to implement and there are problems
+with consistency.
+</p>
+<blockquote>Keys are iterated SHA sequences
+</blockquote>
+<p>The solution is blindingly simple (once you see it) - we represent the
+sequence as a set Key-Value pairs where the Keys are taken from an
+iterated sequence of SHA1 checksums. The first key is a random number,
+thereafter <span class='code'>Key[i] = sha(Key[i-1])</span>.
+</p>
+<a name='head_2'></a><h1>Application 1 - Secure Mail</h1>
+<p><span class='code'>Ann</span> wants to send a stream of messages to <span class='code'>Bob</span>.
+</p>
+<li><span class='code'>Ann</span> generates a 120 bit random number <span class='code'>K0</span></li>
+<li><span class='code'>Ann</span> communicates the value of <span class='code'>K0</span> to <span class='code'>Bob</span> by some out-of-band method (writing it down on a sheet of paper)</li>
+<li><span class='code'>Ann's</span> first mail to <span class='code'>Bob</span> is stored in a DHT with key <span class='code'>K0</span></li>
+<li><span class='code'>Ann's</span> second mail to <span class='code'>Bob</span> is stored in a DHT with key <span class='code'>sha(K0)</span></li>
+<li><span class='code'>Ann's</span> third mail to <span class='code'>Bob</span> is stored in a DHT with key <span class='code'>sha(sha(K0))</span></li>
+<li>...</li>
+<li><span class='code'>Bob</span> polls the DHT for <span class='code'>K0</span> to get the first mail</li>
+<li><span class='code'>Bob</span> polls the DHT for <span class='code'>sha(K0)</span> to get the second mail</li>
+<p>Assuming we use a DHT like Kademlia to store the data <span class='code'>Ann</span>
+should republish the data (say) every hour and store the data on the
+20 nearest nodes to the key.
+</p>
+<a name='head_3'></a><h1>What's in the value?</h1>
+<p>I haven't said anything about the values that are stored at a particular key. There are
+several alternatives. Assuming these values are tuples that have been serialized in
+some way, we could choose:
+</p>
+<p><span class='code'>{sha,Key1}</span> This is an indirection to a second document <span class='code'>Key1</span> is the SHA of a second
+document stored in the DHT. The document is &ldquo;self-signed&rdquo; ie has checksum <span class='code'>Key1</span>. The
+client can fetch this document and check that it has SHA1 checksum of <span class='code'>Key1</span>. This
+is immune to a thing-in-the-middle attack.
+</p>
+<p><span class='code'>{s,Person,Key1,Data,Proof}</span> is a signed document. Person signed the document. <span class='code'>Key1</span> is
+the SHA of a key in the DHT containing Person's public key. <span class='code'>Data</span> is signed with
+authentication <span class='code'>Proof</span>
+</p>
+<p><span class='code'>{e,...}</span> is an encrypted document ...
+</p>
+<p>As you can see there are many possibilities.
+</p>
+<a name='head_4'></a><h1>Application 2 - Decentralized map</h1>
+<p>Given a sequence of values <span class='code'>X0</span>, <span class='code'>X1</span>, <span class='code'>X2</span>, <span class='code'>X3</span> compute a sequence of
+values <span class='code'>Y0</span>, <span class='code'>Y1</span>, <span class='code'>Y2</span>, ... where <span class='code'>Yi = f(Xi)</span>. This is easy:
+</p>
+<li>Generate two random numbers <span class='code'>Kx0</span> and <span class='code'>Ky0</span></li>
+<li>Store <span class='code'>X0</span> in the DHT with key <span class='code'>Kx0</span></li>
+<li>Store <span class='code'>X1</span> in the DHT with key <span class='code'>sha(Kx0)</span></li>
+<li>...</li>
+<li>Compute <span class='code'>Y0 = f(X0)</span> and store the result in the DHT with key <span class='code'>Ky0</span></li>
+<li>Compute <span class='code'>Y1 = f(X1)</span> and store the result in the DHT with key <span class='code'>sha(Ky0)</span></li>
+<p>If the sequence of <span class='code'>X</span>'s is huge then multiple workers can be started tell them
+to start computing values at different points in the value chain.
+</p>
+<a name='head_5'></a><h1>Application 3 - Software upgrade</h1>
+<p>Suppose we have deployed some software on an extremely large number of machines.
+</p>
+<p>Assume that we are at version 23 of some software. The &ldquo;Key&rdquo; to this software
+is <span class='code'>K23</span> (an SHA checksum) to fetch the software we lookup <span class='code'>K23</span> in our DHT,
+and assume this is the SHA of the software. So:
+</p>
+<div class='pre'>  OurSoftware = lookup(lookup(K23))
+</div>
+<p>Where <span class='code'>lookup(Key)</span> retrieves a value from a global DHT.
+</p>
+<p>To publish new software the provider injects two new keys into the software.
+Something like:
+</p>
+<div class='pre'> 
+ SHA = sha(Blob),
+ inject(SHA, Blob)
+ inject(sha(K23), SHA)
+</div>
+<p>Where <span class='code'>inject(Key, Value)</span> inserts a new value into the DHT (or KVS) and <span class='code'>Blob</span>
+represents the software.
+</p>
+<p>Clients at version <span class='code'>K23</span> poll the system by doing <span class='code'>lookup(sha(K23))</span> if a new value
+is returned then the software needs to be upgraded.
+</p>
+<p>Values can be protected and signed with a layer of cryptography
+</p>
+<a name='head_6'></a><h1>Application 4 - Digital Money</h1>
+<p>It should be possible to make small closed groups of agents participating
+in financial transactions. Once we have established secure message streams between
+agents, we can add a server and a transaction layer in a manner similar to bitcoin.
+</p>
+<p>By keeping the groups small the transaction chains will be short which simplifies the
+implementation.
+</p>
+<a name='head_7'></a><h1>Will the keys run out?</h1>
+<p>SHA which I have chosen in this article has 160 bits, so after more than <span class='code'>2^160</span>
+entries have been put into the DHT collisions will occur.
+</p>
+<p>To put this number in perspective we note that the number of atoms on
+the planet is about 10^50 (2^166) and the volume of the universe/the
+Planck volume is about 10^188 (c. 2^624) so we might need a larger key space
+that that which is provided by SHA.
+</p>
+
+	  </div>
+	  
+	  <div class="rightColumn">
+	    <h1>Index</h1>
+ <a href='#head_1'>Mutable Value Chains</a><br><a href='#head_2'>Application 1 - Secure Mail</a><br><a href='#head_3'>What's in the value?</a><br><a href='#head_4'>Application 2 - Decentralized map</a><br><a href='#head_5'>Application 3 - Software upgrade</a><br><a href='#head_6'>Application 4 - Digital Money</a><br><a href='#head_7'>Will the keys run out?</a><br>
+	  </div>
+	  
+	  <footer>
+
+	   
+  <!-- the tweet button -->
+  <p>	    
+    <a href=	"https://twitter.com/share"  class="twitter-share-button" 
+       data-url= "http://joearms.github.com/2015/06/19/Mutable-Value_Chains">Tweet</a>
+  </p>
+  
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+  <!-- end of tweet button -->
+
+  <p>Comments:</p>
+  
+  <div id="disqus">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      // var disqus_developer = 1;
+      var disqus_shortname = 'joearmstrongsblog';
+      var disqus_identifier = '/2015/06/19/Mutable-Value_Chains';
+      var disqus_url = 'http://joearms.github.com/2015/06/19/Mutable-Value_Chains.html';
+      (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+  </div>
+
+	   
+           <p>&copy; 2014-2016 Joe Armstrong - All Rights Reserved.</p>  </footer>
+	</div>
+      </div>
+    </body>
+</html>

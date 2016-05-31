@@ -1,0 +1,21 @@
+We might want to do this
+
+<? for I in Exprs ?>
+<? I ?>
+<? endfor ?>
+
+<? if Exr ?>
+....
+<? elseif Exr ?>
+   
+<? endif ?>
+
+<? set Var ?>
+   Block
+<? end ?>
+
+<? set Sidebar ?>
+...
+<? endset ?>
+
+<? expand("post") ?>

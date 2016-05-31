@@ -1,0 +1,232 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+      <title>Joe Armstrong - Erlang and other things</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1"/>
+      <link rel="stylesheet" media="screen" href="/leftFluid.css"/>
+      <link rel="stylesheet" media="screen" href="/my.css"/>
+    </head>
+
+    <body>
+      <div class="wrap">
+	<h1>Joe Armstrong - Erlang and other stuff</h1>
+	<header>
+	  <nav>
+	    <ul class="nav inline-items">
+	      <li><a href="/index.html">Index</a></li>
+	      <li><a href="/lectures.html">Lectures</a></li>
+	      <li><a href="/resources.html">Resources</a></li>
+	    </ul>
+	  </nav>
+	</header>
+	
+	<div class="columnsContainer">
+	  
+	  <div class="leftColumn">
+	    <h1> Background to Programming Erlang </h1>
+	      <p>Erlang is now over 25 years old. I've been involved with Erlang from
+the very start, and seen it grow from a idea into a fully fledged
+programming language with large numbers of users.
+</p>
+<p>I wrote the first Erlang compiler, taught the first Erlang course, and
+with my colleagues wrote the first Erlang book.  I started one of the
+first successful Erlang companies and have been involved with all
+stages of development of the language and its applications.
+</p>
+<p>In 2007 I wrote &ldquo;Programming Erlang&rdquo; (Pragmatic Press) - it had been
+14 years since the publication of &ldquo;Concurrent Programming in Erlang&rdquo;
+(Prentice Hall, 1993) - and our users were crying out for a new book.
+So in 2007 I grit my teeth and started writing. I had the good fortune
+to have Dave Thomas as my Editor and he taught me a lot about writing.
+The first edition was pretty ambitious, I wanted to describe every
+part of the language and the major libraries, with example code and
+with real world examples that actually did things. So the book
+contained runnable code for things like a SHOUTcast server so you
+could stream music to devices and a full text indexing system.
+</p>
+<p>The first edition of &ldquo;Programming Erlang&rdquo; spurred a flurry of
+activity, the book sold well. It was published through the Pragmatic
+Press Beta publishing process. The beta publishing process is great,
+authors get immediate feedback from their readers. The readers can
+download a PDF of the unfinished book and start reading and commenting
+on the text.  Since the book is deliberately unfinished they can
+influence the remainder of the book.  Books are published as betas
+when they are about 70% complete.
+</p>
+<p>On day one over 800 people bought the book, and on day two there were about
+a thousand comments in the errata page of the book. How could there be
+so many errors? My five hundred page book seemed to have about 4
+comments per page. This came as a total shock. Dave and I slaved away,
+fixing the errata.  If I'd known I'd have taken a two week holiday when
+the book went live.
+</p>
+<p>A couple of months after the initial PDF version of the book, the final
+version was ready and we started shipping the paper version.
+</p>
+<p>Now a strange thing happened - The Prags had published a Erlang book
+and word on the street was that it was selling well. In no short order
+I began hearing rumors, O'Reilly was on the prowl looking for authors,
+many of my friends were contacted to see if they were interested in
+writing Erlang books.
+</p>
+<p>This is really weird, when you want to write a book you can't find a
+publisher. But when an established publisher wants to publish a book
+on a particular topic it can't find authors.
+</p>
+<p>Here's the time line since 2007	
+</p>
+<li>2007 - Programming Erlang - Armstrong - (Prag Press) </li>
+<li>2009 - ERLANG Programming - Cesarini and Thompson - (O'Reilly) </li>
+<li>2010 - Erlang and OTP in Action Logan - Merritt and Carlsson - (Manning) </li>
+<li>2013 - Learn You Some Erlang for Great Good - Hebert - (No starch press) </li>
+<li>2013 - Introducing Erlang: Getting Started in Functional Programming - St. Laurent (O'Reilly)</li>
+<li>2013 - Programming Erlang - 2'nd edition - Armstrong - (Prag Press) </li>
+<li>2014 - Designing for Scalability with Erlang/OTP - Cesarini and Vinoski - (O'Reilly)</li>
+<p>Not only was Erlang getting some love, languages like Haskell needed
+to compete so Real World Haskell by Bryan O'Sullivan, John Goerzen and
+Don Stewart was published in 2008.  This was followed by &ldquo;Learn You a
+Haskell for Great Good&rdquo; by Miran Lipovaca (2011).
+</p>
+<p>My Erlang book seemed to break the ice, O'Reilly followed with
+&ldquo;Erlang Programming&rdquo; and &ldquo;Real World Haskell&rdquo; - which inspired
+Starch press and &ldquo;Learn You a Haskell for Great Good&rdquo; which inspired
+&ldquo;Learn You Some Erlang for Great Good&rdquo; and the wheel started to
+spin.
+</p>
+<a name='head_1'></a><h1>Fast Forward to 2013</h1>
+<p>I was contacted by the Prags &ldquo;did my book want a refresh?&rdquo; -
+what's a refresh?  The 2007 book was getting a little dated. Core
+Erlang had changed a bit, but the libraries had changed, and the user
+base had grown.  But also, and significantly for the second edition
+there were now four other books on the market.
+</p>
+<p>My goal in the first edition had been &ldquo;describe everything&rdquo; and
+&ldquo;document everything that is undocumented&rdquo;. I wanted a book that was
+complete in its coverage and I wanted a book for beginners and for
+advanced users.
+</p>
+<p>Now of course this is impossible. A book for beginners will have a lot
+of explanations that the advanced user will not want to read. Text for
+advanced users will be difficult for beginners to understand, or
+worse, impossible to understand.
+</p>
+<p>When I started work on a second edition - I thought - &ldquo;All I'll have to
+do is piff up the examples and make sure everything works properly.&rdquo; I
+also thought I'd drop some rather boring appendices, drop the odd
+chapter and add a new chapter on the type system - so I thought.
+</p>
+<p>It didn't turn out like this, My editor, the ever helpful Susannah
+Pfalzer, probably knew this, but wasn't letting on.
+</p>
+<p>In the event I wrote seven new chapters, dropped some rather boring
+appendices and dropped some old chapters.
+</p>
+<p>The biggest difference in the second edition was a refocusing the target
+audience.  Remember I said that the first edition was intended for
+advanced and beginning users.  Well now there were four competing books
+on the market. Fred Hebert's book was doing a great job for the
+first-time users, with beautifully hand draw cartoons to
+boot. Francesco and Simons book was doing a great job with OTP, so now
+I could refocus the book and concentrate on a narrow band of users.
+</p>
+<p>But who? In writing the second edition we spent a lot of time focusing on
+our target audience. When the first seven chapters were ready we sent
+the chapters for review to 14 reviewers. There were three super advanced
+users - the programmers who know <span class='emph'>everything</span> about Erlang. What they don't
+know about Erlang could be engraved on the back of a tea-leaf, we also took
+four total beginners - who know how to program in Java but who
+knew no Erlang, and the rest were total beginners, they'd been hacking
+Erlang for a year or so but were still learning.
+</p>
+<p>We threw the book at them to see what would happen.
+</p>
+<p>Surprise number one:
+</p>
+<p>Some of the true beginners didn't understand what I'd written - some
+of the ideas were just &ldquo;too strange&rdquo;. I was amazed - goodness gracious
+me, when you've lived breathed dreamed and slept with Erlang for
+twenty five years and you know Erlangs aunty and grandmother you take
+things for granted.
+</p>
+<p>And so I threw away the text that they didn't understand and
+started again.  I'd got one reviewer on the ball, - I redid the text -
+they read it again - they still didn't understand - it was very frustrating.
+</p>
+<p>&ldquo;what is wrong?&rdquo; I'm busting a gut explaining <span class='emph'>everything</span> and
+they still don't understand. And so I threw the text away (again)
+re-wrote it and sent them the third draft.
+</p>
+<p>Bingo - they understood. Happy days are here again. Sometimes new
+ideas are just &ldquo;too strange&rdquo; to grock. But by now I was getting a
+feeling for how much explanation I had to add, it was about 30% more
+that I thought - but what the heck, if you've bought a book you don't
+want the people who've bought the damn thing to not read it because
+it's too difficult.
+</p>
+<p>I also had Bruce Tate advising me - Bruce wrote	 &ldquo;learn 600
+languages in ten minutes flat.&rdquo;  Bruce is great guy, and does a mean
+Texas Accent if you feed him on beer and ask him nicely.  Now Bruce
+can teach any programming language to anybody in ten seconds flat, so
+he's a great guy to have reviewing your books.
+</p>
+<p>What about the advanced users? My book was 30% longer with 30% more
+text and was aimed at converting Java programmers who have seen the
+light and are wish to renounce their evil ways and convert to the joys
+of Erlang programming, but what about the advanced users?
+</p>
+<p>Screw the advanced users - they know it all anyway - and they don't buy
+the book because they know it all anyway. So I killed by babies, and
+threw out a lot of advanced material that nobody ever reads - My goal
+is to put the omitted advanced material on a web site.
+</p>
+<p>The other tip I got was from Francesco Cesarini - &ldquo;They like the
+exercises&rdquo; So I added exercises at the end of virtually every
+chapter.
+</p>
+<p>So now there is no excuse for not holding an Erlang programming course,
+there are exercises at the end of every chapter.
+</p>
+
+	  </div>
+	  
+	  <div class="rightColumn">
+	    <h1>Index</h1>
+ <a href='#head_1'>Fast Forward to 2013</a><br>
+	  </div>
+	  
+	  <footer>
+
+	   
+  <!-- the tweet button -->
+  <p>	    
+    <a href=	"https://twitter.com/share"  class="twitter-share-button" 
+       data-url= "http://joearms.github.com/2014/06/26/Background-to-programming-erlang">Tweet</a>
+  </p>
+  
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+  <!-- end of tweet button -->
+
+  <p>Comments:</p>
+  
+  <div id="disqus">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      // var disqus_developer = 1;
+      var disqus_shortname = 'joearmstrongsblog';
+      var disqus_identifier = '/2014/06/26/Background-to-programming-erlang';
+      var disqus_url = 'http://joearms.github.com/2014/06/26/Background-to-programming-erlang.html';
+      (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+  </div>
+
+	   
+           <p>&copy; 2014-2016 Joe Armstrong - All Rights Reserved.</p>  </footer>
+	</div>
+      </div>
+    </body>
+</html>

@@ -1,0 +1,149 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+      <title>Joe Armstrong - Erlang and other things</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1"/>
+      <link rel="stylesheet" media="screen" href="/leftFluid.css"/>
+      <link rel="stylesheet" media="screen" href="/my.css"/>
+    </head>
+
+    <body>
+      <div class="wrap">
+	<h1>Joe Armstrong - Erlang and other stuff</h1>
+	<header>
+	  <nav>
+	    <ul class="nav inline-items">
+	      <li><a href="/index.html">Index</a></li>
+	      <li><a href="/lectures.html">Lectures</a></li>
+	      <li><a href="/resources.html">Resources</a></li>
+	    </ul>
+	  </nav>
+	</header>
+	
+	<div class="columnsContainer">
+	  
+	  <div class="leftColumn">
+	    <h1> Managing Two Million Webservers </h1>
+	      <p>This has been bugging me for a long time. There are some things we
+explain because we know other people don't understand them and there
+are some things we don't explain because we assume that everybody else
+knows them.
+</p>
+<p>So this is about web-servers written in Erlang and Elixir.  The idea
+to write this came after watching the <a href='https://www.youtube.com/watch?v=XJ9ckqCMiKk'>Making the Web Functional</a>
+presentation by Chris McCord and Evan Czaplicki at the
+<a href='http://www.erlang-factory.com/sfbay2016'>2016 Erlang Factory in San Francisco</a>
+</p>
+<p>Imagine an Erlang or Elixir HTTP server managing a couple of million
+user sessions.  Time and again I've heard this said:
+</p>
+<li>We have a (Erlang or Elixir) web server managing 2 million user sessions.</li>
+<p>But this statement is incorrect and stems from a fundamental misconception.
+</p>
+<blockquote>We do not have ONE web-server handling 2 millions sessions. We have
+2 million webservers handling one session each.
+</blockquote>
+<p>The reason people think we have one webserver handling a couple of
+million users is because this is the way it works in a sequential web
+server. A server like Apache is actually a single webserver that
+handles a few million connections.
+</p>
+<p>In Erlang we create very lightweight processes, one per connection and
+within that process spin up a web server. So we might end up with a
+few million web-servers with one user each.
+</p>
+<p>If we can accept say 20K requests/second - this is equivalent to
+saying we can create 20K webservers/second.
+</p>
+<p>On the surface things look very similar. But there is a fundamental
+difference between having one webserver handling two million
+connections, and two million web servers handling one connection each.
+</p>
+<p>If there is a software error and the server software crashes we lose
+either two million connections or one depending upon the model.
+</p>
+<p>In Erlang if the web server software itself is incorrect we'll lose a
+single connection, which is OK. Since the software is incorrect and
+crashes we don't know what to do so crashing is a good
+alternative. What is important is that one session crashing does not
+effect all the other sessions.
+</p>
+<p>This requirement, goes way back to when we designed Erlang in the mid
+1980's.  In Telecoms systems, losing one connection due to a software
+error was acceptable, losing them all due to a bug was big time bad
+news.
+</p>
+<a name='head_1'></a><h1>Chat or Presence Servers</h1>
+<p>So what happens if you want to make a chat or presence server? Well
+we've already got one process per connection, so let's also make one
+process per user and send messages between the connections and user
+processes when connections come and go - this is so simple that the
+code practically writes itself.
+</p>
+<p>So why did WhatsApp use Erlang and why does the <a href='http://www.phoenixframework.org/'>Phoenix Framework</a>
+outperform Ruby on Rails? - precisely because we have millions of tiny
+webservers - and when we have lots of small things it's easy to spread
+them over lots of processors and make the system fault-tolerant and
+scalable.
+</p>
+<p>Packing Erlang or Elixir processes onto cores is easy because they are
+small and are like packing physical objects. If we want to pack sand
+in barrels it's easy. The grains of sand are so small that it's easy
+to completely fill the barrels. Packing huge boulders is difficult,
+they don't pack well and much space is wasted.
+</p>
+<a name='head_2'></a><h1>Adding fault-tolerance and scalability</h1>
+<blockquote>Because we have one web server per user  we can easily make the
+system fault tolerant or scalable
+</blockquote>
+<p>To make a fault tolerent system we use two or more processes per user;
+One is the master process, the others are replicas on different
+machines. They must be on different machines since the entire machine
+where the master runs might crash. We can make it scalable by just
+buying more machines and spreading the processes out over the
+machines.
+</p>
+
+	  </div>
+	  
+	  <div class="rightColumn">
+	    <h1>Index</h1>
+ <a href='#head_1'>Chat or Presence Servers</a><br><a href='#head_2'>Adding fault-tolerance and scalability</a><br>
+	  </div>
+	  
+	  <footer>
+
+	   
+  <!-- the tweet button -->
+  <p>	    
+    <a href=	"https://twitter.com/share"  class="twitter-share-button" 
+       data-url= "http://joearms.github.com/2016/03/13/Managing-two-million-webservers">Tweet</a>
+  </p>
+  
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+  <!-- end of tweet button -->
+
+  <p>Comments:</p>
+  
+  <div id="disqus">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      // var disqus_developer = 1;
+      var disqus_shortname = 'joearmstrongsblog';
+      var disqus_identifier = '/2016/03/13/Managing-two-million-webservers';
+      var disqus_url = 'http://joearms.github.com/2016/03/13/Managing-two-million-webservers.html';
+      (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+  </div>
+
+	   
+           <p>&copy; 2014-2016 Joe Armstrong - All Rights Reserved.</p>  </footer>
+	</div>
+      </div>
+    </body>
+</html>

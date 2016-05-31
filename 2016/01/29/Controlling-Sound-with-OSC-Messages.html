@@ -1,0 +1,185 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+      <title>Joe Armstrong - Erlang and other things</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1"/>
+      <link rel="stylesheet" media="screen" href="/leftFluid.css"/>
+      <link rel="stylesheet" media="screen" href="/my.css"/>
+    </head>
+
+    <body>
+      <div class="wrap">
+	<h1>Joe Armstrong - Erlang and other stuff</h1>
+	<header>
+	  <nav>
+	    <ul class="nav inline-items">
+	      <li><a href="/index.html">Index</a></li>
+	      <li><a href="/lectures.html">Lectures</a></li>
+	      <li><a href="/resources.html">Resources</a></li>
+	    </ul>
+	  </nav>
+	</header>
+	
+	<div class="columnsContainer">
+	  
+	  <div class="leftColumn">
+	    <h1> Controlling Sound with OSC Messages </h1>
+	      <p>In earlier articles I have talked about <a href='http://joearms.github.io/2016/01/27/Controlling-Live-Music.html'>Controlling Live Music</a> and <a href='http://joearms.github.io/2016/01/28/A-Badass-Way-To-Connect-Programs-Together.html'>A
+Badass Way to Connect Programs Together</a>
+</p>
+<p>In this article I'll show how I have interfaced Erlang to the <a href='http://sonic-pi.net/'>Sonic
+Pi</a>, the <a href='http://www.audiosynth.com/'>SuperCollider</a> and <a href='https://puredata.info/'>Pure Data</a>.
+</p>
+<p>The code for described here is available at
+<a href='https://github.com/joearms/music_experiments'>https://github.com/joearms/music_experiments</a>
+</p>
+<p>The code I'm described is at &ldquo;proof of concept&rdquo; stage - you can
+download it and run it - but there are no build instructions, so
+familiarity with Erlang/OSC and the target systems is implied.
+</p>
+<a name='head_1'></a><h1>Act1 : Connecting Sonic PI to Erlang.</h1>
+<p>This all started when Sam Arron showed me how to do remotely control
+Sonic Pi.
+</p>
+<blockquote>&ldquo;It's easy,&rdquo; he said &ldquo;<span style='color:red'>Just open port 4557 and send it
+a run_code message</span>.&rdquo; Actually he didn't say *exactly* this
+but he might say this if I asked again.
+</blockquote>
+<p>So it's really really easy. Any of the programs you see in a sonic pi window
+can be turned into a fragment of Erlang code
+</p>
+<p>Here's a very simple program in Sonic Pi:
+</p>
+<p><img src="/images/sonic_pi.png">
+</p>
+<p>To run this in Sonic Pi you just press the run button, and you'll hear
+a noise.
+</p>
+<p>Here's the code to do the same thing in Erlang:
+</p>
+<div class='erlang'><span class='atom'>test1</span><span class='punc'>(</span><span class='punc'>)</span><span class='ws'> </span><span class='punc'>-></span><span class='ws'>
+</span><span class='ws'>    </span><span class='atom'>run_code</span><span class='punc'>(</span><span class='string'>"use_synth :fm\nplay 50\n"</span><span class='punc'>)</span><span class='punc'>.</span><span class='ws'>
+</span><span class='ws'>
+</span><span class='atom'>run_code</span><span class='punc'>(</span><span class='var'>Prog</span><span class='punc'>)</span><span class='ws'> </span><span class='punc'>-></span><span class='ws'>
+</span><span class='ws'>    </span><span class='comment'>%% Prog is a io-list</span><span class='ws'>
+</span><span class='ws'>    </span><span class='var'>P1</span><span class='ws'> </span><span class='punc'>=</span><span class='ws'> </span><span class='atom'>lists</span><span class='punc'>:</span><span class='atom'>flatten</span><span class='punc'>(</span><span class='var'>Prog</span><span class='punc'>)</span><span class='punc'>,</span><span class='ws'>
+</span><span class='ws'>    </span><span class='var'>M</span><span class='ws'> </span><span class='punc'>=</span><span class='ws'> </span><span class='punc'>[</span><span class='string'>"/run-code"</span><span class='ws'> </span><span class='punc'>,</span><span class='ws'> </span><span class='string'>"erl-id"</span><span class='punc'>,</span><span class='ws'> </span><span class='var'>P1</span><span class='punc'>]</span><span class='punc'>,</span><span class='ws'>
+</span><span class='ws'>    </span><span class='var'>E</span><span class='ws'> </span><span class='punc'>=</span><span class='ws'> </span><span class='atom'>osc</span><span class='punc'>:</span><span class='atom'>encode</span><span class='punc'>(</span><span class='var'>M</span><span class='punc'>)</span><span class='punc'>,</span><span class='ws'>
+</span><span class='ws'>    </span><span class='punc'>{</span><span class='atom'>ok</span><span class='punc'>,</span><span class='ws'> </span><span class='var'>Socket</span><span class='punc'>}</span><span class='ws'> </span><span class='punc'>=</span><span class='ws'> </span><span class='atom'>gen_udp</span><span class='punc'>:</span><span class='atom'>open</span><span class='punc'>(</span><span class='integer'>0</span><span class='punc'>,</span><span class='punc'>[</span><span class='atom'>binary</span><span class='punc'>]</span><span class='punc'>)</span><span class='punc'>,</span><span class='ws'>
+</span><span class='ws'>    </span><span class='atom'>ok</span><span class='ws'> </span><span class='punc'>=</span><span class='ws'> </span><span class='atom'>gen_udp</span><span class='punc'>:</span><span class='atom'>send</span><span class='punc'>(</span><span class='var'>Socket</span><span class='punc'>,</span><span class='ws'> </span><span class='string'>"localhost"</span><span class='punc'>,</span><span class='ws'> </span><span class='integer'>4557</span><span class='punc'>,</span><span class='ws'> </span><span class='var'>E</span><span class='punc'>)</span><span class='punc'>,</span><span class='ws'>
+</span><span class='ws'>    </span><span class='atom'>gen_udp</span><span class='punc'>:</span><span class='atom'>close</span><span class='punc'>(</span><span class='var'>Socket</span><span class='punc'>)</span><span class='punc'>.</span><span class='ws'>
+</span></div>
+<p>The entire program is in <a href='https://github.com/joearms/music_experiments/blob/master/sonic.erl'>sonic.erl</a> the OSC encoder is in <a href='https://github.com/joearms/music_experiments/blob/master/osc.erl'>osc.erl</a>.
+</p>
+<p><b>Fantastic</b> I say.
+</p>
+<blockquote>Note: I can collaborate with the Sonic PI without messing in the
+Sonic Pi source code tree - all I do is send it messages that it understands.
+</blockquote>
+<a name='head_2'></a><h1>Act2 : Connecting The SuperCollider to Erlang.</h1>
+<p>Having connected the Sonic Pi to Erlang I started idly wondering
+&ldquo;How does the Sonic Pi actually make sounds? does it do it itself
+or does in use some other code to do this&rdquo; - I downloaded the
+sources to find out - the documentation doesn't say.
+</p>
+<p>Low and behold the Sonic Pi makes sounds by sending OSC-over-UDP
+messages to the SuperCollider. I say the SuperCollider here, since
+this is the name of the program you have to download to perform these
+experiments. But actually the SuperCollider itself is actually two
+programs, which communicate by (guess what) OSC-over-UDP.
+</p>
+<p>A program called <span class='code'>scsynth</span> which is part of the SuperCollider program
+generates the actual sounds. &ldquo;Why is it done this way?&rdquo; you're probably asking.
+It's because the author of the SuperCollider wanted to separate the program
+into a real-time part (<span class='code'>scsynth</span>) and a control part (which has less stringent control
+problems) - the music should play (via <span class='code'>scsynth</span>) even if the controller is
+busy or crashed for a short time - a very nice design.
+</p>
+<p>Sam kindly told me how to trace the OSC messages to the SuperCollider
+and I turned this into an Erlang program.
+</p>
+<p>So to control the SuperCollider I open UDP port 4556 and send it a
+stream of OSC messages - ie I'm doing exactly what the Sonic Pi did,
+only I'm doing it from Erlang and without the user interface.
+</p>
+<p>The code is in <a href='https://github.com/joearms/music_experiments/blob/master/sc.erl'>sc.erl</a> All I've done is start a <span class='code'>scsynth</span> server
+listening to port 4556 (this is done in <a href='https://github.com/joearms/music_experiments/blob/master/start_scsynth.sh'>start_scsynth.sh</a> and send it a
+load of OSC commands.
+</p>
+<p>Working in the SuperCollider was an eye opener. It a REPL *without* a
+terminal and is similar to the Plan9 <a href='(https://en.wikipedia.org/wiki/Acme_%28text_editor%29'>ACME</a> shell/editor.
+</p>
+<p>I'd read about ACME but never experienced it.  It's a Visceral
+experience. <b>You never type code twice</b>. If it's on the screen you
+click it, the answer appears &ldquo;somewhere else&rdquo;.
+</p>
+<p>Interestingly <span class='code'>Pure data</span> makes exactly the same design decision.
+</p>
+<p>Why why why? Because it's faster to interact with. No typing just
+clicking - this is important for live performance.  Musicians
+instruments are not laptops with keyboards - they are things you can
+hit and stroke.
+</p>
+<a name='head_3'></a><h1>Act 3 - Pure Data</h1>
+<p>Finally <a href='https://puredata.info/'>Pure Data</a>. PD programs have no textual representation, there
+is only a graphic interface to a data-flow language.
+</p>
+<p>The program is in
+https://github.com/joearms/music_experiments/blob/master/pd_osc.pd:
+</p>
+<p><img src="/images/pd_osc.png">
+</p>
+<p>The Erlang code <a href='https://github.com/joearms/music_experiments/blob/master/pd.erl'>pd.erl</a> is extremely simple:
+</p>
+<div class='erlang'><span class='ws'>    </span><span class='atom'>play</span><span class='punc'>(</span><span class='var'>N</span><span class='punc'>)</span><span class='ws'> </span><span class='punc'>-></span><span class='ws'> </span><span class='atom'>run_code</span><span class='punc'>(</span><span class='punc'>[</span><span class='string'>"/playNote"</span><span class='punc'>,</span><span class='ws'> </span><span class='var'>N</span><span class='punc'>]</span><span class='punc'>)</span><span class='punc'>.</span><span class='ws'>
+</span><span class='ws'>
+</span><span class='ws'>    </span><span class='atom'>run_code</span><span class='punc'>(</span><span class='var'>M</span><span class='punc'>)</span><span class='ws'> </span><span class='punc'>-></span><span class='ws'>
+</span><span class='ws'>        </span><span class='var'>E</span><span class='ws'> </span><span class='punc'>=</span><span class='ws'> </span><span class='atom'>osc</span><span class='punc'>:</span><span class='atom'>encode</span><span class='punc'>(</span><span class='var'>M</span><span class='punc'>)</span><span class='punc'>,</span><span class='ws'>
+</span><span class='ws'>        </span><span class='punc'>{</span><span class='atom'>ok</span><span class='punc'>,</span><span class='ws'> </span><span class='var'>Socket</span><span class='punc'>}</span><span class='ws'> </span><span class='punc'>=</span><span class='ws'> </span><span class='atom'>gen_udp</span><span class='punc'>:</span><span class='atom'>open</span><span class='punc'>(</span><span class='integer'>0</span><span class='punc'>,</span><span class='punc'>[</span><span class='atom'>binary</span><span class='punc'>]</span><span class='punc'>)</span><span class='punc'>,</span><span class='ws'>
+</span><span class='ws'>        </span><span class='atom'>ok</span><span class='ws'> </span><span class='punc'>=</span><span class='ws'> </span><span class='atom'>gen_udp</span><span class='punc'>:</span><span class='atom'>send</span><span class='punc'>(</span><span class='var'>Socket</span><span class='punc'>,</span><span class='ws'> </span><span class='string'>"localhost"</span><span class='punc'>,</span><span class='ws'> </span><span class='integer'>6677</span><span class='punc'>,</span><span class='ws'> </span><span class='var'>E</span><span class='punc'>)</span><span class='punc'>,</span><span class='ws'>
+</span><span class='ws'>        </span><span class='atom'>gen_udp</span><span class='punc'>:</span><span class='atom'>close</span><span class='punc'>(</span><span class='var'>Socket</span><span class='punc'>)</span><span class='punc'>.</span><span class='ws'>
+</span></div>
+
+	  </div>
+	  
+	  <div class="rightColumn">
+	    <h1>Index</h1>
+ <a href='#head_1'>Act1 : Connecting Sonic PI to Erlang.</a><br><a href='#head_2'>Act2 : Connecting The SuperCollider to Erlang.</a><br><a href='#head_3'>Act 3 - Pure Data</a><br>
+	  </div>
+	  
+	  <footer>
+
+	   
+  <!-- the tweet button -->
+  <p>	    
+    <a href=	"https://twitter.com/share"  class="twitter-share-button" 
+       data-url= "http://joearms.github.com/2016/01/29/Controlling-Sound-with-OSC-Messages">Tweet</a>
+  </p>
+  
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+  <!-- end of tweet button -->
+
+  <p>Comments:</p>
+  
+  <div id="disqus">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      // var disqus_developer = 1;
+      var disqus_shortname = 'joearmstrongsblog';
+      var disqus_identifier = '/2016/01/29/Controlling-Sound-with-OSC-Messages';
+      var disqus_url = 'http://joearms.github.com/2016/01/29/Controlling-Sound-with-OSC-Messages.html';
+      (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+  </div>
+
+	   
+           <p>&copy; 2014-2016 Joe Armstrong - All Rights Reserved.</p>  </footer>
+	</div>
+      </div>
+    </body>
+</html>

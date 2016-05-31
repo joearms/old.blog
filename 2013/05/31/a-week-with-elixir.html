@@ -1,0 +1,680 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+      <title>Joe Armstrong - Erlang and other things</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1"/>
+      <link rel="stylesheet" media="screen" href="/leftFluid.css"/>
+      <link rel="stylesheet" media="screen" href="/my.css"/>
+    </head>
+
+    <body>
+      <div class="wrap">
+	<h1>Joe Armstrong - Erlang and other stuff</h1>
+	<header>
+	  <nav>
+	    <ul class="nav inline-items">
+	      <li><a href="/index.html">Index</a></li>
+	      <li><a href="/lectures.html">Lectures</a></li>
+	      <li><a href="/resources.html">Resources</a></li>
+	    </ul>
+	  </nav>
+	</header>
+	
+	<div class="columnsContainer">
+	  
+	  <div class="leftColumn">
+	    <h1> A week with Elixir </h1>
+	      <p>About a week ago I started looking at <a href='http://elixir-lang.org'>Elixir</a> Elixir had been one of
+those things that I was vaguely aware of but had not yet time to look
+at in any detail.
+</p>
+<p>This all changed when I discovered the announcement that Dave Thomas
+was publishing <a href='http://pragprog.com/book/elixir/programming-elixir'>Programming Elixir</a>.  Dave Thomas edited my Erlang book
+and did great work in introducing Ruby, so when Dave gets excited
+about something then this is a sure sign that something interesting is
+in the wind.
+</p>
+<p>Dave was excited about Elixir, in the introduction to his new book he
+says:
+</p>
+<div class='pre'>I came across Ruby in 1998 because I was an avid 
+reader of comp.lang.misc (ask your parents). I 
+downloaded it, compiled it, and fell in love. 
+As with any time you fall in love,
+it’s difficult to explain why. 
+It just worked the way I work, 
+and it had enough depth to keep me interested.
+
+Fast forward 15 years. All that time I’d been 
+looking for something new that gave me the same feeling.
+
+I came across Elixir a while back, but for some 
+reason never got stuck in. But a few months ago I 
+was chatting with Corey Haines. I was
+bemoaning the fact that I wanted to find a 
+way to show people functional programming concepts 
+without the kind of academic trappings those books 
+seem to attract. He told me to look again at Elixir. I
+did, and I felt the same way I felt when I first saw Ruby.  
+</div>
+<p>I know the feeling. Gut feeling precedes logic. I know when things are
+right, I don't know how or why I know, but the explanation of why
+things are right often comes weeks or years later. Malcolm Gladwell in
+his book <a href='(http://www.amazon.com/Blink-Power-Thinking-Without/dp/0316010669/ref=sr_1_1?s=books&ie=UTF8&qid=1369995752&sr=1-1&keywords=blink'>Blink: The Power of Thinking Without Thinking</a> talks about
+this.  Experts in a particular field can often instantly know that
+something is right, but they can't explain why.
+</p>
+<p>When I saw that Dave had his eye &ldquo;on the ball&rdquo; I wanted to
+know why.
+</p>
+<p>Surprise number two, Simon St. Laurent was also writing a book on
+Elixir. Simon did a good job with <a href='http://www.amazon.com/Introducing-Erlang-Simon-St-Laurent/dp/1449331769'>Introducing Erlang</a> and we'd
+exchanged several mails, so something was in the air. With both
+Pragmatic Press and O'Reilly racing to get into Elixir I knew
+something was happening on the Erlang VM, and I didn't know about
+this. Boy am I out of touch.
+</p>
+<p>I mailed Dave and Simon and they kindly sent me copies of their books
+so I could start learning ...  Thanks guys ...
+</p>
+<a name='head_1'></a><h1>I downloaded elixir last week and started playing ...</h1>
+<p>It didn't take long, but pretty soon my gut feeling kicked in. This is
+good shit.  The funny thing is that Erlang and Elixir are the same
+thing under the surface.  They &ldquo;feel&rdquo; the same to me. In fact this
+is literally true, they both compile to instructions for the
+EVM (Erlang Virtual Machine) - actually nobody call this the EVM They
+just say the "Beam" VM but I thing we should start calling this the
+EVM to distinguish it for the JVM.
+</p>
+<p>Why do Erlang and Elixir have the same &ldquo;semantics&rdquo;? The reason has
+to do with the underlying machine. The garbage collection behavior,
+the non-shared concurrency model, the underlying error handling and
+code loading mechanism are identical. They must be identical: they run
+on the same VM. This is also why things like Scala and Akka will never
+be like Erlang. Scala and Akka run on the JVM so under the covers,
+things like garbage collection and code loading are fundamentally
+different. 
+</p>
+<p>What Elixir brings to the table is a complete different surface
+syntax, inspired by Ruby. What you might call a &ldquo;non-scary&rdquo; syntax,
+and a load of extra goodies.
+</p>
+<p>Erlang's syntax derived from Prolog and was heavily influenced by
+smalltalk, CSP and the functional programming. Elixir is heavily
+influenced by Erlang and Ruby.  From Erlang it brings pattern matching,
+higher order functions and the entire process and error handling &ldquo;let
+it crash&rdquo; philosophy. From Ruby it brings sigils, and shortcut syntaxes. It
+also adds a few goodies of its own, the |> pipe operator, reminiscent
+of Prologs DCGs and Haskell monads (though less complicated, more like
+the good old unix pipe operator) and the macro quote and unquote
+operators, which come from the lisp quasiquote and comma operators.
+</p>
+<p>Elixir also brings a new underlying AST to the table, instead of the
+Erlang AST where everything form has its own representation, the
+Elixir AST has a far more uniform representation, which makes
+meta-programming far easier.
+</p>
+<p>The implementation is surprisingly solid, though some things don't work as I
+expected. String interpolation (which is a great idea) works in a
+hit-and-miss manner.
+</p>
+<p>I'd thought that:
+</p>
+<div class='pre'>IO.puts "...#{x}..."
+</div>
+<p>evaluated x and injected a pretty-printed representation of x into the
+string.  But it only works for some simpler forms of x and not all x.
+</p>
+<p>Since you can call any Erlang function from Elixir this was easy to fix.
+</p>
+<p><span class='code'>IO.puts "...#{pp(x)}...</span> always works. I just defined <span class='code'>pp(x)</span> as
+</p>
+<p>	def pp(x) do 
+		:io_lib.format("~p", [x])
+		|> :lists.flatten
+		|> :erlang.list_to_binary
+	end
+</p>
+<p>In Erlang this would be:
+</p>
+<div class='pre'>pp(X) ->
+  list_to_binary(lists_flatten(li_lib:format("~p),[X])))
+</div>
+<p>which is &ldquo;obviously&rdquo; equivalent to the Elixir version. Actually the
+Elixir version is easier to read. The <span class='code'>|></span> operator in the above means
+pipe the output of <span class='code'>io_lib:format</span> into <span class='code'>lists:flatten</span> and then
+list_to_binary. Just like the good ol' Unix pipe operator.
+</p>
+<p>Elixir breaks a few Erlang holy cows - variables can be re-bound in
+sequences.  This is actually ok, the resulting forms can still be
+normalized into a static-single-assignment (SSA) form. While this is OK in
+sequences it would totally verboten-nicht-do-not-do-it in loop
+constructs. But this is fine, Elixir has no loops, only
+recursion. Actually it could not have loops with mutable variables
+since this would be impossible to compile into anything remotely
+sensible in the EVM. SSA variables in sequences are fine, the EVM knows
+how to optimize these. Loops no, so Elixir doesn't go there. It would even boil
+nicely down into LLVM assembler - but that's another story too long to tell here.
+</p>
+<a name='head_2'></a><h1>The Three Laws of Programming Language Design</h1>
+<li>What you get right, nobody mentions it.</li>
+<li>What you get wrong, people bitch about.</li>
+<li>What is difficult to understand you have to explain to people over and over again.</li>
+<p>Some languages get some things so right that nobody ever bothers to
+mention them, they are right, they are beautiful, they are easy to
+understand.
+</p>
+<p>The wrong stuff is a bitch. You boobed, but you are forgiven if the
+good stuff outweighs the bad. This is the stuff you want to remove
+later, but you can't because of backwards compatibility and some nitwit has
+written a zillion lines of code using all the bad stuff.
+</p>
+<p>The difficult to understand stuff is a real bummer. You have to
+explain it over and over again until you're sick, and some people never
+get it, you have to write hundred of mails and thousands of words
+explaining over and over again why this stuff means and why it is so.
+For a language designer, or author, this is a pain in the bottom.
+</p>
+<p>I'm going to mention a few things that I think fall into these three
+categories.
+</p>
+<p>Before I start I'll just say that Elixir has got a heck of lot of
+things right, and the good things far outweigh the bad things.
+</p>
+<p>The nice thing about Elixir is that it's not too late to fix the bad
+things. This can only be done before zillions of line of code get
+written and before trillions of programmers start using it - so
+there's only a few days to fix this.
+</p>
+<a name='head_3'></a><h1>No versions in the source files</h1>
+<p>XML files always start
+</p>
+<div class='pre'>&lt;?xml version="1.0"?&gt;
+</div>
+<p>This is great. Reading the first line of an XML file is like
+listening to the opening bars of Rachmaninoff's third piano
+concerto. A sublime experience. All praise to the XML designers,
+hallowed be their names, give these guys some Turing prizes.
+</p>
+<p>Putting the language version in all source files is essential. Why is
+this?
+</p>
+<p>Early Erlang did not have list comprehensions. Suppose that we give a
+modern Erlang module to an old Erlang compiler and ask it to compile
+it. The modern code has list comprehensions, but the old compiler
+doesn't know about list comprehensions so the old compiler thinks this
+is a syntax error.
+</p>
+<p>If a <b>version3</b>  Erlang compiler is given a file that starts:
+</p>
+<div class='pre'>-version(5,0).
+</div>
+<p>Then it should say
+</p>
+<div class='pre'>    ** auuuuugggghhhhhh **
+
+       Oh bother and blast, I am mere version 3 compiler
+       and cannot see into the future.
+       
+       You have given me a version 5 program. This means 
+       my time on earth has come.
+
+       You will have to kill me. You will uninstall me, 
+       and install a version five compiler. I will be
+       no more. I will cease to exist.
+
+       Goodbye old friend.
+
+       I have a headache. I'm going to have a rest...
+    **
+</div>
+<p>It's the first law of data design:
+</p>
+<div class='pre'> All data that might change in the future should be 
+ tagged with a version number.
+</div>
+<p>and a module *is* data.
+</p>
+<a name='head_4'></a><h1>Funs and defs are not the same</h1>
+<p>When I started writing &ldquo;Programming Erlang&rdquo; Dave Thomas wondered why
+you couldn't type function in the shell.
+</p>
+<p>If a module contains this:
+</p>
+<div class='pre'>fac(0) when N > 0 -> 1;
+fac(N)            -> N* fac(N-1).
+</div>
+<p>You can't just cut and paste this into the shell and get the same result.
+Dave asked why and said that this was stupid.
+</p>
+<p>In Lisp and so on you can. Dave said something like &ldquo;this is going to
+confuse people&rdquo; - he was right and it does confuse people. There must
+be hundreds to thousands of messages on forums asking about this.
+</p>
+<p>I have explained why so many times that my hair has gone grey, it's
+true my hair is now grey because of this.
+</p>
+<p>It's because there is a bug in Erlang.
+</p>
+<p>Modules in Erlang are sequences of <b>FORMS</b>.
+</p>
+<p>The Erlang shell evaluates a sequence of <b>EXPRESSIONS</b>.
+</p>
+<p>In Erlang <b>FORMS</b> are not <b>EXPRESSIONS</b>.
+</p>
+<div class='pre'>double(X) -> 2*X.            in an Erlang module is a FORM
+</div>
+<div class='pre'>Double = fun(X) -> 2*X end.  in the shell is an EXPRESSION
+</div>
+<p>The two are <b>not</b> the same. This bit of silliness has been Erlang forever
+but we didn't notice it and we learned to live with it.
+</p>
+<p>In an Elixir Module you can write
+</p>
+<div class='pre'>def triple(x) do
+   3 * x;
+end
+</div>
+<p>My bet is that thousands of programmers will cut and paste this from their text editor
+into the shell and it will say
+</p>
+<div class='pre'>ex> def triple(x) do 3*x; end
+** (SyntaxError) iex:66: cannot invoke def outside module
+</div>
+<p>If you don't fix this you'll spend the next 20 years explain why - just like we did in Erlang.
+</p>
+<p>BTW the fix is really really easy. I made erl2 as an experiment to fix
+this. It can't be fixed in Erlang (backwards compatibility) so I did
+it in <a href='https://github.com/joearms/erl2'>erl2</a>. This needs a very small change to <span class='code'>erl_eval</span> and a few
+tweaks in the parser.
+</p>
+<p>Basically FORMS are not expressions, so I added a keyword <b>def</b>
+</p>
+<div class='pre'> Var = def fac(0) -> ; fac(N) -> N*fac(N-1) end.
+</div>
+<p>This is <span class='emph'>defined</span> to be an expression with a side effect. Since it's
+an expression I can evaluate in the shell, remember the shell can
+only evaluate expressions.
+</p>
+<p>The side effect is to create a function called <span class='code'>shell:fac/1</span> (just as if
+it were defined in a module).
+</p>
+<p>So really
+</p>
+<div class='pre'>iex> double = fn(x) -> 2 * x end;
+</div>
+<div class='pre'>iex> def double(x) do 2*x end;
+</div>
+<p>Should be identical, and <b>both</b> should define a function with name <b>Shell.double</b>
+</p>
+<p>Make this change and avoid grey hair.
+</p>
+<a name='head_5'></a><h1>Funs have an extra dot in the name</h1>
+<div class='pre'>iex> f = fn(x) -> 2 * x end
+#Function<erl_eval.6.17052888>
+iex> f.(10)
+20
+</div>
+<p>In school I learned to call functions by writing <span class='code'>f(10)</span> not <span class='code'>f.(10)</span> -
+this is "really" a function with a name like <b>Shell.f(10)</b> (it's a
+function defined in the shell) The shell part is <span class='emph'>implicit</span> so it should
+just be called <span class='code'>f(10)</span>.
+</p>
+<p>If you leave it like this expect to spend the next twenty years of
+your life explaining why.  Expect thousands of mails in hundreds of
+forums.
+</p>
+<a name='head_6'></a><h1>The send operator</h1>
+<div class='pre'>Process <- Message
+</div>
+<p>What's on earth is? Do you realize how difficult it will be to convert
+from occam-pi to Elixir.
+</p>
+<p>You're going to lose the occam-pi community here. The send operator
+should be <b>!</b>, like this:
+</p>
+<div class='pre'>Process ! Message
+</div>
+<p>Next week my brain will have gone soggy and my neural network be
+reprogrammed so that I &ldquo;see&rdquo; <- as <b>!</b> - this is not about thinking
+it's about reprogramming the base of my spine. The send operator is
+not in my brain, it's in the base of my spine. My brain thinks
+&ldquo;send a message to a process&rdquo; and sends a message to my fingertips,
+my spine adds the <b>!</b> then by brain does <b>backspace erase <-</b>.
+</p>
+<p>It's a syntax thing. We all love to hate syntax. But on a scale of
+badness where 10 is &ldquo;really really bad&rdquo; and 1 is &ldquo;well ok I might
+get used to this&rdquo; its about a 3.
+</p>
+<p>This is going to make it really difficult for programmers in Occam-pi
+to convert to Elixir, by the simple act of changing <b><-</b> to <b>!</b> will cause
+hoards of occam-pi programmers to weep for joy rush into the
+streets crying &ldquo;horray, horray, what a good day&rdquo; and immediately
+convert to Elixir. Old men will tell of this in times to come, and
+there will be much rejoicing and celebration in the land.
+</p>
+<a name='head_7'></a><h1>The Pipe operator</h1>
+<p>This is one of those things that is really really good, and really
+really easy to understand so nobody will give you credit for
+it. That's life.
+</p>
+<p>This is the recessive monadic gene of Prolog. The gene was dominant in
+Prolog, recessive in Erlang (son-of-prolog) but re-emerged in
+Elixir (son-of-son-of-prolog).
+</p>
+<p><span class='code'>x |> y*</span> means call <span class='code'>x</span> then take the output of <span class='code'>x</span> and add it as an extra
+argument to <span class='code'>y</span> in the first argument position.
+</p>
+<p>So
+</p>
+<div class='pre'> x(1,2) |> y(a,b,c) 
+</div>
+<p>Means
+</p>
+<div class='pre'> newvar = x(1,2);
+ y(newvar,a,b,c);
+</div>
+<p>This is <b>very</b> useful. Suppose we want to capitalize an atom that is
+turn the atom <b>'abc'</b> into <b>'Abc'</b>. There is no function to capitalize an
+atom in Elixir but there is a function to capitalize a string. So we
+have to first convert the atom to a string. So in Erlang we'd write
+</p>
+<div class='pre'> capitalize_atom(X) ->
+    list_to_atom(binary_to_list(capitalize_binary(list_to_binary(atom_to_list(X))))).
+</div>
+<p>Which is horrible. We could also write
+</p>
+<div class='pre'> capitalize_atom(X) ->
+     V1 = atom_to_list(X),
+     V2 = list_to_binary(V1),
+     V3 = capitalize_binary(V2),
+     V4 = binary_to_list(V3),
+     binary_to_atom(V4).
+</div>
+<p>Which is even worse - yucky code. How many times have I written code like
+this? this sucks big time.
+</p>
+<p>With the <span class='code'>|></span> operator this becomes:
+</p>
+<div class='pre'>    X |> atom_to_list |> list_to_binary |> capitalize_binary 
+      |> binary_to_list |> binary_to_atom
+</div>
+<p>Why did I call this the recessive gene?
+</p>
+<p>Erlang was derived from Prolog, and Elixir is derived from Erlang.
+</p>
+<p>Prolog had DCGs so 
+</p>
+<div class='pre'>  foo --> a,b,c.
+</div>
+<p>Got expanded into
+</p>
+<div class='pre'>  foo(In, Out) :- a(In, V1), b(V1,V2), c(V2, Out).
+</div>
+<p>This is essentially the same idea. We create an additional extra
+hidden argument that threads its way in and out of a sequence of
+function calls. It's kind-of what a monad does in Haskell, but keep this
+a secret.
+</p>
+<p>Prolog had DCGs, Erlang didn't, Elixir has the pipe operator.
+</p>
+<a name='head_8'></a><h1>Elixir has sigils</h1>
+<p>Sigils are great - love 'em. We should add these to Erlang.
+</p>
+<p>A string is a programming language abstraction. Programming languages
+have string literals, usually a sequence of characters surrounded by
+double quotes.  So when you see a line of code like:
+</p>
+<div class='pre'>x = "a string"
+</div>
+<p>the compiler turns this into some internal representation of the
+string literal, this internal representation has some associated
+semantics.
+</p>
+<p>In Erlang
+</p>
+<div class='pre'> X = "abc" 
+</div>
+<p>means &ldquo;X is a list of integers representing the ASCII codes for a, b
+and c&rdquo;
+</p>
+<p>But we can choose any meaning we want. In Elixir <b>x = "abc"</b> means
+<b>x</b> is a UTF8 encoded binary. By adding a character in-front of the
+leading quote we can change the meaning of the string literal so that
+in Erlang:
+</p>
+<div class='pre'> X = r"...."
+</div>
+<p>could be defined to mean &ldquo;a compiled regular expression&rdquo;, i.e. is
+equivalent to <b>X = re:compile("....")</b> - given that we know the meaning
+of a string we can interpret the contents in different ways. We might
+like to write
+</p>
+<div class='pre'> A = "Joe",
+ B = s"Hello #{A}".
+</div>
+<p>So that B would be <b>"Hello Joe"</b> - here the s sigil would change the
+interpretation of the string literal to mean <b>"substitute variables in"</b>.
+</p>
+<p>Elixir does this in a very nice way, defining many different sigils.
+</p>
+<p>In Elixir the sigil syntax is different, it's:
+</p>
+<div class='pre'>%C{.....}
+</div>
+<p>Their C is a single character followed by a pair of matching brackets
+<span class='code'>}</span> or <span class='code'>[]</span>.
+</p>
+<p>Sigils are great. Erlang could have had these 15 years ago, and they can 
+be added now without breaking backwards compatibility.
+</p>
+<a name='head_9'></a><h1>Docstrings</h1>
+<p>Docstrings are great love 'em.
+</p>
+<p>But I have a minor quibble. Please put the docstring <b>inside</b> the function definition.
+</p>
+<p>You say
+</p>
+<div class='pre'>@doc """
+ ...
+"""
+
+def foo do
+   ...
+end
+</div>
+<p>Put it *inside* the function like this:
+</p>
+<div class='pre'> def foo do
+   @doc """
+   ...
+   """
+ end
+</div>
+<p>Otherwise you'll get&ldquo;detached comment&rdquo;: things will get mucked up
+when you edit programs. Comments will get separated from the functions
+to which they apply.
+</p>
+<p>In Erlang I haven't a clue if a comment belongs to the next function
+or the previous one or the module. If a comment refers to a function
+it should be INSIDE the function not outside.
+</p>
+<a name='head_10'></a><h1>defmacro quote and unquote</h1>
+<p>Love 'em. This is parse transforms done right. The joy is that you
+don't need to know the abstract syntax. Quote and unquote do the magic
+for you.
+</p>
+<p>This is one of those things that is right - it's great but
+intrinsically difficult to explain. This is like monads in Haskell -
+Yup, monads are really easy to understand that's why there are
+hundreds of articles explaining how easy they are.
+</p>
+<p>Elixir macros are really easy - quote is just quasiquote in lisp and
+unquote is the list comma operator - so that was easy :-)
+</p>
+<a name='head_11'></a><h1>Extra punctuation</h1>
+<p>This works:
+</p>
+<div class='pre'>iex> lc x inlist [1,2,3], do: 2*x
+[2,4,6]
+</div>
+<p>This doesn't:
+</p>
+<div class='pre'>iex> lc x inlist [1,2,3] do: 2*x 
+** (SyntaxError) iex:3: syntax error before: do
+</div>
+<p>The extra comma after the list confuses me.
+</p>
+<a name='head_12'></a><h1>Whitespace Strangeness</h1>
+<div class='pre'>iex> lc x inlist [1,2,3], do : 2*x
+** (SyntaxError) iex:2: invalid token: : 2*x
+</div>
+<p>Oops it should be &ldquo;do:&rdquo; and not &ldquo;do :&rdquo;
+</p>
+<p>To me white-space is white-space. Inside string literals I cannot mess
+with white-space. Outside a string literal I like to add white space
+wherever I feel like for formatting reasons, so I can make the code
+look pretty.
+</p>
+<p>But I can't do this in Elixir - I don't like this.
+</p>
+<a name='head_13'></a><h1>Closures done right - Hip hip hooray</h1>
+<p>Closures in Elixir (fn's) are really just closures in Erlang (fun's).
+</p>
+<p>fn's have the nice property of capturing the present value of any
+variables that are in their scope (ie we can create immutable
+closures) this is incredibly useful. This is something that JavaScript
+gets very wrong. Here's an example in JavaScript and Elixir so you can
+see the difference:
+</p>
+<div class='pre'>js> a = 5;
+5
+js> f = function(x) { return x+a }; 
+function (x){return x+a}
+js> f(10)
+15
+js> a = 100
+100
+js> f(10)
+110
+</div>
+<p>Oh dear we broke the function f. We define a function f, start using
+it. Redefine a and this has the side effect of breaking f. One of the
+good things about functional programming is that it makes it easy to
+reason about programs. If f(10) evaluates to 15 then it should evaluate
+to 15 forever, you should not be able to remotely break it.
+</p>
+<p>What about Elixir? This gets closures right:
+</p>
+<div class='pre'>iex> a = 5  
+5
+iex> f = fn(x) -> x + a end
+#Function<erl_eval.6.17052888>
+iex> f.(10)
+15
+iex> a = 100
+100
+iex> f.(10)
+15
+</div>
+<p>Proper closures should only contain pointers into immutable
+data (which is the case in Erlang) - no pointers into mutable data. If
+a closure contains a pointer into mutable data and you change the data
+later you break the closure. This means you can't parallelize your
+program and even sequential code can contain weird errors.
+</p>
+<p>In a conventional language creating proper closures would be very
+expensive since it would require deep copying of all the variables
+that are captured in the environment, but this is not the case in
+Erlang or Elixir, since data once written is immutable. All you can do
+later is refer to it. Internally this is through a pointer
+(which the programmer never sees) and the garbage collector removes
+all data that can never be referenced since nothing points to it.
+</p>
+<p>We can have closures in the shell, but we can't have closures in a
+module.
+</p>
+<p>If I can say
+</p>
+<div class='pre'>a = 10;
+f = fn(x) -> a + x end;
+</div>
+<p>in the shell
+</p>
+<p>why can't I say
+</p>
+<div class='pre'>a = 10;
+def f(x) do
+   a + x
+end
+</div>
+<p>in a module? This is completely fixable I did this in an experiment
+in erlang2.
+</p>
+<a name='head_14'></a><h1>Finally</h1>
+<p>This has been my first week with Elixir, and I'm pretty excited.
+</p>
+<p>Elixir has a non-scary syntax and combines the good features of Ruby
+and Erlang.  It's not Erlang and it's not Ruby and it has ideas of
+its own.
+</p>
+<p>It's a new language, but books are being written as the language is
+being developed. The first Erlang book came 7 years after Erlang was
+invented, and the first popular book 14 years later. 21 years is too
+long to wait for a decent book.
+</p>
+<p>Dave loves Elixir, I think it's pretty cool, I think we're going to have fun
+together.
+</p>
+<p>Erlang powers things like WhatsApp and crucial parts of half the
+world's mobile phone networks. It's going to be great fun to see what
+will happen when the technology becomes less scary and the next wave
+of enthusiasts joins the party.
+</p>
+<p>This was written in haste and while excited. So probably has a few typos.
+Feel free to push corrections.
+</p>
+
+	  </div>
+	  
+	  <div class="rightColumn">
+	    <h1>Index</h1>
+ <a href='#head_1'>I downloaded elixir last week and started playing ...</a><br><a href='#head_2'>The Three Laws of Programming Language Design</a><br><a href='#head_3'>No versions in the source files</a><br><a href='#head_4'>Funs and defs are not the same</a><br><a href='#head_5'>Funs have an extra dot in the name</a><br><a href='#head_6'>The send operator</a><br><a href='#head_7'>The Pipe operator</a><br><a href='#head_8'>Elixir has sigils</a><br><a href='#head_9'>Docstrings</a><br><a href='#head_10'>defmacro quote and unquote</a><br><a href='#head_11'>Extra punctuation</a><br><a href='#head_12'>Whitespace Strangeness</a><br><a href='#head_13'>Closures done right - Hip hip hooray</a><br><a href='#head_14'>Finally</a><br>
+	  </div>
+	  
+	  <footer>
+
+	   
+  <!-- the tweet button -->
+  <p>	    
+    <a href=	"https://twitter.com/share"  class="twitter-share-button" 
+       data-url= "http://joearms.github.com/2013/05/31/a-week-with-elixir">Tweet</a>
+  </p>
+  
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+  <!-- end of tweet button -->
+
+  <p>Comments:</p>
+  
+  <div id="disqus">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      // var disqus_developer = 1;
+      var disqus_shortname = 'joearmstrongsblog';
+      var disqus_identifier = '/2013/05/31/a-week-with-elixir';
+      var disqus_url = 'http://joearms.github.com/2013/05/31/a-week-with-elixir.html';
+      (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+  </div>
+
+	   
+           <p>&copy; 2014-2016 Joe Armstrong - All Rights Reserved.</p>  </footer>
+	</div>
+      </div>
+    </body>
+</html>

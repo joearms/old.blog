@@ -1,0 +1,141 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+      <title>Joe Armstrong - Erlang and other things</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1"/>
+      <link rel="stylesheet" media="screen" href="/leftFluid.css"/>
+      <link rel="stylesheet" media="screen" href="/my.css"/>
+    </head>
+
+    <body>
+      <div class="wrap">
+	<h1>Joe Armstrong - Erlang and other stuff</h1>
+	<header>
+	  <nav>
+	    <ul class="nav inline-items">
+	      <li><a href="/index.html">Index</a></li>
+	      <li><a href="/lectures.html">Lectures</a></li>
+	      <li><a href="/resources.html">Resources</a></li>
+	    </ul>
+	  </nav>
+	</header>
+	
+	<div class="columnsContainer">
+	  
+	  <div class="leftColumn">
+	    <h1> Connecting Erlang to the SonicPi </h1>
+	      <p>Last September after giving <a href='https://www.youtube.com/watch?v=lKXe3HUG2l4'>my keynote at StrangeLoop</a> I bumped into my
+old friend <a href='https://twitter.com/@samaaron'>Sam Aaron</a>. As usual he was bubbling over with enthusiasm,
+he'd been making a music program for kids <a href='http://sonic-pi.net/'>Sonic Pi</a> which interested
+me.
+</p>
+<p>I'm interested in all things musical and especially making noises with computers
+so I was _very_ interested in Sonic Pi.
+</p>
+<p>My first thought was &ldquo;how can I control Sonic Pi from Erlang?&rdquo; --
+with Sam at hand this turned out to be really really easy.
+</p>
+<p>&ldquo;All you have to do,&rdquo; said Sam &ldquo;is open UDP port 4557 and send it
+an OSC message.&rdquo;
+</p>
+<p>&ldquo;What message?&rdquo; I asked.
+</p>
+<p><span class='code'>"\run code $string"</span> said Sam. Where <span class='code'>$string</span> is whatever you would
+have typed into the Sonic Pi control window.
+</p>
+<p>&ldquo;That's easy,&rdquo; I thought, and it was. All I needed was a library to
+convert Erlang terms to OSC messages. After a little searching I found
+a library at <a href='https://github.com/mujaheed/erlang-osc'>erlang-osc</a>.
+</p>
+<p>The rest was easy.
+</p>
+<p>I'd completely forgotten about this until earlier today when
+<a href='https://twitter.com/@WadeMealing'>@WadeMeadling</a> tweeted me asking if the code was documented
+anywhere. Well it wasn't and now it is.
+</p>
+<p>I've put the code up at <a href='https://github.com/joearms/sonic_pi_interface'>sonic_pi_inteface</a> it's been tested with sonic
+Pi version 2.0 and seems to work.
+</p>
+<p># On the Sonic Pi Interface
+</p>
+<p>I'd now like to take a moment and heap praises upon the design of
+Sonic Pi. It literally took me about ten minutes to interface Erlang to Sonic Pi.
+</p>
+<p><span class='emph'>Actually this is not quite true</span> It took me ten minutes after Sam
+had explained how the interface worked - he had not documented the
+interface, assuming that nobody would wish to remotely control the
+program.
+</p>
+<p>The interface is simplicity itself. Open a UDP port (in this case port
+4557) and send it a fragment of Ruby (as an OSC message). Would that
+all programs were that easy to interface.
+</p>
+<p>I have had the misfortune to interface Erlang to the Apple Core-audio and Core-midi
+interfaces - now this (interfacing to Core-audio) is not for the faint hearted.
+</p>
+<p>Applications using core audio must be liked in memory to the core audio framework,
+a practice which is bizarre and which makes interfacing to languages that do not
+have the memory layout conventions of objective-C a pain.
+</p>
+<p>This (the interfacing) harks back to the old arguments of &ldquo;shared
+memory&rdquo; verses &ldquo;message passing&rdquo; concurrency. Linking things in
+memory and using callbacks is painfully difficult and highly error
+prone.
+</p>
+<p>This practise (shared memory) comes from the days when efficiency
+_was_ a problem, when we had computers with MHz clocks and tens of
+KBytes of memory. Those days are long gone.
+</p>
+<p>Using a message passing, interfacing to Sonic Pi was pure joy. Open a
+port, send it a message, done.  Easy.
+</p>
+<p>If I were defining an audio API I'd be able to say:
+</p>
+<div class='pre'>piano ! {play_note, C}
+</div>
+<p>From my favorite programming language (Erlang) and it would just work.
+</p>
+
+	  </div>
+	  
+	  <div class="rightColumn">
+	    <h1>Index</h1>
+ 
+	  </div>
+	  
+	  <footer>
+
+	   
+  <!-- the tweet button -->
+  <p>	    
+    <a href=	"https://twitter.com/share"  class="twitter-share-button" 
+       data-url= "http://joearms.github.com/2015/01/05/Connecting-Erlang-to-Sonic-Pi">Tweet</a>
+  </p>
+  
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+  <!-- end of tweet button -->
+
+  <p>Comments:</p>
+  
+  <div id="disqus">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      // var disqus_developer = 1;
+      var disqus_shortname = 'joearmstrongsblog';
+      var disqus_identifier = '/2015/01/05/Connecting-Erlang-to-Sonic-Pi';
+      var disqus_url = 'http://joearms.github.com/2015/01/05/Connecting-Erlang-to-Sonic-Pi.html';
+      (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+  </div>
+
+	   
+           <p>&copy; 2014-2016 Joe Armstrong - All Rights Reserved.</p>  </footer>
+	</div>
+      </div>
+    </body>
+</html>

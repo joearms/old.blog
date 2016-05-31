@@ -1,0 +1,271 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+      <title>Joe Armstrong - Erlang and other things</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1"/>
+      <link rel="stylesheet" media="screen" href="/leftFluid.css"/>
+      <link rel="stylesheet" media="screen" href="/my.css"/>
+    </head>
+
+    <body>
+      <div class="wrap">
+	<h1>Joe Armstrong - Erlang and other stuff</h1>
+	<header>
+	  <nav>
+	    <ul class="nav inline-items">
+	      <li><a href="/index.html">Index</a></li>
+	      <li><a href="/lectures.html">Lectures</a></li>
+	      <li><a href="/resources.html">Resources</a></li>
+	    </ul>
+	  </nav>
+	</header>
+	
+	<div class="columnsContainer">
+	  
+	  <div class="leftColumn">
+	    <h1> Big changes to Erlang </h1>
+	      <p>Yesterday release candidate 1 of version R17 of Erlang
+was released.
+</p>
+<p>This was a major event. Version R17 has some changes to Erlang that
+significantly improve the language. These are the biggest changes
+since the introduction of higher order functions and list
+comprehensions.
+</p>
+<p>Erlang now has maps and named arguments in funs.
+</p>
+<p>We've been talking about maps for over twelve years, but now they are
+here to stay.
+</p>
+<p>Why the long wait? - we wanted maps to be a replacement for records
+and to be as efficient as records, and its not blindingly obvious how
+to do so.
+</p>
+<p>In the remainder of this article I'll explain some of the new features in
+Erlang version R17.
+</p>
+<a name='head_1'></a><h1>Erlang now has maps</h1>
+<p>Records are dead - long live maps !
+</p>
+<p>Maps are associative collections of key-value pairs.  In Perl and Ruby
+they are called hashes, in C++ and Java the are called maps in Lua
+tables, and Python calls them dictionaries.  We call them maps.
+</p>
+<p>We can create a new map by writing:
+</p>
+<div class='pre'>A = #{key1 => Val1, key2 => Val2, ...}
+</div>
+<p>And we can pattern match a map by writing :
+</p>
+<div class='pre'>#{key1 := Pattern1, key2 := Pattern2, ...} = VarContainingAMap
+</div>
+<p>Updating a map is done as follows:
+</p>
+<div class='pre'> NewX = X#{ key1 => Val1, ... KeyN := ValN, ...}
+</div>
+<p>The update operators are either "=>" or ":=" but what they do is
+subtly different.
+</p>
+<p><span class='code'>Key => Val Introduces a NEW key</span>
+</p>
+<p>This should be used whenever you know that you want to add a new key
+to a map or when you are unsure if the key exists in the old map or not.
+</p>
+<p><span class='code'>Key := Val Updates an existing Key</span>
+</p>
+<p>The key must be present in the old map.
+If Key is not in the old map Erlang will complain loudly.
+</p>
+<p>Using two operations instead of one has several advantages:
+</p>
+<p><i>A spelling mistake cannot accidentally introduce a new key </i>
+</p>
+<p>Suppose we want to update a key called age, and suppose that there
+were was only one operator ":" that both updated an old element in the
+map or created a new element in the map.  In this case we might write:
+</p>
+<div class='pre'>birthday(#{age : N} = Person) ->
+    Person#{arg : N+1}
+</div>
+<p>So calling birthday(#{person:bill, age:12}) would 
+return #{person:bill, age:12, arg:13}
+</p>
+<p>A new element (arg) has been introduced into the map, but it has the
+wrong key, and it will live in the map for a long time.  We meant to
+write age but by mistake we wrote arg.  This is how things work in
+Javascript, a simple misspelling of a tag name will create a bad
+element in an object, and the consequences of this probably won't be
+discovered until a lot later.
+</p>
+<p>This is why Erlang has two operators, Key => Val always adds a new
+element to the map, but Key := Val updates an existing element and
+shrieks with protest and immediately crashes the program if you try to
+update an element that does not exist in the map.
+</p>
+<p><i>Different maps can share key descriptors</i>
+</p>
+<p>Updating existing keys in the map has another unexpected consequence.
+If the compiler sees a line of code like this:
+</p>
+<div class='pre'>    X1 = X#{key1 := Val1, key2 := Val2, ...}
+</div>
+<p>When all the update operators are ":=" then it knows that the new
+object X1 has the same keys as X. This means we can store the
+descriptor of X (ie what keys the object has) and the values
+in different places, and that the new object X1 can share the keys
+used by X.
+</p>
+<p>If we now build a large list of objects, all with the same set of
+keys, then they can share a single key descriptor. This means that
+asymptotically maps will be as efficient in terms of storage as
+records.
+</p>
+<p>Credit for this idea comes from Richard O'Keefe who pointed
+this out years ago. I don't think any other programming language does this,
+but I might be wrong.
+</p>
+<p><i>What are the keys in maps?</i>
+</p>
+<p>The keys in maps can be any ground term - which is great. We argued
+over this for years.
+</p>
+<p>Here's an example:
+</p>
+<div class='pre'>> Z = #{ {age, fred} => 12, {age, bill} => 97, 
+         {color, red} => {rgb, 255, 0, 0}}.
+</div>
+<p>Then I can pattern match out any of the arguments like this:
+</p>
+<div class='pre'>>    #{ {color, red} := X1} = Z.
+</div>
+<p>which binds X1 to {rgb, 255, 0, 0}
+</p>
+<p>So now we have maps - the keys can be any ground term. We can handle
+large lists of maps that all have the same keys in a space efficient manner
+and we can guard against accidentally introducing bad keys into the map
+in a sensible way that will not cause problems in the future.
+</p>
+<a name='head_2'></a><h1>Names in Funs</h1>
+<p>In Erlang you can't use a name inside a fun before the name has been defined. This
+makes it rather difficult to define things like factorial in a fun.
+</p>
+<p>Why is this?
+</p>
+<p>You might think that the natural way to define factorial inside a fun
+would be to say:
+</p>
+<div class='pre'>   Fac = fun(0) -> 1; (N) -> N*Fac(N-1) end
+</div>
+<p>The problem here is that inside the fun (ie between the <b>fun</b> and
+<b>end</b> symbols) the variable Fac has not yet been defined, it's
+only defined outside the scope of the <b>begin</b> .. <b>end</b>
+construct.
+</p>
+<p>There is a way round this, we add an additional argument to the
+internal function that contains the name of the function to be called
+so we write the inner part of the factorial function as
+</p>
+<div class='pre'>     fun(F, 0) -> 1;
+        (F, N) -> N*F(F, N-1)
+     end.
+</div>
+<p>and pass the function to be called as an additional argument to the function.
+Now everything is defined. If we say:
+</p>
+<div class='pre'>    G = fun(F, 0) -> 1;
+        (F, N) -> N*F(F, N-1)
+     end.
+</div>
+<p>Then G(G,X) will compute factorial X.
+</p>
+<p>But we want to hide this horrible function G, so we write:
+</p>
+<div class='pre'>    Fac = fun(X) ->
+            G = fun(_, 0) -> 1;
+                   (Fac, N) -> N*Fac(Fac, N-1)
+                end,
+            G(G, X)
+          end.
+</div>
+<p> After this feat of intellectual masturbation is over you have defined
+the factorial function. We can even type this monstrously horrible
+expression into the shell and test it:
+</p>
+<div class='pre'>1> F = fun(X) ->
+1>       G = fun(_, 0) -> 1;
+1>              (Fac, N) -> N*Fac(Fac, N-1)
+1>           end,
+1>       G(G, X)
+1>     end.
+#Fun<erl_eval.6.71889879>
+2> F(10).
+3628800
+</div>
+<p>And goodness gracious - it works.
+</p>
+<p>This trick is well known to old-style functional programmers, they
+waffle on about Y combinators and eat this stuff for breakfast, but
+it's the kind of stuff that gives functional programming a bad
+name. Try explaining this to first year students who had a heavy night
+out at the pub the evening before.
+</p>
+<p>But there is an easier way. Allow names in the function definition before
+they are fully defined.
+</p>
+<p>So now we have a better way .. and there should be a drum roll here.
+</p>
+<p>Here's the new way (in the shell).
+</p>
+<div class='pre'>   1> F = fun Fact(0) -> 1; 
+              Fact(N) -> N * Fact(N - 1) 
+          end.  §
+   #Fun<erl_eval.30.71889879>
+   2> F(10).
+   3628800
+</div>
+<p>Which is a zillion times better than the old way.
+</p>
+
+	  </div>
+	  
+	  <div class="rightColumn">
+	    <h1>Index</h1>
+ <a href='#head_1'>Erlang now has maps</a><br><a href='#head_2'>Names in Funs</a><br>
+	  </div>
+	  
+	  <footer>
+
+	   
+  <!-- the tweet button -->
+  <p>	    
+    <a href=	"https://twitter.com/share"  class="twitter-share-button" 
+       data-url= "http://joearms.github.com/2014/02/01/big-changes-to-erlang">Tweet</a>
+  </p>
+  
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+  <!-- end of tweet button -->
+
+  <p>Comments:</p>
+  
+  <div id="disqus">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      // var disqus_developer = 1;
+      var disqus_shortname = 'joearmstrongsblog';
+      var disqus_identifier = '/2014/02/01/big-changes-to-erlang';
+      var disqus_url = 'http://joearms.github.com/2014/02/01/big-changes-to-erlang.html';
+      (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+  </div>
+
+	   
+           <p>&copy; 2014-2016 Joe Armstrong - All Rights Reserved.</p>  </footer>
+	</div>
+      </div>
+    </body>
+</html>

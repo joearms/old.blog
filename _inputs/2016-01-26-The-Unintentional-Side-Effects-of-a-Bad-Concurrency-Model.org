@@ -1,0 +1,237 @@
+tags: Software Messaging Architectures Organizations
+title: The unintentional side effects of a bad concurrency model
+@md:content
+
+This is the first of four related articles about how we
+organize software. The others are:
+
++ [[http://joearms.github.io/2016/01/27/Controlling-Live-Music.html][Controlling Live Music]]
++ [[http://joearms.github.io/2016/01/28/A-Badass-Way-To-Connect-Programs-Together.html][A Badass Way to Connect Programs Together]]
++ [[(http://joearms.github.io/2016/01/29/Controlling-Sound-with-OSC-Messages.html][Controlling Sound With OSC Messages]]
+
+How we collaborate, the organizations we work in and the
+programming languages we use effect software architectures in ways that
+are not immediately obvious.
+
+In this article I argue that monolithic GitHub projects, inflexible
+organizational structures and sequential programming languages all lead
+to bad software architectures.
+
+This effect is unintentional and a side effect which I believe stems
+from a poor understanding of concurrency.
+
+Software architectures are all about collaboration - we solve complex
+problems by breaking them into simpler parts, and the simpler parts
+collaborate to solve the larger problem.
+
+Any system that cannot flexibly create simpler parts and allow them to
+work in parallel will be difficult to work with.
+
+Ideally if the problem can be describe as the interaction between N
+independent interaction agents, then it should be programmed or
+organized as N independent interacting agents.
+
+Conversely if a problem cannot be described in terms of independent
+communicating parts it will be difficult to understand and difficult to
+implement.
+
+The ease with which we can change the number of
+parts and how they interact has profound consequences for
+the success of the architecture.
+
+Have said this, I'll examine three factors that influence architectures
+in an unintentionally bad manner.
+
+* Static Organizational Structures
+
+Thirty odd years ago I got a job at Ericsson and was introduced to
+the architecture of the AXE system. I was initially confused when I
+learned about the software architecture of the AXE system since it appeared
+to be very similar to the organizational structure of a large part of
+the company.
+
+Sometimes I saw diagrams describing the organization, other times
+I saw documents describing the software structure and they appeared to be the
+same.
+
+> What I did't initially understand that they were the same - The
+organizations structure was exactly the same as the software
+structure. One block, one group, they were identical.
+
+This made a lot of sense - the software was stable and mature
+and the architecture did not change.
+
+Now changing an organizational structure is far more difficult than changing
+a software architecture - so software structure can change quickly but
+organizations cannot.
+
+Later, I moved to different projects and discovered that the software
+architecture follows the organizational structure.
+
+Suppose a new project was being started, and at the time when it was
+being started three groups of programmers became free having finished
+another project.  Guess how many major components the new project
+would have? You guessed right, three, because three groups had become
+available at the time when the new project started.
+
+So the problem of designing a system architecture, became the problem
+of splitting the initial problem into three approximately equal
+programming tasks and not the problem of finding a natural division of
+the problem into small interacting parts.
+
+I view this as a kind of concurrency problem. If the problem could be
+described in terms of five interacting components, then it would be
+best programmed by five interacting groups, and not three, or seven
+because the organization happen to have three or seven groups
+available at the time.
+
+* Collaboration Methods
+
+How do we collaborate in software projects? - specifically how we
+collaborate in Open Source projects? The dominant model of
+collaboration is by manipulation of a common archive. Typically
+GitHub.
+
+GibHub collaborations are essentially shared memory transactions. The
+transaction manager (project owner) decides to commit a new set of
+changes or disallow them.  As with all shared memory concurrent reads
+are possible but concurrent writes are disallowed and must be
+sequentially ordered - otherwise chaos will ensue.
+
+Some of us think that shared memory programming is a nightmare -
+people tinkering with my code or my tinkering with other peoples code
+that I don't really understand is a recipe for disaster.
+
+Collaborating in a communal project is not easy. The biggest problem
+is getting into the mind set of the people who built and maintain the
+project. Mature open source projects can have thousands of files and
+directories and knowing exactly where to add your stuff is by no means
+easy. Even though you think you know what you're doing a change that
+appears to work can easily break somebody else's code.
+
+This is incidentally how two humans interact and collaborate. If I
+want to collaborate with my friend I don't open up their head with a
+carving knife, insert new neural synapses, then sew up everything and
+hope that it will work. No I talk to them, I say "can you do this?"
+and they talk back - we interact by exchanging messages.
+
+This is how distributed applications work - they work by exchanging
+messages.  In fact this is the only way they possibly could work. The
+clue lies in the name **distributed** - distributed means that the parts
+of the application are indifferent physical places so they have to
+collaborate by exchanging messages which in the best case travel at
+the speed of light, and in most case a lot lot slower.
+
+The most common way to build distributed things and the most
+successful way of creating collaborative things is the WWW. Of all
+the ways of building object on the Internet the dominant way is to use the
+HTTP protocol layered over TCP sockets. I'll call this HTTP-over-TCP.
+
+Of course HTTP-over-TCP is not the only way of doing things, there are
+many other combinations we could choose.
+
+Recently I've been experimenting with two alternatives JSON-over-TCP and
+OSC-over-UDP - both have their advantages and disadvantages, so I'm
+going to discuss these here:
+
+Firstly I want to use JSON-over-TCP and OSC-over-UDP for purely
+*internal* collaboration. These messages are never intended to escape
+the local machine/Internet boundary so I don't have to worry about security.
+ 
+What are these little projects:
+
+The first is JSON-over-TCP, this started with my [[http://joearms.github.io/2016/01/04/fun-with-swift.html][Fun with Swift]]
+article. After I published this I was contacted by Chris Eidhof who
+very kindly sent me a copy of [[https://www.objc.io/books/functional-swift/][Functional Swift]] which he had
+co-authored so I was very glad to hear from him. Some of my hours of
+struggling were solved by a quick tip from Chris.
+
+Chris and I started mailing each other and he soon had made a simple
+JSON-over-TCP proof of concept where we can build a remote GUI by
+sending JSON messages over TCP. The project is still in
+proof-of-concept stage but there is some code to play with at
+[[https://github.com/chriseidhof/tcp-json-swift][https://github.com/chriseidhof/tcp-json-swift]] and I was able to send
+messages from Erlang to Swift and a window popped up.  Early days, but
+looking good.
+
+Chris and I would like to implement something like [[http://shoesrb.com/][Shoes]] -- for those
+of you who have never used shoes the first version was written by the
+extremely talented [[https://en.wikipedia.org/wiki/Why_the_lucky_stiff][Why the Lucky Stiff]].
+
+> Unfortunately the Internet does not have permanent references, so
+much of what the Lucky Stiff wrote seems to have vanished.  This is
+why we should all support Juan Benet in his attempts to build [[(http://ipfs.io/][The
+Interplanetary File System]] and resist storing our data in impermanent
+clouds.  Let's not destroy history for future generations by sticking
+our data in a proprietary cloud.
+
+The nice thing about separating the GUI client from the GUI server is
+that neither of us needs to know *anything* about the internal
+structure of the other guys project. <span style='color:red'>My
+project is written in Erlang</span> and has a directory structure and
+build system that I'm happy with. <span style='color:red'>Chris's
+project is written in Swift</span> and has a directory structure and
+build system that he is happy with, but <span
+style='color:red'>neither of us needs to know how the other side has
+implemented their code</span>.  All we need to agree on are what
+messages should be send and what the messages mean.
+
+The second project is a collaboration with Sam Aaron focused on the
+[[http://sonic-pi.net/][Sonic Pi]] This project uses OSC messaging with UDP transport, which
+I'll call OSC-over-UDP.
+
+OSC-over-UDP as a way of gluing projects together is described in a [[http://joearms.github.io/2016/01/28/A-Badass-Way-To-Connect-Programs-Together.html][A
+Badass Way to Connect Things Together]].
+ 
+* Programming Languages
+
+Why do we have monolithic projects? I believe this is because it is
+difficult to build communicating components in what are essentially
+sequential programming languages. Concurrency has been forgotten in
+most programming languages, and when it has been added it seems like a
+afterthought, not as an act of conscious design.
+
+In a very large number of programming languages the only way to program
+a concurrent application is to ``do it yourself'' and simulate
+concurrency by storing the state of a suspended process in a data
+base or some equally horrid constructions involving a mess of callback
+and promises.
+
+Sequential languages are designed to write sequential programs, and the
+only way for a sequential program to grow in functionality is for it
+to get larger. It's technically difficult to split it into cooperating
+processes so this is not usually done. The concurrency in the
+application cannot be used to structure the application.
+
+> We should grow things by adding more small communicating objects,
+rather than making larger and larger non-communicating objects.
+
+Concentrating on the communication provides a higher level of
+abstraction than concentrating on the function APIs used within the
+system.  Black-box equivalence says that two systems are equivalent if
+they cannot be distinguished by observing their communication
+patterns. Two black-boxes are equivalent if they have identical
+input/output behavior.
+
+When we connect black boxes together we don't care what programming
+languages have been used inside the black boxes, we don't care how
+the code inside the black boxes has been organized, we just have to
+obey the communication protocols.
+
+If you look at most GitHub projects - they are built as monolithic
+single language applications, they are not built from small
+communicating components written in different languages.
+
+In the Internet world, we program differently. Here it is possible to
+structure applications as `micro-services` usually using HTTP-over-TCP
+or JSON-over-TCP AJAX and so on, but this is not used **internally**
+inside the OS to any large extent.
+
+> Erlang programs are the exception. Erlang programs are
+intentionally structured as communicating processes - they are the ultimate
+micro-services.
+
+Large Erlang applications have a flat ``bus like'' structure. They are
+structured as independent parallel applications hanging off a common
+communication bus. This leads to architectures that are easy to
+understand and debug and collaborations which are easy to program.

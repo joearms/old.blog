@@ -1,0 +1,38 @@
+layout: layout2.ehe
+b: over ridden value of b from post1
+c: new c from post1
+@content
+
+	<? mymd:getvar(content, Env) ?>
+
+	    <!-- the tweet button -->
+  <p>	    
+    <a href=	"https://twitter.com/share"  class="twitter-share-button" 
+       data-url= "http://joearms.github.com{<? mymd:getvar(id, Env) ?>">Tweet</a>
+  </p>
+  
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+  <!-- end of tweet button -->
+
+  <p>Comments:</p>
+  
+  <div id="disqus">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      // var disqus_developer = 1;
+      var disqus_shortname = 'joearmstrongsblog';
+      var disqus_identifier = '<? mymd:getvar(id, Env) ?>';
+      var disqus_url = 'http://joearms.github.com{{ page.url }}';
+      (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+  </div>
+
+
+
+@right
+
+The <b>Right</b> sidebar will contain the index

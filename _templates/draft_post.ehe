@@ -1,0 +1,10 @@
+layout: layout1.ehe
+@content
+  <? mymd:getvar(content, Env) ?>
+
+@footer
+
+Twitter link: http://joearms.github.com/<? mymd:getvar(id, Env) ?>
+
+<p>Disqus Link follows
+

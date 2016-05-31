@@ -1,0 +1,141 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+      <title>Joe Armstrong - Erlang and other things</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1"/>
+      <link rel="stylesheet" media="screen" href="/leftFluid.css"/>
+      <link rel="stylesheet" media="screen" href="/my.css"/>
+    </head>
+
+    <body>
+      <div class="wrap">
+	<h1>Joe Armstrong - Erlang and other stuff</h1>
+	<header>
+	  <nav>
+	    <ul class="nav inline-items">
+	      <li><a href="/index.html">Index</a></li>
+	      <li><a href="/lectures.html">Lectures</a></li>
+	      <li><a href="/resources.html">Resources</a></li>
+	    </ul>
+	  </nav>
+	</header>
+	
+	<div class="columnsContainer">
+	  
+	  <div class="leftColumn">
+	    <h1> Controlling Live Music </h1>
+	      <p>If you think about, it controlling live music is far more difficult
+than controlling a web browser.
+</p>
+<p>If you think that reactive programming in a web browser is difficult
+then think again - this is really really easy compared to control a
+live-gig performance setup with two or three musicians, a dozen
+synthesizers and half a dozen computers.
+</p>
+<p>In the 2014 Strangeloop keynote <a href='https://www.youtube.com/watch?v=3_zW63dcZB0'>Our Shared Joy of Programming</a> Carin
+Meier and Sam Aaron had drones dancing to live music (look at the
+video 43 minutes from the start). This is <b>Bigtime badass reactive
+programming</b> and is something far more difficult than anything
+&ldquo;reactive&rdquo; done in a browser. This is real-world objects reacting in
+real-time to messages.
+</p>
+<p>One of the most difficult control problems I can imagine
+involves an orchestra of 50 musicians.
+</p>
+<p>An orchestral musician has two main inputs, ears and eyes, the
+conductor has an advance gesture control device, a wooden stick which
+predates the Internet of things and works remarkably well.  It boots
+instantly, requires no cloud storage, and doesn't need firmware
+updates, and doesn't nag you every day about not having been backed
+up.
+</p>
+<p>The orchestra is controlled by waving the stick.
+</p>
+<p>Listening to sound from multiple instruments and transcribing it
+accurately is something no computer can yet do with any accuracy.
+</p>
+<p>Timing in musical performance is critical, delays of more than a few
+milliseconds are noticeable, tempo shifts not so important, provided
+all the musicians change tempo at the same rate.
+</p>
+<blockquote>Music as a control problem is terribly difficult - it pushes
+our understanding of interfaces to the limit.
+</blockquote>
+<p>This is why the methods and the software designed for live performance
+is worthy of study - I've started looking at this in some detail and I
+think there's a lot we can learn from it, and that this should
+influences how we design software and how we interact with things.
+</p>
+<p>This is particularly relevant as we move into a world of the Internet
+Of Thinsg.  Is there really a better way of conducting an orchestra
+than waving a bit of wood, or has thousands of years of evolution and
+experimentation resulted in the perfect control device - a stick?
+</p>
+<a name='head_1'></a><h1>Music is performed by multiple instruments and musicians in real-time</h1>
+<p>So the problem is intrinsically parallel, distributed and soft real-time.
+</p>
+<p>&ldquo;Auugh you're thinking,&rdquo; are there any programming languages
+designed to be intrinsically parallel, distributed and soft real-time?&rdquo;
+</p>
+<p>Answer: Yes.
+</p>
+<p>So the match between Erlang and Music control is pretty obvious - it's just that
+Erlang has been used for the soft real-time control of distributed telecommunication
+systems and not orchestras.
+</p>
+<p>I thought I'd take a look at how some systems designed for live performance look.
+</p>
+<p>Several things are immediately apparent (and this is based on
+observation of three systems, <a href='http://sonic-pi.net/'>Sonic Pi</a> <a href='http://www.audiosynth.com/'>SuperCollider</a> and <a href='https://puredata.info'>Pure Data</a> -
+to start with the controls have a declarative feel - the interfaces
+are simple, and these are build from many components which operate in
+parallel.
+</p>
+<p>All the above systems interact with each other by exchanging OSC
+messages over UDP, I've described this in <a href='(http://joearms.github.io/2016/01/28/A-Badass-Way-To-Connect-Programs-Together.html'>A Badass Way to Connect
+Programs Together</a> and <a href='http://joearms.github.io/2016/01/29/Controlling-Sound-with-OSC-Messages.html'>Controlling Sound With OSC Messages</a>
+</p>
+
+	  </div>
+	  
+	  <div class="rightColumn">
+	    <h1>Index</h1>
+ <a href='#head_1'>Music is performed by multiple instruments and musicians in real-time</a><br>
+	  </div>
+	  
+	  <footer>
+
+	   
+  <!-- the tweet button -->
+  <p>	    
+    <a href=	"https://twitter.com/share"  class="twitter-share-button" 
+       data-url= "http://joearms.github.com/2016/01/27/Controlling-Live-Music">Tweet</a>
+  </p>
+  
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+  <!-- end of tweet button -->
+
+  <p>Comments:</p>
+  
+  <div id="disqus">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      // var disqus_developer = 1;
+      var disqus_shortname = 'joearmstrongsblog';
+      var disqus_identifier = '/2016/01/27/Controlling-Live-Music';
+      var disqus_url = 'http://joearms.github.com/2016/01/27/Controlling-Live-Music.html';
+      (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+  </div>
+
+	   
+           <p>&copy; 2014-2016 Joe Armstrong - All Rights Reserved.</p>  </footer>
+	</div>
+      </div>
+    </body>
+</html>

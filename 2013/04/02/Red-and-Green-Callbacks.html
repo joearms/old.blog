@@ -1,0 +1,254 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+      <title>Joe Armstrong - Erlang and other things</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1"/>
+      <link rel="stylesheet" media="screen" href="/leftFluid.css"/>
+      <link rel="stylesheet" media="screen" href="/my.css"/>
+    </head>
+
+    <body>
+      <div class="wrap">
+	<h1>Joe Armstrong - Erlang and other stuff</h1>
+	<header>
+	  <nav>
+	    <ul class="nav inline-items">
+	      <li><a href="/index.html">Index</a></li>
+	      <li><a href="/lectures.html">Lectures</a></li>
+	      <li><a href="/resources.html">Resources</a></li>
+	    </ul>
+	  </nav>
+	</header>
+	
+	<div class="columnsContainer">
+	  
+	  <div class="leftColumn">
+	    <h1> Red and Green callbacks </h1>
+	      <p>There are two types of callback, I'll call them &ldquo;Red&rdquo; and
+&ldquo;Green&rdquo;. Red callbacks are evil and interrupt the flow of control in
+your program. Green callbacks are beautiful and do not interrupt the
+flow of control in your program.  Javascript has red callbacks and
+Erlang has green callbacks.
+</p>
+<p>To explain this I have to back-off and talk about I/O.
+</p>
+<a name='head_1'></a><h1>Concurrent I/O in Erlang</h1>
+<p>How does Erlang do concurrent I/O? It's easy.
+Suppose we have three processes <span class='code'>A</span>, <span class='code'>B</span> and <span class='code'>C</span> executing in 
+parallel. I'll represent this as follows:
+</p>
+<div class='pre'>   A  ||  B ||  C
+</div>
+<p>This is supposed to represent three processes <span class='code'>A</span>, <span class='code'>B</span> and <span class='code'>C</span>
+which are doing I/O operations.
+</p>
+<p>Process A does something like:
+</p>
+<div class='pre'> A: --- read --- read --- write --- read --- write ---
+</div>
+<p>B does:
+</p>
+<div class='pre'> B: ---- write --- write --- read --- read --- write ---
+</div>
+<p>and so on. The dashed lines represent sequential computations. The
+Erlang code for process <span class='code'>A</span> is exactly like the diagram:
+</p>
+<div class='erlang'><span class='atom'>a</span><span class='punc'>(</span><span class='punc'>)</span><span class='ws'> </span><span class='punc'>-></span><span class='ws'>
+</span><span class='ws'>    </span><span class='punc'>.</span><span class='punc'>.</span><span class='punc'>.</span><span class='ws'>
+</span><span class='ws'>    </span><span class='var'>X</span><span class='ws'> </span><span class='punc'>=</span><span class='ws'> </span><span class='atom'>read</span><span class='punc'>(</span><span class='punc'>)</span><span class='punc'>,</span><span class='ws'>
+</span><span class='ws'>    </span><span class='punc'>.</span><span class='punc'>.</span><span class='punc'>.</span><span class='ws'>
+</span><span class='ws'>    </span><span class='var'>Y</span><span class='ws'> </span><span class='punc'>=</span><span class='ws'> </span><span class='atom'>read</span><span class='punc'>(</span><span class='punc'>)</span><span class='punc'>,</span><span class='ws'> </span><span class='ws'>
+</span><span class='ws'>    </span><span class='punc'>.</span><span class='punc'>.</span><span class='punc'>.</span><span class='ws'>  </span><span class='ws'>
+</span><span class='ws'>    </span><span class='atom'>write</span><span class='punc'>(</span><span class='punc'>.</span><span class='punc'>.</span><span class='punc'>.</span><span class='punc'>)</span><span class='punc'>,</span><span class='ws'>
+</span><span class='ws'>    </span><span class='punc'>.</span><span class='punc'>.</span><span class='punc'>.</span><span class='ws'>
+</span></div>
+<p>And likewise for <span class='code'>B</span> and <span class='code'>C</span>.
+</p>
+<p>There is actually no <span class='code'>read()</span> statement in Erlang. Erlang has
+<a href='http://www.erlang.org/course/concurrent_programming.html#select'>selective receive</a> so we actually define <span class='code'>read()</span> something like this:
+</p>
+<div class='erlang'><span class='atom'>read</span><span class='punc'>(</span><span class='punc'>)</span><span class='ws'> </span><span class='punc'>-></span><span class='ws'>
+</span><span class='ws'>    </span><span class='keyword'>receive</span><span class='ws'>
+</span><span class='ws'>        </span><span class='var'>Pattern1</span><span class='ws'> </span><span class='punc'>-></span><span class='ws'> 	</span><span class='ws'>
+</span><span class='ws'>           </span><span class='punc'>.</span><span class='punc'>.</span><span class='punc'>.</span><span class='ws'>
+</span><span class='ws'>        </span><span class='var'>Pattern2</span><span class='ws'> </span><span class='punc'>-></span><span class='ws'> </span><span class='ws'>
+</span><span class='ws'>           </span><span class='punc'>.</span><span class='punc'>.</span><span class='punc'>.</span><span class='ws'>
+</span><span class='ws'>    </span><span class='keyword'>end</span><span class='punc'>.</span><span class='ws'>
+</span></div>
+<p>The details of exactly how selective receive works are not important
+to this discussion, so I'll hop over the details for now.
+</p>
+<p>The important point to note is that in the code for the process
+<span class='code'>A</span> we write:
+</p>
+<div class='erlang'><span class='ws'>    </span><span class='punc'>.</span><span class='punc'>.</span><span class='punc'>.</span><span class='ws'>
+</span><span class='ws'>    </span><span class='var'>X</span><span class='ws'> </span><span class='punc'>=</span><span class='ws'> </span><span class='atom'>read</span><span class='punc'>(</span><span class='punc'>)</span><span class='ws'>
+</span><span class='ws'>    </span><span class='punc'>.</span><span class='punc'>.</span><span class='punc'>.</span><span class='ws'>
+</span></div>
+<p>and that our process suspends (or you might say _blocks_) at the read
+function until the read request is satisfied.  So our code &ldquo;looks
+like&rdquo; we're doing a _synchronous blocking read_.
+</p>
+<p>_Looks like_ was in quotes, because it's not actually a blocking read,
+it's really an asynchronous read which does not block any other Erlang
+processes.
+</p>
+<p>This is really nice, since the beginning of time, programs have waited
+for read requests to be satisfied, and then having read their data,
+move on.
+</p>
+<a name='head_2'></a><h1>Enter Concurrency</h1>
+<p>Erlang I/O is magic with a purpose. When we have two parallel processes,
+a <span class='code'>read()</span> request in process <span class='code'>A</span> will apparently block in <span class='code'>A</span>,
+but this will not effect the code in any other parallel process (say <span class='code'>B</span>).
+</p>
+<p>So <span class='code'>A</span> and <span class='code'>B</span> can both be written <span class='emph'>as if they were sequential processes</span>.
+</p>
+<p>Now suppose we didn't have a decent underlying concurrency model.
+Suppose everything we did had to be squeezed into a single thread of
+execution. Suppose we did a read (which blocked) while there was other
+stuff waiting to be done. Oh dear, our programming model would be clearer,
+but we'd use up valuable CPU cycles.
+</p>
+<p>Now in some languages (and I'm looking at you Javascript) there are no
+processes, and no threads. This is not strictly accurate, there is one
+thread and everything has to be multiplexed into this thread. To write
+code with reads in Javascript you have to use red callbacks and invent
+you own concurrency abstractions.
+</p>
+<a name='head_3'></a><h1>Red Callbacks</h1>
+<p>In Javascript you really don't want to do a blocking synchronous read
+in the main thread (and remember there is only one thread), so instead
+you have to setup a callback which triggers when the read completes. I call this
+a _red callback_. You write something like this:
+</p>
+<div class='pre'>    var done  = function(x){ ... do something with x ..};
+    var error = function(x){ .... x ...}
+    read(Something, {onSuccess:done, onError:error});
+    ...
+    ... more code ...
+</div>
+<p>Code like this melts my brain.
+</p>
+<p>When the program is executing somewhere inside &ldquo;_more code_&rdquo;, 
+the read completes, and I'm time warped back in
+time to the code in _done_, then back to wherever I came from in &ldquo;_more
+code_&rdquo; when _done_ completes. I find this very difficult to understand. 
+</p>
+<p>It's actually worse, every Javascript programmer who has a concurrent
+problem to solve must _invent their own concurrency model_.  The
+problem is that they don't know that this is what they are
+doing. Every time a Javascript programmer writes a line of code that
+says &ldquo;on this do that&rdquo; they are actually inventing a new concurrency
+model, and they haven't a clue how the code will interleave when it
+executes.
+</p>
+<p>(I actually have a love-hate relationship with Javascript, most parts
+I love but I hate the concurrency model- that might sound funny since
+Javascript has no concurrency model - so there's nothing to hate :-)
+</p>
+<p>What's even more difficult to understand is errors. Errors in
+multi-threaded callback code with shared memory is something that would
+give me an extremely large headache.
+</p>
+<a name='head_4'></a><h1>Green Callbacks</h1>
+<p>Just to make life more confusing, we use a lot of callbacks in
+Erlang.  I'll call these &ldquo;green callbacks.&rdquo; So callbacks are not
+necessarily bad.  In Erlang we can see precisely where, in the context
+of a process, a callback is evaluated, so we don't get the problem of
+figuring out how the callbacks interleave.
+</p>
+<p>Here's a example of a green callback in Erlang:
+</p>
+<div class='erlang'><span class='atom'>loop</span><span class='punc'>(</span><span class='var'>F</span><span class='punc'>)</span><span class='ws'> </span><span class='punc'>-></span><span class='ws'>
+</span><span class='ws'>    </span><span class='keyword'>receive</span><span class='ws'>
+</span><span class='ws'>        </span><span class='punc'>{</span><span class='atom'>new_callback</span><span class='punc'>,</span><span class='ws'> </span><span class='var'>F1</span><span class='punc'>}</span><span class='ws'> </span><span class='punc'>-></span><span class='ws'>
+</span><span class='ws'>            </span><span class='atom'>loop</span><span class='punc'>(</span><span class='var'>F1</span><span class='punc'>)</span><span class='punc'>;</span><span class='ws'>
+</span><span class='ws'>        </span><span class='var'>Msg</span><span class='ws'> </span><span class='punc'>-></span><span class='ws'>
+</span><span class='ws'>            </span><span class='var'>F</span><span class='punc'>(</span><span class='var'>Msg</span><span class='punc'>)</span><span class='punc'>,</span><span class='ws'>
+</span><span class='ws'>            </span><span class='atom'>loop</span><span class='punc'>(</span><span class='var'>F</span><span class='punc'>)</span><span class='ws'>
+</span><span class='ws'>    </span><span class='keyword'>end</span><span class='punc'>.</span><span class='ws'>
+</span></div>
+<p>When the processes running this code receives a message <span class='code'>Msg</span> it
+evaluates the function <span class='code'>F(Msg)</span>.  There is no uncertainty about
+this, we know _exactly_ when the callback is triggered.  It is
+triggered immediately after receiving the message <span class='code'>Msg</span>.
+</p>
+<p>This wee code fragment is doubly beautiful, if you send the process a message
+<span class='code'>{new_callback, F1}</span> then it will change its behavior using the
+new callback on the next invocation.
+</p>
+<p>I don't know how you would write this in Javascript. I've written
+quite a lot of jQuery and know how to setup and remove callbacks. But
+what happens if an event is triggered in the time interval between
+removing an event handler and adding a new one. I have no idea, and
+life is too short to find out.
+</p>
+<a name='head_5'></a><h1>How Erlang I/O really works</h1>
+<p>We don't actually send messages to a process. We send messages to a
+process mailbox. Each process has a mailbox, when we send a message to
+a process it is put in the mailbox (if the postal guy can find the
+processes).
+</p>
+<p>Imagine Erlang processes are houses with mailboxes. Sending a
+message means you hand your message to the mail guy, whose job is
+to do two things: deliver the mail in the destination mailbox and bang
+on the door to say &ldquo;new mail.&rdquo;
+</p>
+<p>A process can be doing something or asleep. Just like a house owner,
+they can be awake doing something or asleep. If they are asleep, then
+when the postman comes and bangs on the door they wander over to the
+mailbox to check if anything interesting has arrived.
+</p>
+<p>If they are doing something, and have finished a job, they might just
+wander over to the mailbox to see if any new mail has arrived when
+they were doing other things.
+</p>
+<p>That's how Erlang messaging works. Each house (process) has a life of
+its own.  The mail guy delivers the mail, and the house owners go
+check the mailboxes now and then when they feel like it.
+</p>
+
+	  </div>
+	  
+	  <div class="rightColumn">
+	    <h1>Index</h1>
+ <a href='#head_1'>Concurrent I/O in Erlang</a><br><a href='#head_2'>Enter Concurrency</a><br><a href='#head_3'>Red Callbacks</a><br><a href='#head_4'>Green Callbacks</a><br><a href='#head_5'>How Erlang I/O really works</a><br>
+	  </div>
+	  
+	  <footer>
+
+	   
+  <!-- the tweet button -->
+  <p>	    
+    <a href=	"https://twitter.com/share"  class="twitter-share-button" 
+       data-url= "http://joearms.github.com/2013/04/02/Red-and-Green-Callbacks">Tweet</a>
+  </p>
+  
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+  <!-- end of tweet button -->
+
+  <p>Comments:</p>
+  
+  <div id="disqus">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      // var disqus_developer = 1;
+      var disqus_shortname = 'joearmstrongsblog';
+      var disqus_identifier = '/2013/04/02/Red-and-Green-Callbacks';
+      var disqus_url = 'http://joearms.github.com/2013/04/02/Red-and-Green-Callbacks.html';
+      (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+  </div>
+
+	   
+           <p>&copy; 2014-2016 Joe Armstrong - All Rights Reserved.</p>  </footer>
+	</div>
+      </div>
+    </body>
+</html>
