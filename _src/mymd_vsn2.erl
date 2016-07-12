@@ -27,8 +27,8 @@ process(Pattern, Site_dir, IndexFile, PostTemplate) ->
     Files1 = lists:reverse(lists:sort(Files)),
     %% io:format("Files=~p~n",[Files1]),
     [convert_if_out_of_date0(I, Site_dir, PostTemplate) || I <- Files1],
-    make_index(Files1, Site_dir, IndexFile).
-
+    make_index_and_feed(Files1, Site_dir, IndexFile).
+    
 convert_if_out_of_date0(In, SiteDir, PostTemplate) ->
     case (catch convert_if_out_of_date(In, SiteDir, PostTemplate)) of
 	{'EXIT', Why} ->
@@ -474,19 +474,77 @@ out_of_date(In, Out) ->
 	    exit({out_of_date,no_input,In})
     end.
 
-make_index(Files, Site, Dest) ->
-    L= [begin
-	    Out = Site ++ outname(I),
-	    Title = must_get_title_from_file(I),
-	    Date = date_from_filename(I),
-	    ["<li>",Date," &raquo; <a href='",Out,"'>", Title,"</a></li>\n"]
-	end || I <- Files],
-    L1 = iolist_to_binary(L),
+make_index_and_feed(Files, Site, Dest) ->
+    L1 = [begin
+	      Link = Site ++ outname(I),
+	      Title = must_get_title_from_file(I),
+	      Date = date_from_filename(I),
+	      {Link, Title, Date}
+	  end || I <- Files],
+    L2= [
+	 ["<li>",Date," &raquo; <a href='",Link,"'>", Title,"</a></li>\n"]
+	 || {Link,Title,Date} <- L1
+	],
+    L3 = iolist_to_binary(L2),
     %% io:format("making index L1=~p~~n",[L1]),
     %% file:write_file("index.html", [L1]).
-    Val = top_expand("_templates/index.ehe", #{content => L1}),
+    Val = top_expand("_templates/index.ehe", #{content => L3}),
     must_write_file(Dest, Val),
-    io:format("~s created~n", [Dest]).
+    io:format("~s created~n", [Dest]),
+    %% XML Feed
+    make_feed(Site, L1).
+
+fix_link("./", "./" ++ Link) ->
+    "http://joearms.github.io/" ++ Link;
+fix_link(_, Link) ->
+    Link.
+
+make_feed(Site, L1) ->
+    L2 = [{fix_link(Site,Link), Title} || {Link, Title,_} <- L1],
+    Items = [
+	  ["<item>\n",
+	   "  <title>", Title, "</title>\n",
+	   "  <link>", Link, "</link>\n",
+	   "  <description>", Title, "</description>\n",
+	   "</item>\n"] ||
+	     {Link,Title} <- L2
+	 ],
+    L5 = ["<?xml version='1.0' encoding='UTF-8' ?>
+<rss version='2.0'>
+  <channel>
+   <title>Joe Armstrong - Erlang and other stuff</title>
+     <link>http://joearms.github.io/index.html</link>
+     <description>Miscellaneous writing</description>\n",
+	  Items,"
+  </channel>
+</rss>
+"],
+    L6 = iolist_to_binary(L5),
+    Feed = Site ++ "feed.xml",
+    must_write_file(Feed, L6),
+    io:format("~s created~n", [Feed]).
+
+%% <?xml version="1.0" encoding="UTF-8" ?>
+%% <rss version="2.0">
+
+%% <channel>
+%%   <title>W3Schools Home Page</title>
+%%   <link>http://www.w3schools.com</link>
+%%   <description>Free web building tutorials</description>
+%%   <item>
+%%     <title>RSS Tutorial</title>
+%%     <link>http://www.w3schools.com/xml/xml_rss.asp</link>
+%%     <description>New RSS tutorial on W3Schools</description>
+%%   </item>
+%%   <item>
+%%     <title>XML Tutorial</title>
+%%     <link>http://www.w3schools.com/xml</link>
+%%     <description>New XML tutorial on W3Schools</description>
+%%   </item>
+%% </channel>
+
+%% </rss>
+
 
  
 date_from_filename("_inputs/" ++ T) -> date_from_filename1(T);

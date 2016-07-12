@@ -1,20 +1,189 @@
----
----
-<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-	<channel>
-		<title>{{ site.name }}</title>
-		<description>{{ site.description }}</description>
-		<link>{{ site.url }}/feed.xml</link>
-		<atom:link href="{{ site.url }}/feed.xml" rel="self" type="application/rss+xml" />
-		{% for post in site.posts limit:10 %}
-			<item>
-				<title>{{ post.title }}</title>
-				<description>{{ post.content | xml_escape }}</description>
-				<pubDate>{{ post.date | date: "%a, %d %b %Y %H:%M:%S %z" }}</pubDate>
-				<link>{{ site.url }}{{ post.url }}</link>
-				<guid isPermaLink="true">{{ site.url }}{{ post.url }}</guid>
-			</item>
-		{% endfor %}
-	</channel>
+<?xml version='1.0' encoding='UTF-8' ?>
+<rss version='2.0'>
+  <channel>
+   <title>Joe Armstrong - Erlang and other stuff</title>
+     <link>http://joearms.github.io/index.html</link>
+     <description>Miscellaneous writing</description>
+<item>
+  <title>George has an argument about the EU</title>
+  <link>http://joearms.github.io/2016/06/14/Geroge-and-hadrians-wall.html</link>
+  <description>George has an argument about the EU</description>
+</item>
+<item>
+  <title>New Blogging Software</title>
+  <link>http://joearms.github.io/2016/05/31/New-blogging_software.html</link>
+  <description>New Blogging Software</description>
+</item>
+<item>
+  <title>Why Markdown Sucks</title>
+  <link>http://joearms.github.io/2016/03/21/Why-Markdown-Sucks.html</link>
+  <description>Why Markdown Sucks</description>
+</item>
+<item>
+  <title>Managing Two Million Webservers</title>
+  <link>http://joearms.github.io/2016/03/13/Managing-two-million-webservers.html</link>
+  <description>Managing Two Million Webservers</description>
+</item>
+<item>
+  <title>Calling Elixir from Erlang</title>
+  <link>http://joearms.github.io/2016/03/13/Calling-Elixir-From_Erlang.html</link>
+  <description>Calling Elixir from Erlang</description>
+</item>
+<item>
+  <title>Controlling Sound with OSC Messages</title>
+  <link>http://joearms.github.io/2016/01/29/Controlling-Sound-with-OSC-Messages.html</link>
+  <description>Controlling Sound with OSC Messages</description>
+</item>
+<item>
+  <title>A Badass Way to Connect Programs Togther</title>
+  <link>http://joearms.github.io/2016/01/28/A-Badass-Way-To-Connect-Programs-Together.html</link>
+  <description>A Badass Way to Connect Programs Togther</description>
+</item>
+<item>
+  <title>Controlling Live Music</title>
+  <link>http://joearms.github.io/2016/01/27/Controlling-Live-Music.html</link>
+  <description>Controlling Live Music</description>
+</item>
+<item>
+  <title>The unintentional side effects of a bad concurrency model</title>
+  <link>http://joearms.github.io/2016/01/26/The-Unintentional-Side-Effects-of-a-Bad-Concurrency-Model.html</link>
+  <description>The unintentional side effects of a bad concurrency model</description>
+</item>
+<item>
+  <title>Really bad websites</title>
+  <link>http://joearms.github.io/2016/01/07/really-bad-websites.html</link>
+  <description>Really bad websites</description>
+</item>
+<item>
+  <title>Fun with Swift and Midi</title>
+  <link>http://joearms.github.io/2016/01/06/fun_with_swift_and_midi.html</link>
+  <description>Fun with Swift and Midi</description>
+</item>
+<item>
+  <title>Fun with Swift</title>
+  <link>http://joearms.github.io/2016/01/04/fun-with-swift.html</link>
+  <description>Fun with Swift</description>
+</item>
+<item>
+  <title>Mutable Value Chains</title>
+  <link>http://joearms.github.io/2015/06/19/Mutable-Value_Chains.html</link>
+  <description>Mutable Value Chains</description>
+</item>
+<item>
+  <title>HTML as a programming language</title>
+  <link>http://joearms.github.io/2015/03/16/HTML-As-A-Programming-Language.html</link>
+  <description>HTML as a programming language</description>
+</item>
+<item>
+  <title>The web of names, hashes and UUIDs</title>
+  <link>http://joearms.github.io/2015/03/12/The_web_of_names.html</link>
+  <description>The web of names, hashes and UUIDs</description>
+</item>
+<item>
+  <title>Why did I wake up before my alarm clock went off?</title>
+  <link>http://joearms.github.io/2015/03/02/Waking-Up.html</link>
+  <description>Why did I wake up before my alarm clock went off?</description>
+</item>
+<item>
+  <title>Some performance measurements on maps</title>
+  <link>http://joearms.github.io/2015/01/08/Some_Performance-Measurements-On-Maps.html</link>
+  <description>Some performance measurements on maps</description>
+</item>
+<item>
+  <title>Connecting Erlang to the SonicPi</title>
+  <link>http://joearms.github.io/2015/01/05/Connecting-Erlang-to-Sonic-Pi.html</link>
+  <description>Connecting Erlang to the SonicPi</description>
+</item>
+<item>
+  <title>Background to Programming Erlang</title>
+  <link>http://joearms.github.io/2014/06/26/Background-to-programming-erlang.html</link>
+  <description>Background to Programming Erlang</description>
+</item>
+<item>
+  <title>Minimal Viable Programs</title>
+  <link>http://joearms.github.io/2014/06/25/minimal-viable-program.html</link>
+  <description>Minimal Viable Programs</description>
+</item>
+<item>
+  <title>Why programming is difficult</title>
+  <link>http://joearms.github.io/2014/02/07/why-programming-is-difficult.html</link>
+  <description>Why programming is difficult</description>
+</item>
+<item>
+  <title>Big changes to Erlang</title>
+  <link>http://joearms.github.io/2014/02/01/big-changes-to-erlang.html</link>
+  <description>Big changes to Erlang</description>
+</item>
+<item>
+  <title>Present wrapping</title>
+  <link>http://joearms.github.io/2013/12/24/present-wrapping.html</link>
+  <description>Present wrapping</description>
+</item>
+<item>
+  <title>On the road again</title>
+  <link>http://joearms.github.io/2013/12/16/on-the-road-again.html</link>
+  <description>On the road again</description>
+</item>
+<item>
+  <title>My favorite Erlang Program</title>
+  <link>http://joearms.github.io/2013/11/21/My-favorite-erlang-program.html</link>
+  <description>My favorite Erlang Program</description>
+</item>
+<item>
+  <title>A week with Elixir</title>
+  <link>http://joearms.github.io/2013/05/31/a-week-with-elixir.html</link>
+  <description>A week with Elixir</description>
+</item>
+<item>
+  <title>Fail fast and noisely, fail politely</title>
+  <link>http://joearms.github.io/2013/04/28/Fail-fast-noisely-and-politely.html</link>
+  <description>Fail fast and noisely, fail politely</description>
+</item>
+<item>
+  <title>Read me on a mobile</title>
+  <link>http://joearms.github.io/2013/04/13/Read-me-on-a-mobile.html</link>
+  <description>Read me on a mobile</description>
+</item>
+<item>
+  <title>Signs of the times</title>
+  <link>http://joearms.github.io/2013/04/07/Signs-of-the-times.html</link>
+  <description>Signs of the times</description>
+</item>
+<item>
+  <title>Programming Erlang 2'nd edition</title>
+  <link>http://joearms.github.io/2013/04/05/programming-erlang-2nd-edition.html</link>
+  <description>Programming Erlang 2'nd edition</description>
+</item>
+<item>
+  <title>Concurrent and Parallel Programming</title>
+  <link>http://joearms.github.io/2013/04/05/concurrent-and-parallel-programming.html</link>
+  <description>Concurrent and Parallel Programming</description>
+</item>
+<item>
+  <title>Red and Green callbacks</title>
+  <link>http://joearms.github.io/2013/04/02/Red-and-Green-Callbacks.html</link>
+  <description>Red and Green callbacks</description>
+</item>
+<item>
+  <title>Too big to fail</title>
+  <link>http://joearms.github.io/2013/04/01/too-big-to-fail.html</link>
+  <description>Too big to fail</description>
+</item>
+<item>
+  <title>Solving the wrong problem</title>
+  <link>http://joearms.github.io/2013/03/28/solving-the-wrong-problem.html</link>
+  <description>Solving the wrong problem</description>
+</item>
+<item>
+  <title>Jekyll is great</title>
+  <link>http://joearms.github.io/2013/03/28/jekyll-is-great.html</link>
+  <description>Jekyll is great</description>
+</item>
+<item>
+  <title>Promoting Erlang</title>
+  <link>http://joearms.github.io/2013/03/27/promoting-erlang.html</link>
+  <description>Promoting Erlang</description>
+</item>
+
+  </channel>
 </rss>
