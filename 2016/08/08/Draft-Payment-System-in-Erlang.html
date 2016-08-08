@@ -1,0 +1,267 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+      <title>Joe Armstrong - Erlang and other things</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1"/>
+      <link rel="stylesheet" media="screen" href="/leftFluid.css"/>
+      <link rel="stylesheet" media="screen" href="/my.css"/>
+    </head>
+
+    <body>
+      <div class="wrap">
+	<h1>Joe Armstrong - Erlang and other stuff</h1>
+	<header>
+	  <nav>
+	    <ul class="nav inline-items">
+	      <li><a href="/index.html">Index</a></li>
+	      <li><a href="/lectures.html">Lectures</a></li>
+	      <li><a href="/resources.html">Resources</a></li>
+	    </ul>
+	  </nav>
+	</header>
+	
+	<div class="columnsContainer">
+	  
+	  <div class="leftColumn">
+	    <h1> How to make an efficient payment system in Erlang </h1>
+	      <p><img style="width:200px" src='/images/chopin_bar4.png'/>
+</p>
+<blockquote>Making a payment system is like playing a Chopin Waltz - and involves
+a universal method of problem solving which can be applied to any probem.
+</blockquote>
+<p>The other day I was send a rather nice mail by a young programmer who
+was learning Erlang, and wanted to know if Erlang was suitable for
+building a financial payments site. He was attracted to Erlang because
+he'd read that Erlang was a good choice of language for making highly
+concurrent fault tolerant applications, and was happily reading my
+book.
+</p>
+<p>My answer to his question, is pretty much the same as my answer to all
+questions of the form &ldquo;is X suitable to program Y?&rdquo; I thought I'd
+answer it here, so as to avoid answering the same question multiple
+times.
+</p>
+<blockquote>When solving problems solve the most difficult problem first
+</blockquote>
+<p>It's really important to know what the most difficult problem you will
+encounter when solving a problem. If you can't solve the most
+difficult problem you'll be stuck when you get to it.
+</p>
+<p>The general method for solving all problems is:
+</p>
+<li>Find the most difficult outstanding problem</li>
+<li>Solve it</li>
+<p>Repeat this until the only remaining problems are trivial - and you
+know you can solve them.
+</p>
+<p>The problem with this method is that you probably don't know what the
+most difficult problem is when you start. If you did know you would
+be the expert. You would be the person who had built and succeeded
+making a super-duper financial payments system.
+</p>
+<p>To find out what the most difficult problem is easy:
+</p>
+<blockquote>Ask an expert what the most difficult problem is.
+</blockquote>
+<p>Finding an expert is probably the most difficult part of this
+exercise.
+</p>
+<a name='head_1'></a><h1>What happens if you don't know an expert?</h1>
+<p>If you don't personally know an expert then do some research and find out
+who the experts are and mail them.
+</p>
+<p>In my experience a polite and friendly mail to an expert has about a
+fifty percent chance of getting a helpful reply. Most experts worthy
+of the name are glad to share their knowledge since it gives then an
+opportunity to explain whatever it is that they are experts in.  Many
+interesting conversations start this way.
+</p>
+<a name='head_2'></a><h1>What are the difficult problems in a payment system?</h1>
+<p>On a couple of occasions I found myself talking to people who had
+personally built large scale financial payment systems so I asked them
+what the most difficult problems were and got two answers:
+</p>
+<li>Satisfying the regulatory authorities, and,</li>
+<li>Interacting with legacy systems</li>
+<p>Regulation in financial systems is vital. Financial transactions have
+to be approved by regulatory authorities. It is not enough that the
+software is correct and performant. You must be able to satisfy the
+regulatory authorities that the software is doing the right thing and
+obeying all the regulations.
+</p>
+<p>Financial systems do not live in isolated worlds, they interact with
+legacy systems written in archaic languages and with bizarre and
+poorly documented protocols. Interacting with the world as it is, and
+not how we would like it to be is a huge problem.
+</p>
+<p>Funnily enough - both experts did not mention performance as a
+problem - actually virtually nobody mentions performance as a
+problem - if the software actually works (which is often viewed as a
+miracle, since most projects are canceled because the software never
+actually works) and is slow, the usually solution is just to &ldquo;throw
+more machines at it&rdquo;.
+</p>
+<p>Performance is not a problem unless you have billions of users, and
+certainly not a problem you will meet on day one. If you get to the
+point where performance is a problem, then your project will have come
+a long long way. Your most difficult problem will be getting the
+system to work at all, and then finding a few people brave enough to
+use it.
+</p>
+<p>I always have to say that <span class='emph'>any</span> programming language can be used to
+solve a problem - this is what computer scientists call &ldquo;Turing
+equivalence&rdquo; so if you can solve your problem in HorribleTran9 you
+will also be able to solve it in SuperNifty2.
+</p>
+<p>Having said that, solving the same problem in different programming
+languages is not equally difficult - what is hard in one language can
+be simple in another and <span class='emph'>vice versa</span>.
+</p>
+<p>Erlang is a good choice if your hard problem is to make something
+fault-tolerance (after all that is what we designed it to be good at,
+and <span class='emph'>surprise surprise</span> that's what it just happens to be good at,
+this is not by accident but by design.
+</p>
+<p>Erlang is useless for making GUIs, number crunching and watering
+flowers.  Choose another technology for this.
+</p>
+<p>The general method of solving problems by choosing the hardest problem
+and solving it first is applicable to many problems.
+</p>
+<a name='head_3'></a><h1>What's this got to do with Chopin?</h1>
+<p>I'm currently learning to play Chopin's Waltz Opus 64
+Number 2 in C# minor.
+</p>
+<p>What I started my music teacher quickly pointed to
+bar 4. He said &ldquo;learn this bar first, watch a load of YouTube videos, 20
+minutes a day should sort it.&rdquo;
+</p>
+<p><img style="width:200px" src='/images/chopin_bar4.png'/>
+</p>
+<p>My immediate thought was that 20 minutes a day was a bit over the
+top - it's only 16 notes. If I practice 20 mintes a day for a week
+that 140 minutes ie 8 minutes per note.
+</p>
+<p>But I did what he said and recorded The Vladimirs Ashkenazy and
+Horowitz, and a few others for comparison purposes.  After a while I
+found I I could play bar 4 as well as the Vladimirs.
+</p>
+<p>I was childishly delighted about this - I could play bar 4 as well as
+Ashkenazy, only another 191 bars to go. The next bit my teacher
+identified was the Pi&#249; Mosso starting at bar 33 - which Horowitz,
+said to be the world best pianist, murders by playing too fast. I
+certainly can't play this at Horowitz's tempo - but at a speed that
+surprises my brain - my hands and fingers now move at speeds that my
+brain cannot understand.
+</p>
+<p>Just for comparison, here is Horowitz vs. Dyson.
+</p>
+<li><a href='https://www.youtube.com/watch?v=dooeJpzkOLs'>Horowitz</a> (38 seconds in)</li>
+<li><a href='https://www.youtube.com/watch?v=OM5Yt9NYJ3k'>Dyson</a>  (1min 08 seconds in)</li>
+<p>Horwoitz total time is 3:13 is against Dyson's 4:53 (I suspect
+Horowitz's reputation came from a time when virtuosity was defined
+as being &ldquo;how fast you could play&rdquo; I much prefer more modern
+(and slower) interpretations.
+</p>
+<p>Then there was Pi&#249; Lento (bars 65 onwards) - which I just didn't get - the
+melody shifts between the left and right hands in subtly beautiful manner
+</p>
+<p>Then bar 84.
+</p>
+<blockquote>Eight notes in the left hand against three in the
+left. &ldquo;You've got to be joking Mr Chopin.&rdquo;
+</blockquote>
+<p>My theory is that Chopin threw a musical wobbly here and had reached
+the limit of what could be notated so he just vaguely indicated what
+he wanted. Just make sure the three notes in the base sing out and
+that your left and right hand fingers arrive in time to play the first
+chord in the next bar on time. Not too difficult, but definitely not a
+straight 8 against 3 tempo.
+</p>
+<p>The rest is easy (well it's not actually, it's technically easy but
+still needs attention to detail).
+</p>
+<blockquote>Learning to play Chopin involves exactly the same mental discipline
+as building a complex software system.
+</blockquote>
+<li>First Identify the most difficult outstanding problem</li>
+<li>Solve this</li>
+<p>Iterate until there are no more difficult problems.
+</p>
+<p>Solve all the remaining problems, paying attention to detail
+and quality control.
+</p>
+<p>When finished run though everything polishing parts that are
+sub-standard.
+</p>
+<p>I can now play all of the Opus 64 - but not without the music. The
+basic work is done, now the polish must be applied.
+</p>
+<a name='head_4'></a><h1>Tell me the bad</h1>
+<p>Once your work is nearing perfection it's now vital to known what's
+wrong with it. My music teacher does this. Last week I played the Opus
+64 from beginning to end. It was first time I'd done this. When I was
+done he had several comments; the right hand tricky bits were OK but
+some of the chords in the left hand were fumbled or wrong - I needed
+to know this.
+</p>
+<p>In the West there is a culture of praise and encouragement and it
+certainly would not be a good idea to criticize beginners for every
+mistake they make. But at a certain point encouragement must be
+changed to criticism. Encouragement is fine to get you started, but
+not sufficient to achieve perfection.
+</p>
+<p>I noticed this years ago, the transition from a schoolkid to
+undergraduate and then PhD student involved being subject to more and
+more criticism and less and less praise.
+</p>
+<p>The thing to remember about criticism is that it's not about you.
+It's not about you it's about your work and the purpose is to improve
+your work. How you receive criticism is important. If you perceive it
+as an attack you will reject it. If you perceive it as a way to
+improve what you're doing then you'll find it helpful.
+</p>
+
+	  </div>
+	  
+	  <div class="rightColumn">
+	    <h1>Index</h1>
+ <a href='#head_1'>What happens if you don't know an expert?</a><br><a href='#head_2'>What are the difficult problems in a payment system?</a><br><a href='#head_3'>What's this got to do with Chopin?</a><br><a href='#head_4'>Tell me the bad</a><br>
+	  </div>
+	  
+	  <footer>
+
+	   
+  <!-- the tweet button -->
+  <p>	    
+    <a href=	"https://twitter.com/share"  class="twitter-share-button" 
+       data-url= "http://joearms.github.com/2016/08/08/Draft-Payment-System-in-Erlang">Tweet</a>
+  </p>
+  
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+  <!-- end of tweet button -->
+
+  <p>Comments:</p>
+  
+  <div id="disqus">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      // var disqus_developer = 1;
+      var disqus_shortname = 'joearmstrongsblog';
+      var disqus_identifier = '/2016/08/08/Draft-Payment-System-in-Erlang';
+      var disqus_url = 'http://joearms.github.com/2016/08/08/Draft-Payment-System-in-Erlang.html';
+      (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+  </div>
+
+	   
+           <p>&copy; 2014-2016 Joe Armstrong - All Rights Reserved.</p>  </footer>
+	</div>
+      </div>
+    </body>
+</html>

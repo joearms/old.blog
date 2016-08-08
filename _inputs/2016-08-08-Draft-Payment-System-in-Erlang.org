@@ -1,0 +1,209 @@
+tags: markdown
+title: How to make an efficient payment system in Erlang
+@md:content
+
+<img style="width:200px" src='/images/chopin_bar4.png'/>
+
+> Making a payment system is like playing a Chopin Waltz - and involves
+a universal method of problem solving which can be applied to any probem.
+
+
+The other day I was send a rather nice mail by a young programmer who
+was learning Erlang, and wanted to know if Erlang was suitable for
+building a financial payments site. He was attracted to Erlang because
+he'd read that Erlang was a good choice of language for making highly
+concurrent fault tolerant applications, and was happily reading my
+book.
+
+My answer to his question, is pretty much the same as my answer to all
+questions of the form ``is X suitable to program Y?'' I thought I'd
+answer it here, so as to avoid answering the same question multiple
+times.
+
+> When solving problems solve the most difficult problem first
+
+It's really important to know what the most difficult problem you will
+encounter when solving a problem. If you can't solve the most
+difficult problem you'll be stuck when you get to it.
+
+The general method for solving all problems is:
+
++ Find the most difficult outstanding problem
++ Solve it
+
+Repeat this until the only remaining problems are trivial - and you
+know you can solve them.
+
+The problem with this method is that you probably don't know what the
+most difficult problem is when you start. If you did know you would
+be the expert. You would be the person who had built and succeeded
+making a super-duper financial payments system.
+
+To find out what the most difficult problem is easy:
+
+> Ask an expert what the most difficult problem is.
+
+Finding an expert is probably the most difficult part of this
+exercise.
+
+* What happens if you don't know an expert?
+
+If you don't personally know an expert then do some research and find out
+who the experts are and mail them.
+
+In my experience a polite and friendly mail to an expert has about a
+fifty percent chance of getting a helpful reply. Most experts worthy
+of the name are glad to share their knowledge since it gives then an
+opportunity to explain whatever it is that they are experts in.  Many
+interesting conversations start this way.
+
+* What are the difficult problems in a payment system?
+
+On a couple of occasions I found myself talking to people who had
+personally built large scale financial payment systems so I asked them
+what the most difficult problems were and got two answers:
+
++ Satisfying the regulatory authorities, and,
++ Interacting with legacy systems
+
+Regulation in financial systems is vital. Financial transactions have
+to be approved by regulatory authorities. It is not enough that the
+software is correct and performant. You must be able to satisfy the
+regulatory authorities that the software is doing the right thing and
+obeying all the regulations.
+
+Financial systems do not live in isolated worlds, they interact with
+legacy systems written in archaic languages and with bizarre and
+poorly documented protocols. Interacting with the world as it is, and
+not how we would like it to be is a huge problem.
+
+Funnily enough - both experts did not mention performance as a
+problem - actually virtually nobody mentions performance as a
+problem - if the software actually works (which is often viewed as a
+miracle, since most projects are canceled because the software never
+actually works) and is slow, the usually solution is just to ``throw
+more machines at it''.
+
+Performance is not a problem unless you have billions of users, and
+certainly not a problem you will meet on day one. If you get to the
+point where performance is a problem, then your project will have come
+a long long way. Your most difficult problem will be getting the
+system to work at all, and then finding a few people brave enough to
+use it.
+
+I always have to say that __any__ programming language can be used to
+solve a problem - this is what computer scientists call ``Turing
+equivalence'' so if you can solve your problem in HorribleTran9 you
+will also be able to solve it in SuperNifty2.
+
+Having said that, solving the same problem in different programming
+languages is not equally difficult - what is hard in one language can
+be simple in another and __vice versa__.
+
+Erlang is a good choice if your hard problem is to make something
+fault-tolerance (after all that is what we designed it to be good at,
+and __surprise surprise__ that's what it just happens to be good at,
+this is not by accident but by design.
+
+Erlang is useless for making GUIs, number crunching and watering
+flowers.  Choose another technology for this.
+
+The general method of solving problems by choosing the hardest problem
+and solving it first is applicable to many problems.
+
+* What's this got to do with Chopin?
+
+I'm currently learning to play Chopin's Waltz Opus 64
+Number 2 in C# minor.
+
+What I started my music teacher quickly pointed to
+bar 4. He said ``learn this bar first, watch a load of YouTube videos, 20
+minutes a day should sort it.''
+
+<img style="width:200px" src='/images/chopin_bar4.png'/>
+
+My immediate thought was that 20 minutes a day was a bit over the
+top - it's only 16 notes. If I practice 20 mintes a day for a week
+that 140 minutes ie 8 minutes per note.
+
+But I did what he said and recorded The Vladimirs Ashkenazy and
+Horowitz, and a few others for comparison purposes.  After a while I
+found I I could play bar 4 as well as the Vladimirs.
+
+I was childishly delighted about this - I could play bar 4 as well as
+Ashkenazy, only another 191 bars to go. The next bit my teacher
+identified was the Pi&#249; Mosso starting at bar 33 - which Horowitz,
+said to be the world best pianist, murders by playing too fast. I
+certainly can't play this at Horowitz's tempo - but at a speed that
+surprises my brain - my hands and fingers now move at speeds that my
+brain cannot understand.
+
+Just for comparison, here is Horowitz vs. Dyson.
+
++ [[https://www.youtube.com/watch?v=dooeJpzkOLs][Horowitz]] (38 seconds in)
++ [[https://www.youtube.com/watch?v=OM5Yt9NYJ3k][Dyson]]  (1min 08 seconds in)
+
+Horwoitz total time is 3:13 is against Dyson's 4:53 (I suspect
+Horowitz's reputation came from a time when virtuosity was defined
+as being ``how fast you could play'' I much prefer more modern
+(and slower) interpretations.
+
+Then there was Pi&#249; Lento (bars 65 onwards) - which I just didn't get - the
+melody shifts between the left and right hands in subtly beautiful manner
+
+Then bar 84.
+
+> Eight notes in the left hand against three in the
+left. ``You've got to be joking Mr Chopin.''
+
+My theory is that Chopin threw a musical wobbly here and had reached
+the limit of what could be notated so he just vaguely indicated what
+he wanted. Just make sure the three notes in the base sing out and
+that your left and right hand fingers arrive in time to play the first
+chord in the next bar on time. Not too difficult, but definitely not a
+straight 8 against 3 tempo.
+
+The rest is easy (well it's not actually, it's technically easy but
+still needs attention to detail).
+
+> Learning to play Chopin involves exactly the same mental discipline
+as building a complex software system.
+
++ First Identify the most difficult outstanding problem
++ Solve this
+
+Iterate until there are no more difficult problems.
+
+Solve all the remaining problems, paying attention to detail
+and quality control.
+
+When finished run though everything polishing parts that are
+sub-standard.
+
+I can now play all of the Opus 64 - but not without the music. The
+basic work is done, now the polish must be applied.
+
+* Tell me the bad
+
+Once your work is nearing perfection it's now vital to known what's
+wrong with it. My music teacher does this. Last week I played the Opus
+64 from beginning to end. It was first time I'd done this. When I was
+done he had several comments; the right hand tricky bits were OK but
+some of the chords in the left hand were fumbled or wrong - I needed
+to know this.
+
+In the West there is a culture of praise and encouragement and it
+certainly would not be a good idea to criticize beginners for every
+mistake they make. But at a certain point encouragement must be
+changed to criticism. Encouragement is fine to get you started, but
+not sufficient to achieve perfection.
+
+I noticed this years ago, the transition from a schoolkid to
+undergraduate and then PhD student involved being subject to more and
+more criticism and less and less praise.
+
+The thing to remember about criticism is that it's not about you.
+It's not about you it's about your work and the purpose is to improve
+your work. How you receive criticism is important. If you perceive it
+as an attack you will reject it. If you perceive it as a way to
+improve what you're doing then you'll find it helpful.

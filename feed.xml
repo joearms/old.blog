@@ -5,6 +5,11 @@
      <link>http://joearms.github.io/index.html</link>
      <description>Miscellaneous writing</description>
 <item>
+  <title>How to make an efficient payment system in Erlang</title>
+  <link>http://joearms.github.io/2016/08/08/Draft-Payment-System-in-Erlang.html</link>
+  <description>How to make an efficient payment system in Erlang</description>
+</item>
+<item>
   <title>George has an argument about the EU</title>
   <link>http://joearms.github.io/2016/06/14/Geroge-and-hadrians-wall.html</link>
   <description>George has an argument about the EU</description>
