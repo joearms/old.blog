@@ -101,9 +101,9 @@ languages is not equally difficult - what is hard in one language can
 be simple in another and __vice versa__.
 
 Erlang is a good choice if your hard problem is to make something
-fault-tolerance (after all that is what we designed it to be good at,
-and __surprise surprise__ that's what it just happens to be good at,
-this is not by accident but by design.
+fault-tolerant. Erlang was designed for building fault-tolerant
+systemw and __surprise surprise,__ that's what it just happens to be
+good at, this is not by accident but by design.
 
 Erlang is useless for making GUIs, number crunching and watering
 flowers.  Choose another technology for this.
