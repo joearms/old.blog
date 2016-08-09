@@ -8,7 +8,7 @@ title: How to make an efficient payment system in Erlang
 a universal method of problem solving which can be applied to any probem.
 
 
-The other day I was send a rather nice mail by a young programmer who
+The other day I was sent a rather nice mail by a young programmer who
 was learning Erlang, and wanted to know if Erlang was suitable for
 building a financial payments site. He was attracted to Erlang because
 he'd read that Erlang was a good choice of language for making highly
@@ -116,7 +116,7 @@ and solving it first is applicable to many problems.
 I'm currently learning to play Chopin's Waltz Opus 64
 Number 2 in C# minor.
 
-What I started my music teacher quickly pointed to
+When I started my music teacher quickly pointed to
 bar 4. He said ``learn this bar first, watch a load of YouTube videos, 20
 minutes a day should sort it.''
 
